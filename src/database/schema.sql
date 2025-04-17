@@ -2,4 +2,4 @@
 
 CREATE DATABASE glamSync;
 
-\c glamSync
+\c glamSync;
