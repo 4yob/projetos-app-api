@@ -1,14 +1,16 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-//const wizardRoutes = require("./src/routes/wizardRoutes");
+const postRoutes = require("./src/routes/postRoutes");
+
 //const houseRoutes = require("./src/routes/houseRoutes");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-//app.use("/api/wizards", wizardRoutes);
+app.use("/post", postRoutes);
+
 //app.use("/api/houses", houseRoutes);
 
 const PORT = process.env.PORT || 3000;
