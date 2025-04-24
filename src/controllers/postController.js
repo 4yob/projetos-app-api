@@ -29,23 +29,26 @@ const getAllPosts = async (req, res) => {
 //Controller para criar um novo post
 const createPost = async (req, res) => {
     try {
-        const { user_id, title, content } = req.body;
-        const newPost = await postModel.createPost(user_id, title, content);
-        res.status(201).json({ message: "Post criado com sucesso.", newPost });
+        const { user_id, title, content} = req.body;
+        const photo = req.file ? req.file.filename : null;
+        const newPost = await userModel.createPost(user_id, title, content, photo);
+        res.status(201).json(newPost);
     } catch (error) {
+        console.log(error);
         if (error.code === "23505") {
-            return res.status(404).json({ message: "Post já existe." });
+            return res.status(409).json({ message: "Post já cadastrado!!" });
         }
-        res.status(404).json({ message: "Erro ao criar post." });
+        res.status(500).json({ message: "Erro ao criar um novo Post" });
     }
 };
+
 
 //Controller para atualizar um post existente
 const updatePost = async (req, res) => {
     try {
         const { id } = req.params;
         const { title, content } = req.body;
-        const updatedPost = await postModel.updatePost(id, title, content);
+        const updatedPost = await postModel.updatePost(title, content);
         if (!updatedPost) {
             return res.status(404).json({ message: "Post não encontrado." });
         }
@@ -83,6 +86,20 @@ const deletePostById = async (req, res) => {
     }
 };
 
+//Controller para curtir um post
+const likePost = async (req, res) => {
+    try {
+        const { postId } = req.params;
+        const { userId } = req.body;
+        const likedPost = await postModel.likePost(postId, userId);
+        if (!likedPost) {
+            return res.status(404).json({ message: "Post não encontrado." });
+        }
+        res.json({ message: "Post curtido com sucesso.", likedPost });
+    } catch (error) {
+        res.status(500).json({ message: "Erro ao curtir post." });
+    }
+};
 
 
 //Exportação dos controllers
