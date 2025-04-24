@@ -25,7 +25,7 @@ const getUserById = async (req, res) => {
 
 const createUser = async (req, res) => {
     try {
-        const { name, username, email location, following, followers } = req.body;
+        const { name, username, email, location, following, followers } = req.body;
         const photo = req.file ? req.file.filename : null;
         const newUser = await userModel.createUser(name, username, email, location, following, followers, photo);
         res.status(201).json(newUser);
@@ -41,22 +41,23 @@ const createUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
     try {
-        const { name, username, email, location } = req.body
+        const { name, username, email, location } = req.body;
         const photo = req.file ? req.file.filename : null;
-        const updateUser = await userModel.updateUser(req.params.id, name, username, email, location, photo );
+        const updatedUser = await userModel.updateUser(req.params.id, name, username, email, location, photo);
 
-        if(!updateUser) {
-            res.status(404).json({ message: "Usuário não encontrado" });
+        if (!updatedUser) {
+            return res.status(404).json({ message: "Usuário não encontrado" });
         }
+        res.status(200).json(updatedUser);
     } catch (error) {
-            res.status(404).json({ message: "Erro ao atualizar usuário" });
-
+        console.error(error);
+        res.status(500).json({ message: "Erro ao atualizar usuário" });
     }
 };
 
 const deleteUser = async (req, res) => {
     try {
-        const message = await userModel.deletarUser(req.params.id);
+        const message = await userModel.deleteUser(req.params.id);
         res.json(message);
     } catch (error) {
         res.status(404).json({ message: "Erro ao deletar usuário" });
