@@ -17,6 +17,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/api", postRoutes);
 app.use("/api", userRoutes);
 
+
 app.listen(PORT, () => {
     console.log(`🌸 Servidor rodando em http://localhost:${PORT}`);
 });
