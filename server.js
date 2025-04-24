@@ -9,7 +9,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use("/post", postRoutes);
+app.use("/api/posts", postRoutes);
 
 //app.use("/api/houses", houseRoutes);
 
