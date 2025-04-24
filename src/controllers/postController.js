@@ -53,10 +53,22 @@ const updatePost = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: "Erro ao atualizar post." });
     }
-},
+};
 
 //Controller para deletar um post existente
+const deletePost = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const deletedPost = await postModel.deletePost(id);
+        if (!deletedPost) {
+            return res.status(404).json({ message: "Post não encontrado." });
+        }
+        res.json({ message: "Post deletado com sucesso.", deletedPost });
+    } catch (error) {
+        res.status(500).json({ message: "Erro ao deletar post." });
+    }
+};
 
 
 //Exportação dos controllers
-module.exports = {getPost, getAllPosts, createPost};
+module.exports = {getPost, getAllPosts, createPost, updatePost, deletePost, deletePostById, likePost};
