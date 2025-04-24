@@ -5,15 +5,6 @@ CREATE DATABASE glamsync;
 
 -- Schema creation for PostgreSQL
 
--- Create a table for users
-CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    email VARCHAR(100) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
 -- Create a table for posts
 CREATE TABLE posts (
     id SERIAL PRIMARY KEY,
@@ -23,7 +14,6 @@ CREATE TABLE posts (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
-
 
 
 -- Inserts para a tabela users

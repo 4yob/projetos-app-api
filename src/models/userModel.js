@@ -13,23 +13,25 @@ const getUserById = async (id) => {
 };
 
 //Api para criar um novo usuário
-const createUser = async (name, username, email, photo_profile, location, following, followers) => {
-    const result = await pool.query("INSERT INTO users (name, email, photo_profile, location, following, followers) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *", 
-        [name, username, email, photo_profile, location, following, followers]
+const createUser = async (name, username, email, location, following, followers, photo) => {
+    const result = await pool.query(
+        "INSERT INTO users (name, username, email, location, following, followers, photo) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
+        [name, username, email, location, following, followers, photo]
     );
-        return result.rows[0];
+    return result.rows[0];
 };
 
 //Api para atualizar um usuário
-const updateUser = async (id, name, username, email, photo_profile, location, following, followers) => {
-    const result = await pool.query("UPDATE users SET name = $1, username = $2, email = $3, photo_profile = $4, location = $5, following = $6, followers = $7 WHERE id = $8 RETURNING *", 
-        [name, username, email, photo_profile, location, following, followers, id]
+const updateUser = async (id, name, username, email, location, photo) => {
+    const result = await pool.query(
+        "UPDATE users SET name = $1, username = $2, email = $3, photo = $4, location = $5 WHERE id = $6 RETURNING *",
+        [name, username, email, photo, location, id]
     );
     return result.rows[0];
 };
 
 //Api para deletar um usuário
-const deletarUser = async (id) => {
+const deleteUser = async (id) => {
     const result = await pool.query("DELETE FROM users WHERE id = $1 RETURNING *", [id]
     );
     if (result.rowCount === 0){
@@ -38,4 +40,4 @@ const deletarUser = async (id) => {
     return { message: "Usuário deletado com sucesso" };
 };
 
-module.exports = { getUsers, getUserById, createUser, updateUser, deletarUser };
+module.exports = { getUsers, getUserById, createUser, updateUser, deleteUser };
