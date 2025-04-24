@@ -32,16 +32,15 @@ INSERT INTO posts (user_id, title, content) VALUES
 
 -- CRIAÇÃO DA TABELA DE POSTS
 CREATE TABLE posts (
-    id_post SERIAL PRIMARY KEY,
-    id_user INT NOT NULL,
-    media_post TEXT NOT NULL,,
-    caption VARCHAR(800) NOT NULL
-    date_publication TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_user FOREIGN KEY (id_user) REFERENCES users(id_user)
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    media_post TEXT NOT NULL,
+    caption VARCHAR(800) NOT NULL,
+    date_publication TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 
-INSERT INTO posts (id_user, media_post, caption, date_publication) VALUES
+INSERT INTO posts (user_id, media_post, caption, date_publication) VALUES
 (1, 'https://br.pinterest.com/pin/1407443629356036/', 'O estilo é uma maneira de dizer quem você é sem precisar falar. 💬👗', '2025-04-14 10:00:00'),
 (2, 'https://br.pinterest.com/pin/3377768467826560/', 'Vestir-se bem é uma arte, e eu sou a obra-prima. 🎨✨', '2025-04-14 10:00:00'),
 (3, 'https://br.pinterest.com/pin/1407443629356036/', 'A moda é uma forma de liberdade. Liberte-se! 🌟', '2025-04-14 10:00:00'),
