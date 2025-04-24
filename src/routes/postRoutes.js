@@ -28,7 +28,7 @@ const postController = require("../controllers/postController");
  * 404:
  * description: Post não encontrado
  */
-router.get("/:id", postController.getPost);
+router.get("/posts/:id", postController.getPost);
 
 /**
  * @swagger
@@ -46,7 +46,7 @@ router.get("/:id", postController.getPost);
  * 200:
  * description: Lista de posts
  */
-router.get("/", postController.getAllPosts);
+router.get("/posts", postController.getAllPosts);
 
 /**
  * @swagger
@@ -77,7 +77,7 @@ router.get("/", postController.getAllPosts);
  * 400:
  * description: Erro ao criar o post
  */
-router.post("/", postController.createPost);
+router.post("/posts", postController.createPost);
 
 /**
  * @swagger
@@ -97,7 +97,7 @@ router.post("/", postController.createPost);
  * 404:
  * description: Post não encontrado
  */
-router.put("/:id", postController.updatePost);
+router.put("/posts/:id", postController.updatePost);
 
 /**
  * @swagger
@@ -117,7 +117,7 @@ router.put("/:id", postController.updatePost);
  * 404:
  * description: Post não encontrado
  */
-router.delete("/:id", postController.deletePost);
+router.delete("/posts", postController.deletePost);
 
 /**
  * @swagger
