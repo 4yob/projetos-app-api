@@ -7,7 +7,7 @@ const getUsers = async () => {
 };
 
 //Api para procurar um usuário pelo id
-const getUserBy = async (id) => {
+const getUserById = async (id) => {
     const result = await pool.query("SELECT * FROM users WHERE id = $1", [id]);
     return result.rows[0];
 };
@@ -38,10 +38,4 @@ const deletarUser = async (id) => {
     return { message: "Usuário deletado com sucesso" };
 };
 
-module.exports = {
-    getUsers,
-    getUserBy,
-    createUser,
-    updateUser,
-    deletarUser
-};
+module.exports = { getUsers, getUserById, createUser, updateUser, deletarUser };
