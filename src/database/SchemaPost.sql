@@ -7,22 +7,12 @@ CREATE DATABASE glamsync;
 
 -- Create a table for posts
 CREATE TABLE posts (
-    id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
+    id_posts SERIAL PRIMARY KEY,
+    id_users INTEGER REFERENCES users(id) ON DELETE CASCADE,
     title VARCHAR(200) NOT NULL,
     content TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
-
--- Inserts para a tabela users
-INSERT INTO users (name, email, password) VALUES 
-('João Silva', 'joao.silva@example.com', 'senha123'),
-('Maria Oliveira', 'maria.oliveira@example.com', 'senha456'),
-('Carlos Souza', 'carlos.souza@example.com', 'senha789'),
-('Ana Lima', 'ana.lima@example.com', 'senha101'),
-('Pedro Santos', 'pedro.santos@example.com', 'senha202');
 
 -- Inserts para a tabela posts
 INSERT INTO posts (user_id, title, content) VALUES 

@@ -17,7 +17,8 @@ const getAllPosts = async () => {
 const getPostById = async (id) => {
     try {
         if (isNaN(id)) {
-            throw new Error("ID inválido.");
+            console.error("ID inválido fornecido:", id);
+            return null; // Retorna null em vez de lançar uma exceção
         }
         const result = await pool.query("SELECT * FROM posts WHERE id = $1", [id]);
         return result.rows[0];
@@ -28,11 +29,11 @@ const getPostById = async (id) => {
 };
 
 // Função para criar um novo post
-const createPost = async (title, content, userId) => {
+const createPost = async (userId, title, content, photo) => { // Adicionado parâmetro photo
     try {
         const result = await pool.query(
-            "INSERT INTO posts (title, content, user_id) VALUES ($1, $2, $3) RETURNING *",
-            [title, content, userId]
+            "INSERT INTO posts (user_id, title, content, photo) VALUES ($1, $2, $3, $4) RETURNING *", // Adicionado photo
+            [userId, title, content, photo] // Incluído photo nos valores
         );
         return result.rows[0];
     } catch (error) {
