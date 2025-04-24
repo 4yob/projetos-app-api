@@ -29,17 +29,34 @@ const getAllPosts = async (req, res) => {
 //Controller para criar um novo post
 const createPost = async (req, res) => {
     try {
-        const { title, content } = req.body;
-        console.log("Dados recebidos:", req.body); // Adicione este log
-        if (!title || !content) {
-            return res.status(400).json({ message: "Título e conteúdo são obrigatórios." });
-        }
-        const newPost = await postModel.createPost(title, content);
-        res.status(201).json({ message: "Post criado com sucesso.", post: newPost });
+        const { user_id, title, content } = req.body;
+        const newPost = await postModel.createPost(user_id, title, content);
+        res.status(201).json({ message: "Post criado com sucesso.", newPost });
     } catch (error) {
-        console.error("Erro ao criar post:", error); // Adicione este log
-        res.status(500).json({ message: "Erro ao criar post." });
+        if (error.code === "23505") {
+            return res.status(404).json({ message: "Post já existe." });
+        }
+        res.status(404).json({ message: "Erro ao criar post." });
     }
 };
 
+//Controller para atualizar um post existente
+const updatePost = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { title, content } = req.body;
+        const updatedPost = await postModel.updatePost(id, title, content);
+        if (!updatedPost) {
+            return res.status(404).json({ message: "Post não encontrado." });
+        }
+        res.json({ message: "Post atualizado com sucesso.", updatedPost });
+    } catch (error) {
+        res.status(500).json({ message: "Erro ao atualizar post." });
+    }
+},
+
+//Controller para deletar um post existente
+
+
+//Exportação dos controllers
 module.exports = {getPost, getAllPosts, createPost};
