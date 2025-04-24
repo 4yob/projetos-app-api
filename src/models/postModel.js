@@ -65,4 +65,15 @@ const deletePost = async (id) => {
     }
 };
 
-module.exports = { getAllPosts, getPostById, createPost };
+//Função para deletar todos os posts
+const deleteAllPosts = async () => {
+    try {
+        await pool.query("DELETE FROM posts");
+    } catch (error) {
+        console.error("Erro ao deletar todos os posts:", error);
+        throw new Error("Erro ao deletar todos os posts no banco de dados.");
+    }
+};
+
+// Exportando as funções para serem usadas em outros arquivos
+module.exports = { getAllPosts, getPostById, createPost, updatePost, deletePost, deleteAllPosts };
