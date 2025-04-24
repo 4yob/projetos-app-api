@@ -8,8 +8,8 @@ CREATE DATABASE glamsync;
 CREATE TABLE posts (
     id_post SERIAL PRIMARY KEY,
     id_user INT NOT NULL,
-    media_post TEXT NOT NULL,,
-    caption VARCHAR(800) NOT NULL
+    media_post TEXT NOT NULL,
+    caption VARCHAR(800) NOT NULL,
     date_publication TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_user FOREIGN KEY (id_user) REFERENCES users(id_user)
 );
