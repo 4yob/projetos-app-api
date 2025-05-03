@@ -28,11 +28,11 @@ const getPostById = async (id) => {
 };
 
 // Função para criar um novo post
-const createPost = async (title, content, userId) => {
+const createPost = async (title, content, userId, photo) => {
     try {
         const result = await pool.query(
-            "INSERT INTO posts (title, content, user_id) VALUES ($1, $2, $3) RETURNING *",
-            [title, content, userId]
+            "INSERT INTO posts (title, content, user_id, photo) VALUES ($1, $2, $3, $4) RETURNING *",
+            [title, content, userId, photo]
         );
         return result.rows[0];
     } catch (error) {

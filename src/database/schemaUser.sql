@@ -31,11 +31,3 @@ VALUES ('Diana Prince', 'dianap', 'diana@example.com', 'San Francisco', 'https:/
 
 INSERT INTO users (name, username, email, location, photo, following, followers) 
 VALUES ('Ethan Hunt', 'ethanh', 'ethan@example.com', 'Miami', 'https://example.com/photos/ethan.jpg', 25, 150);
-
--- Inserts para a tabela users
-INSERT INTO users (name, email, password) VALUES 
-('João Silva', 'joao.silva@example.com', 'senha123'),
-('Maria Oliveira', 'maria.oliveira@example.com', 'senha456'),
-('Carlos Souza', 'carlos.souza@example.com', 'senha789'),
-('Ana Lima', 'ana.lima@example.com', 'senha101'),
-('Pedro Santos', 'pedro.santos@example.com', 'senha202');

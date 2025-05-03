@@ -29,12 +29,18 @@ const getAllPosts = async (req, res) => {
 //Controller para criar um novo post
 const createPost = async (req, res) => {
     try {
-        const { user_id, title, content} = req.body;
+        const { user_id, title, content } = req.body;
+
+        // Validação dos campos obrigatórios
+        if (!user_id || !title || !content) {
+            return res.status(400).json({ message: "Campos obrigatórios não fornecidos." });
+        }
+
         const photo = req.file ? req.file.filename : null;
-        const newPost = await userModel.createPost(user_id, title, content, photo);
+        const newPost = await postModel.createPost(title, content, user_id, photo);
         res.status(201).json(newPost);
     } catch (error) {
-        console.log(error);
+        console.error(error);
         if (error.code === "23505") {
             return res.status(409).json({ message: "Post já cadastrado!!" });
         }

@@ -1,10 +1,11 @@
 const userModel = require("../models/userModel");
 
-const getAllUsers = async (req, res) => {
+const getUsers = async (req, res) => {
     try {
         const users = await userModel.getUsers();
         res.status(200).json(users)
     } catch (error) {
+        console.error(error);
         res.status(400).json({ message: "Erro ao buscar usuário" })
     }
 };
@@ -12,13 +13,12 @@ const getAllUsers = async (req, res) => {
 const getUserById = async (req, res) => {
     try {
         const user = await userModel.getUserById(req.params.id);
-
-
         if (!user) {
             res.status(404).json({ message: "Usuário não encontrado" });
         }
         res.status(200).json(user);
     } catch (error) {
+        console.error(error)
         res.status(404).json({ message: "Erro ao buscar usuário" })
     }
 };
@@ -64,4 +64,4 @@ const deleteUser = async (req, res) => {
     }
 }
 
-module.exports = { getAllUsers, getUserById, createUser, updateUser, deleteUser }
+module.exports = { getUsers, getUserById, createUser, updateUser, deleteUser }

@@ -22,7 +22,7 @@ const upload = multer({ dest: "uploads/" });
  *         description: Usuários retornados com sucesso
  */
 
-router.get("/api/users", userController.getAllUsers);
+router.get("/users", userController.getUsers);
 
 /**
  * @swagger
@@ -44,8 +44,7 @@ router.get("/api/users", userController.getAllUsers);
  *         description: Usuário não encontrado
  */
 
-router.get("/api/users/:id", userController.getUserById);
-
+router.get("/users/:id", userController.getUserById);
 /**
  * @swagger
  * /api/users:
@@ -55,7 +54,7 @@ router.get("/api/users/:id", userController.getUserById);
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
@@ -65,11 +64,16 @@ router.get("/api/users/:id", userController.getUserById);
  *               email:
  *                 type: string
  *                 description: Email do usuário
+ *               photo:
+ *                 type: string
+ *                 format: binary
+ *                 description: Foto do usuário
  *     responses:
  *       201:
  *         description: Usuário criado com sucesso
  */
-router.post("/api/users", (req, res, next) => {
+
+router.post("/users", (req, res, next) => {
     upload.single("photo")(req, res, (err) => {
         if (err) {
             return res.status(400).json({ message: "Erro no upload do arquivo" });
@@ -108,7 +112,7 @@ router.post("/api/users", (req, res, next) => {
  *       200:
  *         description: Usuário atualizado com sucesso
  */
-router.put("/api/users/:id", (req, res, next) => {
+router.put("/users/:id", (req, res, next) => {
     upload.single("photo")(req, res, (err) => {
         if (err) {
             return res.status(400).json({ message: "Erro no upload do arquivo" });
@@ -136,6 +140,6 @@ router.put("/api/users/:id", (req, res, next) => {
  *       404:
  *         description: Usuário não encontrado
  */
-router.delete("/api/users/:id", userController.deleteUser);
+router.delete("/users/:id", userController.deleteUser);
 
 module.exports = router;
