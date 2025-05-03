@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const postController = require("../controllers/postController");
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
 
 /**
  * @swagger
@@ -28,7 +30,7 @@ const postController = require("../controllers/postController");
  *       404:
  *         description: Post não encontrado
  */
-router.get("/posts/:id", postController.getPost);
+router.get("/posts/:id", postController.createPost);
 
 /**
  * @swagger
@@ -77,7 +79,7 @@ router.get("/posts", postController.getAllPosts);
  *       400:
  *         description: Erro ao criar o post
  */
-router.post("/posts", postController.createPost);
+router.post("/posts", upload.single("photo"), postController.createPost);
 
 /**
  * @swagger

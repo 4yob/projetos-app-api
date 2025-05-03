@@ -28,11 +28,11 @@ const getPostById = async (id) => {
 };
 
 // Função para criar um novo post
-const createPost = async (title, content, userId, photo) => {
+const createPost = async (title, content, user_id, photo) => {
     try {
         const result = await pool.query(
             "INSERT INTO posts (title, content, user_id, photo) VALUES ($1, $2, $3, $4) RETURNING *",
-            [title, content, userId, photo]
+            [title, content, user_id, photo]
         );
         return result.rows[0];
     } catch (error) {
@@ -54,6 +54,7 @@ const updatePost = async (id, title, content) => {
         throw new Error("Erro ao atualizar o post no banco de dados.");
     }
 };
+
 // Função para deletar um post existente
 const deletePost = async (id) => {
     try {

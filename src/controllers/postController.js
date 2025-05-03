@@ -44,6 +44,7 @@ const createPost = async (req, res) => {
         if (error.code === "23505") {
             return res.status(409).json({ message: "Post já cadastrado!!" });
         }
+        console.log(req.body);
         res.status(500).json({ message: "Erro ao criar um novo Post" });
     }
 };

@@ -9,9 +9,10 @@ CREATE DATABASE glamsync;
 -- Create a table for posts
 CREATE TABLE posts (
     id_posts SERIAL PRIMARY KEY,
-    id_users INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     title VARCHAR(200) NOT NULL,
     content TEXT NOT NULL,
+    photo TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -38,6 +39,7 @@ CREATE TABLE posts (
     caption VARCHAR(800) NOT NULL,
     date_publication TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
 
 
 INSERT INTO posts (user_id, media_post, caption, date_publication) VALUES
