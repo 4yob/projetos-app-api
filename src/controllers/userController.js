@@ -16,7 +16,7 @@ const getUserById = async (req, res) => {
         if (!user) {
             res.status(404).json({ message: "Usuário não encontrado" });
         }
-        res.status(200).json(user);
+        res.status(200).json({message: "User obtido com sucesso.", user});
     } catch (error) {
         console.error(error)
         res.status(404).json({ message: "Erro ao buscar usuário" })
@@ -48,7 +48,7 @@ const updateUser = async (req, res) => {
         if (!updatedUser) {
             return res.status(404).json({ message: "Usuário não encontrado" });
         }
-        res.status(200).json(updatedUser);
+        res.status(200).json({ message: "Usuário atualizado com sucesso.", updatedUser });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Erro ao atualizar usuário" });

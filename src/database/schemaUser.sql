@@ -1,7 +1,7 @@
 /*Banco de Dados*/
 
-CREATE DATABASE glamSync;
-\c glamSync;
+CREATE DATABASE glamsync;
+\c glamsync;
 
 -- Create a table for users
 CREATE TABLE users (

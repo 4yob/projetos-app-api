@@ -3,7 +3,7 @@
 const pool = require("../config/database");
 
 // Função para obter todos os posts
-const getAllPosts = async () => {
+const getPosts = async () => {
     try {
         const result = await pool.query("SELECT * FROM posts");
         return result.rows;
@@ -16,14 +16,11 @@ const getAllPosts = async () => {
 // Função para obter um post específico pelo ID
 const getPostById = async (id) => {
     try {
-        if (isNaN(id)) {
-            throw new Error("ID inválido.");
-        }
         const result = await pool.query("SELECT * FROM posts WHERE id = $1", [id]);
         return result.rows[0];
     } catch (error) {
-        console.error(`Erro ao obter o post com ID ${id}:`, error);
-        throw new Error("Erro ao buscar o post no banco de dados.");
+        console.error(`Erro ao buscar o post com ID ${id}:`, error); // mantém o erro original
+        throw error;
     }
 };
 
@@ -43,16 +40,11 @@ const createPost = async (title, content, user_id, photo) => {
 
 // Função para atualizar um post existente
 const updatePost = async (id, title, content) => {
-    try {
         const result = await pool.query(
             "UPDATE posts SET title = $1, content = $2 WHERE id = $3 RETURNING *",
             [title, content, id]
         );
         return result.rows[0];
-    } catch (error) {
-        console.error(`Erro ao atualizar o post com ID ${id}:`, error);
-        throw new Error("Erro ao atualizar o post no banco de dados.");
-    }
 };
 
 // Função para deletar um post existente
@@ -77,4 +69,4 @@ const deleteAllPosts = async () => {
 };
 
 // Exportando as funções para serem usadas em outros arquivos
-module.exports = { getAllPosts, getPostById, createPost, updatePost, deletePost, deleteAllPosts };
+module.exports = { getPosts, getPostById, createPost, updatePost, deletePost, deleteAllPosts };

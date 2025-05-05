@@ -1,29 +1,28 @@
 const postModel = require("../models/postModel");
 
+//Controller para obter todos os posts
+const getPosts = async (req, res) => {
+    try {
+        const posts = await postModel.getPosts();
+        res.status(200).json(posts)
+    } catch (error) {
+        console.error(error);
+        res.status(400).json({ message: "Erro ao buscar Posts" })
+    }
+};
+
 //Controller para obter um post específico pelo ID
-const getPost = async (req, res) => {
+const getPostById = async (req, res) => {
     try {
         const post = await postModel.getPostById(req.params.id);
         if (!post) {
-            return res.status(404).json({ message: "Post não encontrado." });
+            res.status(404).json({ message: "Post não encontrado" });
         }
-        res.json({ message: "Post obtido com sucesso.", post });
+        res.status(200).json({message: "Post obtido com sucesso.", post});
+    } catch (error) {
+        console.error(error)
+        res.status(404).json({ message: "Erro ao buscar post" })
     }
-    catch (error) 
-    { res.status(500).json({ message: "Erro ao buscar post." }); }
-};
-
-//Controller para obter todos os posts
-const getAllPosts = async (req, res) => {
-    try {
-        const posts = await postModel.getAllPosts();
-        if (!posts || posts.length === 0) {
-            return res.status(404).json({ message: "Nenhum post encontrado." });
-        }
-        res.json({ message: "Todos os Posts abaixo!!", posts });
-    }
-    catch (error) 
-    { res.status(500).json({ message: "Erro ao buscar posts." }); }
 };
 
 //Controller para criar um novo post
@@ -49,17 +48,15 @@ const createPost = async (req, res) => {
     }
 };
 
-
 //Controller para atualizar um post existente
 const updatePost = async (req, res) => {
     try {
-        const { id } = req.params;
         const { title, content } = req.body;
-        const updatedPost = await postModel.updatePost(title, content);
-        if (!updatedPost) {
+        const updatePost = await postModel.updatePost(req.params.id, title, content);
+        if (!updatePost) {
             return res.status(404).json({ message: "Post não encontrado." });
         }
-        res.json({ message: "Post atualizado com sucesso.", updatedPost });
+        res.json({ message: "Post atualizado com sucesso.", updatePost });
     } catch (error) {
         res.status(500).json({ message: "Erro ao atualizar post." });
     }
@@ -110,4 +107,4 @@ const likePost = async (req, res) => {
 
 
 //Exportação dos controllers
-module.exports = {getPost, getAllPosts, createPost, updatePost, deletePost, deletePostById, likePost};
+module.exports = {getPosts, getPostById, createPost, updatePost, deletePost, deletePostById, likePost};

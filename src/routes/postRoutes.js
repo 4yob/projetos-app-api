@@ -30,7 +30,7 @@ const upload = multer({ dest: "uploads/" });
  *       404:
  *         description: Post não encontrado
  */
-router.get("/posts/:id", postController.createPost);
+router.get("/posts/:id", postController.getPostById);
 
 /**
  * @swagger
@@ -48,7 +48,7 @@ router.get("/posts/:id", postController.createPost);
  *       200:
  *         description: Lista de posts
  */
-router.get("/posts", postController.getAllPosts);
+router.get("/posts", postController.getPosts);
 
 /**
  * @swagger
