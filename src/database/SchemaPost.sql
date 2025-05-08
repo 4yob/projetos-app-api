@@ -16,9 +16,19 @@ CREATE TABLE posts (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO posts (user_id, media_post, caption, date_publication) VALUES
-(1, 'https://br.pinterest.com/pin/1407443629356036/', 'O estilo é uma maneira de dizer quem você é sem precisar falar. 💬👗', '2025-04-14 10:00:00'),
-(2, 'https://br.pinterest.com/pin/3377768467826560/', 'Vestir-se bem é uma arte, e eu sou a obra-prima. 🎨✨', '2025-04-14 10:00:00'),
+INSERT INTO posts (user_id, title, content, photo, created_at) VALUES
+(1, 'Moda é vida', 'O estilo é uma maneira de dizer quem você é sem precisar falar. 💬👗', 'https://br.pinterest.com/pin/1407443629356036/', '2025-05-08'),
+
+INSERT INTO posts (user_id, title, content, photo, created_at) VALUES
+(2, 'Estilo pessoal', 'Vestir-se bem é uma arte, e eu sou a obra-prima. 🎨✨', 'https://br.pinterest.com/pin/3377768467826560/', '2025-05-08'),
+(3, 'Liberdade na moda', 'A moda é uma forma de liberdade. Liberte-se! 🌟', 'https://br.pinterest.com/pin/1407443629356036/', '2025-05-08'),
+(4, 'Elegância', 'Elegância não é sobre ser notada, mas sobre ser lembrada. ✨👑', 'https://br.pinterest.com/pin/1407443629356036/', '2025-05-08'),
+(5, 'Brilho pessoal', 'Toda mulher é uma estrela, e o estilo é seu brilho. ✨🌟', 'https://br.pinterest.com/pin/1407443629356036/', '2025-05-08');
+(6, 'Estilo próprio', 'A moda não tem regras, só estilo próprio. 🔥💁‍♀️', 'https://br.pinterest.com/pin/1407443629356036/', '2025-05-08'),
+(7, 'Confiança', 'Confiança é o melhor acessório que você pode usar. 👑💖', 'https://br.pinterest.com/pin/1407443629356036/', '2025-05-08'),
+(8, 'Peças atemporais', 'Peças atemporais para momentos inesquecíveis. ⏳✨', 'https://br.pinterest.com/pin/1407443629356036/', '2025-05-08'),
+(9, 'Beleza no olhar', 'A verdadeira beleza está no olhar de quem vê. 👀💖', 'https://br.pinterest.com/pin/1407443629356036/', '2025-05-08'),
+(10, 'Estilo pessoal 2', 'Estilo é saber quem você é, o que você quer e não dar a mínima para os outros. 💅🔥', 'https://br.pinterest.com/pin/1407443629356036/', '2025-05-08');
 (3, 'https://br.pinterest.com/pin/1407443629356036/', 'A moda é uma forma de liberdade. Liberte-se! 🌟', '2025-04-14 10:00:00'),
 (4, 'https://br.pinterest.com/pin/1407443629356036/', 'Elegância não é sobre ser notada, mas sobre ser lembrada. ✨👑', '2025-04-14 10:00:00'),
 (5, 'https://br.pinterest.com/pin/1407443629356036/', 'Toda mulher é uma estrela, e o estilo é seu brilho. ✨🌟', '2025-04-14 10:00:00'),
