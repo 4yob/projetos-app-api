@@ -76,19 +76,6 @@ const deletePost = async (req, res) => {
     }
 };
 
-//Controller para deletar um post específico pelo ID
-const deletePostById = async (req, res) => {
-    try {
-        const postId = req.params.id;
-        const deletedPost = await postModel.deletePostById(postId);
-        if (!deletedPost) {
-            return res.status(404).json({ message: "Post não encontrado." });
-        }
-        res.json({ message: "Post deletado com sucesso.", deletedPost });
-    } catch (error) {
-        res.status(500).json({ message: "Erro ao deletar post por ID" });
-    }
-};
 
 //Controller para curtir um post
 const likePost = async (req, res) => {
@@ -107,4 +94,4 @@ const likePost = async (req, res) => {
 
 
 //Exportação dos controllers
-module.exports = {getPosts, getPostById, createPost, updatePost, deletePost, deletePostById, likePost};
+module.exports = {getPosts, getPostById, createPost, updatePost, deletePost, likePost};

@@ -142,4 +142,114 @@ router.put("/users/:id", (req, res, next) => {
  */
 router.delete("/users/:id", userController.deleteUser);
 
+/**
+ * @swagger
+ * /api/users/{id}/followers:
+ *   get:
+ *     summary: Obter o número de seguidores de um usuário
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID do usuário
+ *     responses:
+ *       200:
+ *         description: Número de seguidores retornado com sucesso
+ *       404:
+ *         description: Usuário não encontrado
+ */
+router.get("/users/:id/followers", userController.getFollowers);
+
+/**
+ * @swagger
+ * /api/users/{id}/followers:
+ *   patch:
+ *     summary: Atualizar o número de seguidores de um usuário
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID do usuário
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               action:
+ *                 type: string
+ *                 enum: [increase, decrease]
+ *                 description: Ação para atualizar seguidores
+ *     responses:
+ *       200:
+ *         description: Seguidores atualizados com sucesso
+ *       400:
+ *         description: Ação inválida
+ *       404:
+ *         description: Usuário não encontrado
+ */
+router.patch("/users/:id/followers", userController.updateFollowers);
+
+/**
+ * @swagger
+ * /api/users/{id}/following:
+ *   get:
+ *     summary: Obter o número de pessoas que o usuário está seguindo
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID do usuário
+ *     responses:
+ *       200:
+ *         description: Número de pessoas seguindo retornado com sucesso
+ *       404:
+ *         description: Usuário não encontrado
+ */
+router.get("/users/:id/following", userController.getFollowing);
+
+/**
+ * @swagger
+ * /api/users/{id}/following:
+ *   patch:
+ *     summary: Atualizar o número de pessoas que o usuário está seguindo
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID do usuário
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               action:
+ *                 type: string
+ *                 enum: [increase, decrease]
+ *                 description: Ação para atualizar seguindo
+ *     responses:
+ *       200:
+ *         description: Seguindo atualizado com sucesso
+ *       400:
+ *         description: Ação inválida
+ *       404:
+ *         description: Usuário não encontrado
+ */
+router.patch("/users/:id/following", userController.updateFollowing);
+
 module.exports = router;

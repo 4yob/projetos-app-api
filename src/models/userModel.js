@@ -34,10 +34,39 @@ const updateUser = async (id, name, username, email, location, photo) => {
 const deleteUser = async (id) => {
     const result = await pool.query("DELETE FROM users WHERE id = $1 RETURNING *", [id]
     );
-    if (result.rowCount === 0){
-        return {error: "Usuário não encontrado"};
-        }
-    return { message: "Usuário deletado com sucesso" };
+    return result.rows[0];
 };
 
-module.exports = { getUsers, getUserById, createUser, updateUser, deleteUser };
+//Api para atualizar seguidores de um usuário
+const updateFollowers = async (id, action) => {
+    try {
+        const increment = action === "follow" ? 1 : -1;
+        const result = await pool.query(
+            "UPDATE users SET followers = followers + $1 WHERE id = $2 AND followers + $1 >= 0 RETURNING *",
+            [increment, id]
+        );
+        return result.rows[0];
+    } catch (error) {
+        console.error("Error updating followers in database:", error);
+        throw error;
+    }
+};
+
+//Api para atualizar o número de pessoas que o usuário está seguindo
+const updateFollowing = async (id, action) => {
+    try {
+        const increment = action === "follow" ? 1 : -1; // Certifique-se de que "follow" aumenta e "unfollow" diminui
+        console.log(`Updating following for user ${id} with action ${action} (increment: ${increment})`); 
+        const result = await pool.query(
+            "UPDATE users SET following = following + $1 WHERE id = $2 AND following + $1 >= 0 RETURNING *",
+            [increment, id]
+        );
+        console.log("Database result:", result.rows[0]);
+        return result.rows[0];
+    } catch (error) {
+        console.error("Error updating following in database:", error);
+        throw error;
+    }
+};
+
+module.exports = { getUsers, getUserById, createUser, updateUser, deleteUser, updateFollowers, updateFollowing };
