@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const postRoutes = require("./src/routes/postRoutes");
 const userRoutes = require("./src/routes/userRoutes");
+const commentsRoutes = require("./src/routes/commentsRoutes");
 const setupSwagger = require('./src/config/swagger.js'); 
 const path = require("path");
 
@@ -16,6 +17,7 @@ setupSwagger(app);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/api", postRoutes);
 app.use("/api", userRoutes);
+app.use("/api", commentsRoutes);
 
 
 app.listen(PORT, () => {
