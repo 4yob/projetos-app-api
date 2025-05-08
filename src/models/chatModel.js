@@ -48,7 +48,10 @@ const updateChat = async (id, message) => {
 
 const deleteChat = async (id) => {
     try {
-        const result = await pool.query("DELETE FROM chats WHERE id = $1 RETURNING *", [id]);
+        const result = await pool.query(
+            "DELETE FROM chats WHERE id = $1 RETURNING *",
+            [id]
+        );
         return result.rows[0];
     } catch (error) {
         console.error("Erro ao deletar chat:", error);
@@ -56,4 +59,10 @@ const deleteChat = async (id) => {
     }
 };
 
-module.exports = { getChats, getChatById, createChat, updateChat, deleteChat };
+module.exports = {
+    getChats,
+    getChatById,
+    createChat,
+    updateChat,
+    deleteChat
+};

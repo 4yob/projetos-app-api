@@ -1,23 +1,25 @@
-const commentsModel = require('../models/commentsModel');
+const commentsModel = require("../models/commentsModel");
 
 const getComments = async (req, res) => {
     try {
         const comments = await commentsModel.getComments();
-        res.status(200).json(comments);
+        res.status(200).json({ message: "Comments retrieved successfully.", comments });
     } catch (error) {
-        res.status(500).json({ error: 'Failed to retrieve comments' });
+        console.error("Error fetching comments:", error);
+        res.status(500).json({ error: "Failed to retrieve comments." });
     }
 };
 
 const getCommentById = async (req, res) => {
     try {
-        const commemt = await commentsModel.getCommentById(req.params.id);
-        if (!commemt) {
-            return res.status(404).json({ error: 'Comment not found' });
+        const comment = await commentsModel.getCommentById(req.params.id);
+        if (!comment) {
+            return res.status(404).json({ message: "Comment not found." });
         }
-        res.status(200).json(commemt);
+        res.status(200).json({ message: "Comment retrieved successfully.", comment });
     } catch (error) {
-        res.status(500).json({ error: 'Failed to retrieve comment' });        
+        console.error("Error fetching comment by ID:", error);
+        res.status(500).json({ error: "Failed to retrieve comment." });
     }
 };
 
@@ -25,12 +27,12 @@ const createComment = async (req, res) => {
     try {
         const { user_id, post_id, text_comment } = req.body;
         const newComment = await commentsModel.createComment(user_id, post_id, text_comment);
-        res.status(201).json(newComment);
+        res.status(201).json({ message: "Comment created successfully.", newComment });
     } catch (error) {
         if (error.code === "23505") {
-            return res.status(400).json({ message: "Comentário cadastrado" });
-          }
-        res.status(500).json({ error: 'Failed to create comment' });
+            return res.status(400).json({ message: "Comment already exists." });
+        }
+        res.status(500).json({ error: "Failed to create comment." });
     }
 };
 
@@ -39,22 +41,22 @@ const updateComment = async (req, res) => {
         const { text_comment } = req.body;
         const updatedComment = await commentsModel.updateComment(req.params.id, text_comment);
         if (!updatedComment) {
-            return res.status(404).json({ error: 'Comment not found' });
+            return res.status(404).json({ message: "Comment not found." });
         }
-        res.status(200).json(updatedComment);
+        res.status(200).json({ message: "Comment updated successfully.", updatedComment });
     } catch (error) {
-        res.status(500).json({ error: 'Failed to update comment' });
+        res.status(500).json({ error: "Failed to update comment." });
     }
-}
+};
 
 const deleteComment = async (req, res) => {
     try {
         const message = await commentsModel.deleteComment(req.params.id);
-        res.json(message);
-    } catch (error) {        
-        res.status(500).json({ error: 'Failed to delete comment' });
+        res.status(200).json({ message: "Comment deleted successfully.", details: message });
+    } catch (error) {
+        res.status(500).json({ error: "Failed to delete comment." });
     }
-}
+};
 
 module.exports = {
     getComments,
