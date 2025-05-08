@@ -5,24 +5,24 @@ const chatController = require("../controllers/chatController");
  * @swagger
  * tags:
  *   name: Chat
- *   description: Gerenciamento das rotas de chats
+ *   description: Chat routes management
  */
 
 /**
  * @swagger
  * /api/chat:
  *   get:
- *     summary: Retorna todos os chats
+ *     summary: Returns all chats
  *     tags: [Chat]
  *     parameters:
  *       - in: query
  *         name: name
  *         schema:
  *           type: string
- *         description: Nome do chat
+ *         description: Chat name
  *     responses:
  *       200:
- *         description: Lista de chats
+ *         description: List of chats
  */
 router.get("/chat", chatController.getChats);
 
@@ -30,7 +30,7 @@ router.get("/chat", chatController.getChats);
  * @swagger
  * /api/chat/{id}:
  *   get:
- *     summary: Retorna um chat específico
+ *     summary: Returns a specific chat
  *     tags: [Chat]
  *     parameters:
  *       - in: path
@@ -38,12 +38,12 @@ router.get("/chat", chatController.getChats);
  *         required: true
  *         schema:
  *           type: integer
- *         description: ID do chat
+ *         description: Chat ID
  *     responses:
  *       200:
- *         description: Chat encontrado com sucesso
+ *         description: Chat found successfully
  *       404:
- *         description: Chat não encontrado
+ *         description: Chat not found
  */
 router.get("/chat/:id", chatController.getChatById);
 
@@ -51,7 +51,7 @@ router.get("/chat/:id", chatController.getChatById);
  * @swagger
  * /api/chat:
  *   post:
- *     summary: Cria um novo chat
+ *     summary: Creates a new chat
  *     tags: [Chat]
  *     requestBody:
  *       required: true
@@ -62,21 +62,21 @@ router.get("/chat/:id", chatController.getChatById);
  *             properties:
  *               title:
  *                 type: string
- *                 description: Id do usuário
+ *                 description: User ID
  *               content:
  *                 type: string
- *                 description: Mensagem do chat
+ *                 description: Chat message
  *               photo:
  *                 type: string
  *                 format: binary
- *                 description: Mensagem do chat
+ *                 description: Chat message
  *     responses:
  *       201:
- *         description: Chat criado com sucesso
+ *         description: Chat created successfully
  *       400:
- *         description: Erro ao criar o chat
+ *         description: Error creating chat
  *       500:
- *         description: Erro interno do servidor
+ *         description: Internal server error
  */
 router.post("/chat", chatController.createChat);
 
@@ -84,7 +84,7 @@ router.post("/chat", chatController.createChat);
  * @swagger
  * /api/chat/{id}:
  *   put:
- *     summary: Atualiza um chat existente
+ *     summary: Updates an existing chat
  *     tags: [Chat]
  *     parameters:
  *       - in: path
@@ -92,7 +92,7 @@ router.post("/chat", chatController.createChat);
  *         required: true
  *         schema:
  *           type: integer
- *         description: ID do chat
+ *         description: Chat ID
  *     requestBody:
  *       required: true
  *       content:
@@ -109,9 +109,9 @@ router.post("/chat", chatController.createChat);
  *                 format: binary
  *     responses:
  *       200:
- *         description: Chat atualizado com sucesso
+ *         description: Chat updated successfully
  *       404:
- *         description: Chat não encontrado
+ *         description: Chat not found
  */
 router.put("/chat/:id", chatController.updateChat);
 
@@ -119,7 +119,7 @@ router.put("/chat/:id", chatController.updateChat);
  * @swagger
  * /api/chat/{id}:
  *   delete:
- *     summary: Deleta um chat existente
+ *     summary: Deletes an existing chat
  *     tags: [Chat]
  *     parameters:
  *       - in: path
@@ -127,12 +127,12 @@ router.put("/chat/:id", chatController.updateChat);
  *         required: true
  *         schema:
  *           type: integer
- *         description: ID do chat
+ *         description: Chat ID
  *     responses:
  *       200:
- *         description: Chat deletado com sucesso
+ *         description: Chat deleted successfully
  *       404:
- *         description: Chat não encontrado
+ *         description: Chat not found
  */
 router.delete("/chat/:id", chatController.deleteChat);
 
