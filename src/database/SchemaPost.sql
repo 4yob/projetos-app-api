@@ -17,21 +17,6 @@ CREATE TABLE posts (
 );
 
 
-CREATE TABLE chats (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-    message TEXT NOT NULL,
-    photo TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-INSERT INTO chats (user_id, message, photo) VALUES
-(1, 'A moda é uma forma de liberdade. Liberte-se! 🌟', 'https://br.pinterest.com/pin/1407443629356036/'),
-(2, 'A moda é uma forma de liberdade. Liberte-se! 🌟', 'https://br.pinterest.com/pin/1407443629356036/'),
-(3, 'A moda é uma forma de liberdade. Liberte-se! 🌟', 'https://br.pinterest.com/pin/1407443629356036/'),
-(4, 'A moda é uma forma de liberdade. Liberte-se! 🌟', 'https://br.pinterest.com/pin/1407443629356036/'),
-(5, 'A moda é uma forma de liberdade. Liberte-se! 🌟', 'https://br.pinterest.com/pin/1407443629356036/');
-
 
 INSERT INTO posts (user_id, title, content, photo) VALUES
 (1, 'Moda é vida', 'O estilo é uma maneira de dizer quem você é sem precisar falar. 💬👗', 'https://br.pinterest.com/pin/1407443629356036/'),
