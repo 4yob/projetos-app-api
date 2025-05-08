@@ -16,7 +16,7 @@ CREATE TABLE posts (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO posts (user_id, media_post, caption, date_publication) VALUES
+INSERT INTO posts (user_id, photo, caption, date_publication) VALUES
 (1, 'https://br.pinterest.com/pin/1407443629356036/', 'O estilo é uma maneira de dizer quem você é sem precisar falar. 💬👗', '2025-04-14 10:00:00'),
 (2, 'https://br.pinterest.com/pin/3377768467826560/', 'Vestir-se bem é uma arte, e eu sou a obra-prima. 🎨✨', '2025-04-14 10:00:00'),
 (3, 'https://br.pinterest.com/pin/1407443629356036/', 'A moda é uma forma de liberdade. Liberte-se! 🌟', '2025-04-14 10:00:00'),
