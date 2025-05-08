@@ -17,7 +17,7 @@ CREATE TABLE posts (
 );
 
 INSERT INTO posts (user_id, title, content, photo, created_at) VALUES
-(1, 'Moda é vida', 'O estilo é uma maneira de dizer quem você é sem precisar falar. 💬👗', 'https://br.pinterest.com/pin/1407443629356036/', '2025-05-08'),
+(1, 'Moda é vida', 'O estilo é uma maneira de dizer quem você é sem precisar falar. 💬👗', 'https://br.pinterest.com/pin/1407443629356036/'),
 
 INSERT INTO posts (user_id, title, content, photo, created_at) VALUES
 (2, 'Estilo pessoal', 'Vestir-se bem é uma arte, e eu sou a obra-prima. 🎨✨', 'https://br.pinterest.com/pin/3377768467826560/', '2025-05-08'),
