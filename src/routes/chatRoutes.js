@@ -7,3 +7,5 @@ router.get("/chat/:id", chatController.getChatById);
 router.post("/chat", chatController.createChat);
 router.put("/chat/:id", chatController.updateChat);
 router.delete("/chat/:id", chatController.deleteChat);
+
+module.exports = router;
