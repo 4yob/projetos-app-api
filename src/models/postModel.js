@@ -68,5 +68,19 @@ const deleteAllPosts = async () => {
     }
 };
 
+const updateLikes = async (id, action) => {
+    try {
+        const increment = action === "like" ? 1 : -1;
+        const result = await pool.query(
+            "UPDATE post SET likes = likes + $1 WHERE id = $2 AND likes + $1 >= 0 RETURNING *",
+            [increment, id]
+        );
+        return result.rows[0];
+    } catch (error) {
+        console.error("Error updating likes in database:", error);
+        throw error;
+    }
+};
+
 // Exportando as funções para serem usadas em outros arquivos
-module.exports = { getPosts, getPostById, createPost, updatePost, deletePost, deleteAllPosts };
+module.exports = { getPosts, getPostById, createPost, updatePost, deletePost, deleteAllPosts, updateLikes };

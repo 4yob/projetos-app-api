@@ -156,6 +156,10 @@ router.delete("/posts/:id", postController.deletePost);
  *       404:
  *         description: Post não encontrado
  */
-router.post("/like/:postId", postController.likePost);
+
+router.patch("/posts/:id/likes", postController.updateLikes);
+
+router.get("/posts/:id/likes", postController.getLikes);
+
 
 module.exports = router;

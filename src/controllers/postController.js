@@ -1,97 +1,139 @@
 const postModel = require("../models/postModel");
 
-//Controller para obter todos os posts
+//Controller to get all posts
 const getPosts = async (req, res) => {
-    try {
-        const posts = await postModel.getPosts();
-        res.status(200).json(posts)
-    } catch (error) {
-        console.error(error);
-        res.status(400).json({ message: "Erro ao buscar Posts" })
-    }
+  try {
+    const posts = await postModel.getPosts();
+    res.status(200).json(posts);
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ message: "Error fetching posts." });
+  }
 };
 
-//Controller para obter um post específico pelo ID
+//Controller to get a specific post by ID
 const getPostById = async (req, res) => {
-    try {
-        const post = await postModel.getPostById(req.params.id);
-        if (!post) {
-            res.status(404).json({ message: "Post não encontrado" });
-        }
-        res.status(200).json({message: "Post obtido com sucesso.", post});
-    } catch (error) {
-        console.error(error)
-        res.status(404).json({ message: "Erro ao buscar post" })
+  try {
+    const post = await postModel.getPostById(req.params.id);
+    if (!post) {
+      res.status(404).json({ message: "Post not found." });
     }
+    res.status(200).json({ message: "Post retrieved successfully.", post });
+  } catch (error) {
+    console.error(error);
+    res.status(404).json({ message: "Error fetching post." });
+  }
 };
 
-//Controller para criar um novo post
+//Controller to create a new post
 const createPost = async (req, res) => {
-    try {
-        const { user_id, title, content } = req.body;
+  try {
+    const { user_id, title, content } = req.body;
 
-        // Validação dos campos obrigatórios
-        if (!user_id || !title || !content) {
-            return res.status(400).json({ message: "Campos obrigatórios não fornecidos." });
-        }
-
-        const photo = req.file ? req.file.filename : null;
-        const newPost = await postModel.createPost(title, content, user_id, photo);
-        res.status(201).json(newPost);
-    } catch (error) {
-        console.error(error);
-        if (error.code === "23505") {
-            return res.status(409).json({ message: "Post já cadastrado!!" });
-        }
-        console.log(req.body);
-        res.status(500).json({ message: "Erro ao criar um novo Post" });
+    // Validation of required fields
+    if (!user_id || !title || !content) {
+      return res
+        .status(400)
+        .json({ message: "Required fields not provided." });
     }
+
+    const photo = req.file ? req.file.filename : null;
+    const newPost = await postModel.createPost(title, content, user_id, photo);
+    res.status(201).json(newPost);
+  } catch (error) {
+    console.error(error);
+    if (error.code === "23505") {
+      return res.status(409).json({ message: "Post already exists!" });
+    }
+    console.log(req.body);
+    res.status(500).json({ message: "Error creating a new post." });
+  }
 };
 
-//Controller para atualizar um post existente
+//Controller to update an existing post
 const updatePost = async (req, res) => {
-    try {
-        const { title, content } = req.body;
-        const updatePost = await postModel.updatePost(req.params.id, title, content);
-        if (!updatePost) {
-            return res.status(404).json({ message: "Post não encontrado." });
-        }
-        res.json({ message: "Post atualizado com sucesso.", updatePost });
-    } catch (error) {
-        res.status(500).json({ message: "Erro ao atualizar post." });
+  try {
+    const { title, content } = req.body;
+    const updatePost = await postModel.updatePost(
+      req.params.id,
+      title,
+      content
+    );
+    if (!updatePost) {
+      return res.status(404).json({ message: "Post not found." });
     }
+    res.json({ message: "Post updated successfully.", updatePost });
+  } catch (error) {
+    res.status(500).json({ message: "Error updating post." });
+  }
 };
 
-//Controller para deletar um post existente
+//Controller to delete an existing post
 const deletePost = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const deletedPost = await postModel.deletePost(id);
-        if (!deletedPost) {
-            return res.status(404).json({ message: "Post não encontrado." });
-        }
-        res.json({ message: "Post deletado com sucesso.", deletedPost });
-    } catch (error) {
-        res.status(500).json({ message: "Erro ao deletar post." });
+  try {
+    const { id } = req.params;
+    const deletedPost = await postModel.deletePost(id);
+    if (!deletedPost) {
+      return res.status(404).json({ message: "Post not found." });
     }
+    res.json({ message: "Post deleted successfully.", deletedPost });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting post." });
+  }
 };
 
-
-//Controller para curtir um post
-const likePost = async (req, res) => {
-    try {
-        const { postId } = req.params;
-        const { userId } = req.body;
-        const likedPost = await postModel.likePost(postId, userId);
-        if (!likedPost) {
-            return res.status(404).json({ message: "Post não encontrado." });
-        }
-        res.json({ message: "Post curtido com sucesso.", likedPost });
-    } catch (error) {
-        res.status(500).json({ message: "Erro ao curtir post." });
+//Controller to retrieve likes of a post
+const getLikes = async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const post = await postModel.getPostById(postId);
+    if (!post) {
+      return res.status(404).json({ message: "Post not found." });
     }
+    res
+      .status(200)
+      .json({ message: "Likes retrieved successfully.", likes: post.likes });
+  } catch (error) {
+    console.error("Error retrieving Likes:", error);
+    res.status(500).json({ message: "Error retrieving Likes." });
+  }
 };
 
+//Controller to update likes of a post
+const updateLikes = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { action } = req.body; // 
+    if (!["Like", "remove like"].includes(action)) {
+      return res
+        .status(400)
+        .json({ message: "Invalid action. Use 'remove like' or 'like'." });
+    }
 
-//Exportação dos controllers
-module.exports = {getPosts, getPostById, createPost, updatePost, deletePost, likePost};
+    const updatedPost = await postModel.updateLikes(id, action);
+    if (!updatedPost) {
+      return res
+        .status(404)
+        .json({ message: "Post not found or invalid operation." });
+    }
+
+    res.status(200).json({
+      message: "Likes updated successfully.",
+      likes: updatedPost.likes, // Corrected property reference
+    });
+  } catch (error) {
+    console.error("Error updating likes:", error); // Updated error message
+    res.status(500).json({ message: "Error updating likes." }); // Updated error message
+  }
+};
+
+//Export controllers
+module.exports = {
+  getPosts,
+  getPostById,
+  createPost,
+  updatePost,
+  deletePost,
+  getLikes,
+  updateLikes
+};

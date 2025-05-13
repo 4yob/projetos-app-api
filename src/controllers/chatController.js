@@ -3,10 +3,10 @@ const chatModel = require("../models/chatModel");
 const getChats = async (req, res) => {
     try {
         const chats = await chatModel.getChats();
-        res.status(201).json({ message: "Mensagens obtidas com sucesso.", chats });
+        res.status(201).json({ message: "Messages retrieved successfully.", chats });
     } catch (error) {
         console.error(error);
-        res.status(400).json({ message: "Erro ao buscar mensagens" });
+        res.status(400).json({ message: "Error retrieving messages." });
     }
 };
 
@@ -14,12 +14,12 @@ const getChatById = async (req, res) => {
     try {
         const chat = await chatModel.getChatById(req.params.id);
         if (!chat) {
-            return res.status(404).json({ message: "Mensagem não encontrada." });
+            return res.status(404).json({ message: "Message not found." });
         }
-        res.status(200).json({ message: "Mensagem obtida com sucesso.", chat });
+        res.status(200).json({ message: "Message retrieved successfully.", chat });
     } catch (error) {
         console.error(error);
-        res.status(404).json({ message: "Erro ao buscar mensagem" });
+        res.status(404).json({ message: "Error retrieving message." });
     }
 }
 
@@ -29,18 +29,18 @@ const createChat = async (req, res) => {
 
         // Validação dos campos obrigatórios
         if (!user_id || !message) {
-            return res.status(400).json({ message: "Campos obrigatórios não fornecidos." });
+            return res.status(400).json({ message: "Required fields not provided." });
         }
 
         const newChat = await chatModel.createChat(user_id, message);
-        res.status(201).json({ message: "Mensagem criada com sucesso.", newChat });
+        res.status(201).json({ message: "Message created successfully.", newChat });
     } catch (error) {
         console.error(error);
         if (error.code === "23505") {
-            return res.status(400).json({ message: "Chat já cadastrado!" });
+            return res.status(400).json({ message: "Chat already registered!" });
         }
         console.log(req.body);
-        res.status(500).json({ message: "Erro ao criar um novo chat" });
+        res.status(500).json({ message: "Error creating a new chat." });
     }
 };
 
@@ -49,11 +49,11 @@ const updateChat = async (req, res) => {
         const { message } = req.body;
         const updatedChat = await chatModel.updateChat(req.params.id, message);
         if (!updatedChat) {
-            return res.status(404).json({ message: "Mensagem não encontrada." });
+            return res.status(404).json({ message: "Message not found." });
         }
-        res.status(200).json({ message: "Mensagem atualizada com sucesso.", updatedChat });
+        res.status(200).json({ message: "Message updated successfully.", updatedChat });
     } catch (error) {
-        res.status(500).json({ message: "Erro ao atualizar mensagem." });
+        res.status(500).json({ message: "Error updating message." });
     }
 };
 
@@ -63,11 +63,11 @@ const deleteChat = async (req, res) => {
         const { id } = req.params;
         const deletedChat = await chatModel.deleteChat(id);
         if (!deletedChat) {
-            return res.status(404).json({ message: "Mensagem não encontrada." });
+            return res.status(404).json({ message: "Message not found." });
         }
-        res.status(200).json({ message: "Mensagem deletada com sucesso.", deletedChat });
+        res.status(200).json({ message: "Message deleted successfully.", deletedChat });
     } catch (error) {
-        res.status(500).json({ message: "Erro ao deletar mensagem." });
+        res.status(500).json({ message: "Error deleting message." });
     }
 };
 
