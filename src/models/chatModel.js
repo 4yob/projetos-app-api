@@ -5,8 +5,8 @@ const getChats = async () => {
         const result = await pool.query("SELECT * FROM chats");
         return result.rows;
     } catch (error) {
-        console.error("Erro ao obter todos os chats:", error);
-        throw new Error("Erro ao buscar chats no banco de dados.");
+        console.error("Error fetching all chats:", error);
+        throw new Error("Error retrieving chats from the database.");
     }
 };
 
@@ -15,7 +15,7 @@ const getChatById = async (id) => {
         const result = await pool.query("SELECT * FROM chats WHERE id = $1", [id]);
         return result.rows[0];
     } catch (error) {
-        console.error(`Erro ao obter chat com ID ${id}:`, error);
+        console.error(`Error fetching chat with ID ${id}:`, error);
         throw error;
     }
 };
@@ -28,7 +28,7 @@ const createChat = async (user_id, message) => {
         );
         return result.rows[0];
     } catch (error) {
-        console.error("Erro ao criar chat:", error);
+        console.error("Error creating chat:", error);
         throw error;
     }
 };
@@ -41,7 +41,7 @@ const updateChat = async (id, message) => {
         );
         return result.rows[0];
     } catch (error) {
-        console.error("Erro ao atualizar chat:", error);
+        console.error("Error updating chat:", error);
         throw error;
     }
 };
@@ -54,7 +54,7 @@ const deleteChat = async (id) => {
         );
         return result.rows[0];
     } catch (error) {
-        console.error("Erro ao deletar chat:", error);
+        console.error("Error deleting chat:", error);
         throw error;
     }
 };

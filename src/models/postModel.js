@@ -2,29 +2,29 @@
 
 const pool = require("../config/database");
 
-// Função para obter todos os posts
+// Function to fetch all posts
 const getPosts = async () => {
     try {
         const result = await pool.query("SELECT * FROM posts");
         return result.rows;
     } catch (error) {
-        console.error("Erro ao obter todos os posts:", error);
-        throw new Error("Erro ao buscar posts no banco de dados.");
+        console.error("Error fetching all posts:", error);
+        throw new Error("Error retrieving posts from the database.");
     }
 };
 
-// Função para obter um post específico pelo ID
+// Function to fetch a specific post by ID
 const getPostById = async (id) => {
     try {
         const result = await pool.query("SELECT * FROM posts WHERE id = $1", [id]);
         return result.rows[0];
     } catch (error) {
-        console.error(`Erro ao buscar o post com ID ${id}:`, error); // mantém o erro original
+        console.error(`Error fetching post with ID ${id}:`, error);
         throw error;
     }
 };
 
-// Função para criar um novo post
+// Function to create a new post
 const createPost = async (title, content, user_id, photo) => {
     try {
         const result = await pool.query(
@@ -33,38 +33,43 @@ const createPost = async (title, content, user_id, photo) => {
         );
         return result.rows[0];
     } catch (error) {
-        console.error("Erro ao criar o post:", error);
-        throw new Error("Erro ao criar o post no banco de dados.");
+        console.error("Error creating post:", error);
+        throw new Error("Error creating the post in the database.");
     }
 };
 
-// Função para atualizar um post existente
+// Function to update an existing post
 const updatePost = async (id, title, content) => {
+    try {
         const result = await pool.query(
             "UPDATE posts SET title = $1, content = $2 WHERE id = $3 RETURNING *",
             [title, content, id]
         );
         return result.rows[0];
+    } catch (error) {
+        console.error("Error updating post:", error);
+        throw error;
+    }
 };
 
-// Função para deletar um post existente
+// Function to delete an existing post
 const deletePost = async (id) => {
     try {
         const result = await pool.query("DELETE FROM posts WHERE id = $1 RETURNING *", [id]);
         return result.rows[0];
     } catch (error) {
-        console.error(`Erro ao deletar o post com ID ${id}:`, error);
-        throw new Error("Erro ao deletar o post no banco de dados.");
+        console.error(`Error deleting post with ID ${id}:`, error);
+        throw new Error("Error deleting the post from the database.");
     }
 };
 
-//Função para deletar todos os posts
+// Function to delete all posts
 const deleteAllPosts = async () => {
     try {
         await pool.query("DELETE FROM posts");
     } catch (error) {
-        console.error("Erro ao deletar todos os posts:", error);
-        throw new Error("Erro ao deletar todos os posts no banco de dados.");
+        console.error("Error deleting all posts:", error);
+        throw new Error("Error deleting all posts from the database.");
     }
 };
 
@@ -82,5 +87,5 @@ const updateLikes = async (id, action) => {
     }
 };
 
-// Exportando as funções para serem usadas em outros arquivos
+// Exporting functions to be used in other files
 module.exports = { getPosts, getPostById, createPost, updatePost, deletePost, deleteAllPosts, updateLikes };
