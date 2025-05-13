@@ -3,15 +3,22 @@
 const pool = require("../config/database");
 
 // Function to fetch all posts
-const getPosts = async () => {
+const getPosts = async (categoria) => {
     try {
-        const result = await pool.query("SELECT * FROM posts");
+        const query = categoria
+            ? "SELECT * FROM posts WHERE categoria ILIKE $1"
+            : "SELECT * FROM posts";
+
+        const values = categoria ? [`%${categoria}%`] : []; // Adicionado o uso de %
+
+        const result = await pool.query(query, values);
         return result.rows;
     } catch (error) {
-        console.error("Error fetching all posts:", error);
+        console.error("Error fetching posts:", error);
         throw new Error("Error retrieving posts from the database.");
     }
 };
+
 
 // Function to fetch a specific post by ID
 const getPostById = async (id) => {
@@ -28,7 +35,7 @@ const getPostById = async (id) => {
 const createPost = async (title, content, user_id, photo) => {
     try {
         const result = await pool.query(
-            "INSERT INTO posts (title, content, user_id, photo) VALUES ($1, $2, $3, $4) RETURNING *",
+            "INSERT INTO posts (title, content, user_id, photo, created_at) VALUES ($1, $2, $3, $4, NOW()) RETURNING *",
             [title, content, user_id, photo]
         );
         return result.rows[0];
