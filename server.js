@@ -3,10 +3,10 @@ const express = require("express");
 const cors = require("cors");
 const postRoutes = require("./src/routes/postRoutes");
 const userRoutes = require("./src/routes/userRoutes");
-
 const chatRoutes = require("./src/routes/chatRoutes");
 const commentsRoutes = require("./src/routes/commentsRoutes");
 const setupSwagger = require("./src/config/swagger.js");
+const reportRoutes = require("./src/routes/reportRoutes");
 
 const path = require("path");
 
@@ -20,10 +20,9 @@ setupSwagger(app);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/api", postRoutes);
 app.use("/api", userRoutes);
-
 app.use("/api", chatRoutes);
-
 app.use("/api", commentsRoutes);
+app.use("/api", reportRoutes);
 
 app.listen(PORT, () => {
     console.log(`🌸 Servidor rodando em http://localhost:${PORT}`);

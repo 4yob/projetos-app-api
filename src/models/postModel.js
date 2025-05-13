@@ -9,7 +9,7 @@ const getPosts = async (categoria) => {
             ? "SELECT * FROM posts WHERE categoria ILIKE $1"
             : "SELECT * FROM posts";
 
-        const values = categoria ? [`%${categoria}%`] : []; // Adicionado o uso de %
+        const values = categoria ? [`%${categoria}%`] : [];
 
         const result = await pool.query(query, values);
         return result.rows;
