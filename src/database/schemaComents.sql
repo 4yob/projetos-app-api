@@ -8,11 +8,11 @@ CREATE TABLE comments (
 
 INSERT INTO comments (user_id, post_id, text_comment) 
 VALUES 
-    (4, 11, 'Ótimo post! Muito informativo.'),
-    (2, 13, 'Concordo com o que foi dito.'),
-    (3, 14, 'Tenho uma dúvida sobre o conteúdo.'),
-    (4, 15, 'Parabéns pelo trabalho!'),
-    (5, 16, 'Muito interessante, obrigado por compartilhar.');
+    (4, 1, 'Ótimo post! Muito informativo.'),
+    (2, 2, 'Concordo com o que foi dito.'),
+    (3, 4, 'Tenho uma dúvida sobre o conteúdo.'),
+    (4, 7, 'Parabéns pelo trabalho!'),
+    (5, 2, 'Muito interessante, obrigado por compartilhar.');
 
 
 

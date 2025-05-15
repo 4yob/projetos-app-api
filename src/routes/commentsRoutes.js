@@ -4,8 +4,8 @@ const commentsController = require("../controllers/commentsController");
 /**
  * @swagger
  * tags:
- *   name: Comments
- *   description: Gerenciamento de Comentários
+ *   - name: Comments
+ *     description: Gerenciamento de Comentários
  */
 
 /**
@@ -22,7 +22,7 @@ router.get("/comments", commentsController.getComments);
 
 /**
  * @swagger
- * /comment/{id}:
+ * /api/comment/{id}:
  *   get:
  *     summary: Busca um comentário por ID
  *     tags: [Comments]
@@ -45,12 +45,15 @@ router.get("/comments", commentsController.getComments);
  *                 id:
  *                   type: integer
  *                   example: 1
- *                 name:
+ *                 user_id:
+ *                   type: integer
+ *                   example: 2
+ *                 post_id:
+ *                   type: integer
+ *                   example: 3
+ *                 text_comment:
  *                   type: string
- *                   example: "João Silva"
- *                 email:
- *                   type: string
- *                   example: "joao.silva@example.com"
+ *                   example: "Comentário de exemplo"
  *       404:
  *         description: Comentário não encontrado
  */
@@ -58,7 +61,7 @@ router.get("/comment/:id", commentsController.getCommentById);
 
 /**
  * @swagger
- * /comment:
+ * /api/comment:
  *   post:
  *     summary: Cria um novo comentário
  *     tags: [Comments]
@@ -83,7 +86,7 @@ router.post("/comment", commentsController.createComment);
 
 /**
  * @swagger
- * /comment/{id}:
+ * /api/comment/{id}:
  *   put:
  *     summary: Atualiza um comentário existente
  *     tags: [Comments]
@@ -111,7 +114,7 @@ router.put("/comment/:id", commentsController.updateComment);
 
 /**
  * @swagger
- * /comment/{id}:
+ * /api/comment/{id}:
  *   delete:
  *     summary: Exclui um comentário pelo ID
  *     tags: [Comments]
