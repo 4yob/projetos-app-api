@@ -7,6 +7,7 @@ const chatRoutes = require("./src/routes/chatRoutes");
 const commentsRoutes = require("./src/routes/commentsRoutes");
 const setupSwagger = require("./src/config/swagger.js");
 const reportRoutes = require("./src/routes/reportRoutes");
+const notificacaoRoutes = require("./src/routes/notificacaoRoutes");
 
 const path = require("path");
 
@@ -23,6 +24,7 @@ app.use("/api", userRoutes);
 app.use("/api", chatRoutes);
 app.use("/api", commentsRoutes);
 app.use("/api", reportRoutes);
+app.use("/api", notificacaoRoutes);
 
 app.listen(PORT, () => {
     console.log(`🌸 Servidor rodando em http://localhost:${PORT}`);

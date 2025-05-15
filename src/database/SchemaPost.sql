@@ -48,4 +48,19 @@ INSERT INTO chats (user_id, message, photo) VALUES
     (5, 'A moda é uma forma de liberdade. Liberte-se! 🌟', 'https://br.pinterest.com/pin/1407443629356036/');
 
 
+CREATE TABLE notifications (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    post_id INTEGER REFERENCES posts(id) ON DELETE CASCADE,
+    message TEXT NOT NULL,
+    lida BOOLEAN DEFAULT FALSE,
+    enviada BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
+INSERT INTO notifications (user_id, post_id, message, lida, enviada) VALUES
+    (1, 1, 'Você recebeu um novo comentário em seu post!', FALSE, FALSE),
+    (2, 2, 'Você recebeu um novo comentário em seu post!', FALSE, FALSE),
+    (3, 3, 'Você recebeu um novo comentário em seu post!', FALSE, FALSE),
+    (4, 4, 'Você recebeu um novo comentário em seu post!', FALSE, FALSE),
+    (5, 5, 'Você recebeu um novo comentário em seu post!', FALSE, FALSE);
