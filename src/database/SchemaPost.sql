@@ -2,7 +2,7 @@
 -- CRIAÇÃO DO BANCO DE DADOS GLAMSYNC
 
 CREATE DATABASE glamsync;
-\c glamsync;
+
 
 -- Schema creation for PostgreSQL
 
