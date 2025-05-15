@@ -19,9 +19,8 @@ const upload = multer({ dest: "uploads/" });
  *     tags: [Users]
  *     responses:
  *       200:
- *         description: Usuários retornados com sucesso
+ *         description: Usuários retornados com sucesso!
  */
-
 router.get("/users", userController.getUsers);
 
 /**
@@ -36,15 +35,30 @@ router.get("/users", userController.getUsers);
  *         required: true
  *         schema:
  *           type: integer
+ *           example: 1
  *         description: ID do usuário
  *     responses:
  *       200:
  *         description: Usuário encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                   example: 1
+ *                 name:
+ *                   type: string
+ *                   example: "João Silva"
+ *                 email:
+ *                   type: string
+ *                   example: "joao.silva@example.com"
  *       404:
  *         description: Usuário não encontrado
  */
-
 router.get("/users/:id", userController.getUserById);
+
 /**
  * @swagger
  * /api/users:
@@ -64,6 +78,20 @@ router.get("/users/:id", userController.getUserById);
  *               email:
  *                 type: string
  *                 description: Email do usuário
+ *               username:
+ *                 type: string
+ *                 description: Nome de usuário
+ *               location:
+ *                 type: string
+ *                 description: Localização do usuário
+ *               following:
+*                 type: integer
+*                 description: Número de pessoas que o usuário está seguindo.
+*                 example: 0
+*               followers:
+*                 type: integer
+*                 description: Número de seguidores do usuário.
+*                 example: 0
  *               photo:
  *                 type: string
  *                 format: binary
@@ -72,7 +100,6 @@ router.get("/users/:id", userController.getUserById);
  *       201:
  *         description: Usuário criado com sucesso
  */
-
 router.post("/users", (req, res, next) => {
     upload.single("photo")(req, res, (err) => {
         if (err) {
@@ -94,11 +121,12 @@ router.post("/users", (req, res, next) => {
  *         required: true
  *         schema:
  *           type: integer
+ *           example: 1
  *         description: ID do usuário
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
@@ -108,10 +136,21 @@ router.post("/users", (req, res, next) => {
  *               email:
  *                 type: string
  *                 description: Email do usuário
+ *               username:
+ *                 type: string
+ *                 description: Nome de usuário
+ *               location:
+ *                 type: string
+ *                 description: Localização do usuário
+ *               photo:
+ *                 type: string
+ *                 format: binary
+ *                 description: Foto do usuário
  *     responses:
  *       200:
  *         description: Usuário atualizado com sucesso
  */
+
 router.put("/users/:id", (req, res, next) => {
     upload.single("photo")(req, res, (err) => {
         if (err) {
@@ -133,6 +172,7 @@ router.put("/users/:id", (req, res, next) => {
  *         required: true
  *         schema:
  *           type: integer
+ *           example: 1
  *         description: ID do usuário
  *     responses:
  *       200:
@@ -154,6 +194,7 @@ router.delete("/users/:id", userController.deleteUser);
  *         required: true
  *         schema:
  *           type: integer
+ *           example: 1
  *         description: ID do usuário
  *     responses:
  *       200:
@@ -175,6 +216,7 @@ router.get("/users/:id/followers", userController.getFollowers);
  *         required: true
  *         schema:
  *           type: integer
+ *           example: 1
  *         description: ID do usuário
  *     requestBody:
  *       required: true
@@ -209,6 +251,7 @@ router.patch("/users/:id/followers", userController.updateFollowers);
  *         required: true
  *         schema:
  *           type: integer
+ *           example: 1
  *         description: ID do usuário
  *     responses:
  *       200:
@@ -230,6 +273,7 @@ router.get("/users/:id/following", userController.getFollowing);
  *         required: true
  *         schema:
  *           type: integer
+ *           example: 1
  *         description: ID do usuário
  *     requestBody:
  *       required: true

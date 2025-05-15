@@ -13,7 +13,7 @@ const getUserById = async (id) => {
 };
 
 //Api para criar um novo usuário
-const createUser = async (name, username, email, location, following, followers, photo) => {
+const createUser = async (name, username, email, location, following = 0, followers = 0, photo) => {
     const result = await pool.query(
         "INSERT INTO users (name, username, email, location, following, followers, photo) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
         [name, username, email, location, following, followers, photo]

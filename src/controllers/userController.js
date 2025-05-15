@@ -26,6 +26,19 @@ const getUserById = async (req, res) => {
 const createUser = async (req, res) => {
     try {
         const { name, username, email, location, following, followers } = req.body;
+
+        if (!name || !email || !username) {
+            return res.status(400).json({ message: "Os campos 'name', 'email' e 'username' são obrigatórios." });
+        }
+
+        // Validação de números
+        if (following && isNaN(following)) {
+            return res.status(400).json({ message: "'following' deve ser um número." });
+        }
+        if (followers && isNaN(followers)) {
+            return res.status(400).json({ message: "'followers' deve ser um número." });
+        }
+
         const photo = req.file ? req.file.filename : null;
         const newUser = await userModel.createUser(name, username, email, location, following, followers, photo);
         res.status(201).json({ message: "User created successfully.", newUser });
@@ -119,7 +132,7 @@ const updateFollowing = async (req, res) => {
     try {
         const { id } = req.params;
         const { action } = req.body;
-        console.log(`Received request to update following for user ${id} with action ${action}`); 
+        console.log(`Received request to update following for user ${id} with action ${action}`);
 
         if (!["follow", "unfollow"].includes(action)) {
             return res.status(400).json({ message: "Invalid action. Use 'follow' or 'unfollow'." });
@@ -127,7 +140,7 @@ const updateFollowing = async (req, res) => {
 
         const updatedUser = await userModel.updateFollowing(id, action);
         if (!updatedUser) {
-            console.log(`User ${id} not found or invalid operation`); 
+            console.log(`User ${id} not found or invalid operation`);
             return res.status(404).json({ message: "User not found or invalid operation." });
         }
 
