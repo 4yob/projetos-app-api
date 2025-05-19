@@ -46,7 +46,11 @@ const createUser = async (req, res) => {
     } catch (error) {
         console.log(error);
         if (error.code === "23505") {
-            res.status(400).json({ message: "Email already registered." });
+            if (error.constraint === "users_email_key") {
+                res.status(400).json({ message: "Email already registered." });
+            } else if (error.constraint === "users_username_key") {
+                res.status(400).json({ message: "Username already used, please try again!" });
+            }
         }
         res.status(404).json({ message: "Error creating user." });
     }
