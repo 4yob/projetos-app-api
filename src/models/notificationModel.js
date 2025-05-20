@@ -1,9 +1,10 @@
 const pool = require("../config/database");
 
 // Buscar todas as notificações
-const getNotificacoes = async () => {
+const getNotifications = async () => {
     try {
-        const result = await pool.query("SELECT * FROM notificacoes ORDER BY created_at DESC");
+        const result = await pool.query("SELECT * FROM notifications ORDER BY created_at DESC");
+        console.log("Notificações retornadas do banco de dados:", result.rows); // Log para depuração
         return result.rows;
     } catch (error) {
         console.error("Erro ao buscar notificações:", error);
@@ -12,9 +13,9 @@ const getNotificacoes = async () => {
 };
 
 // Buscar uma notificação por ID
-const getNotificacaoById = async (id) => {
+const getNotificationById = async (id) => {
     try {
-        const result = await pool.query("SELECT * FROM notificacoes WHERE id = $1", [id]);
+        const result = await pool.query("SELECT * FROM notifications WHERE id = $1", [id]);
         return result.rows[0];
     } catch (error) {
         console.error(`Erro ao buscar notificação com ID ${id}:`, error);
@@ -23,11 +24,11 @@ const getNotificacaoById = async (id) => {
 };
 
 // Criar uma nova notificação
-const createNotificacao = async (user_id, mensagem) => {
+const createNotification = async (user_id, message, post_id) => {
     try {
         const result = await pool.query(
-            "INSERT INTO notificacoes (user_id, mensagem, created_at) VALUES ($1, $2, NOW()) RETURNING *",
-            [user_id, mensagem]
+            "INSERT INTO notifications (user_id, message, post_id, created_at) VALUES ($1, $2, $3, NOW()) RETURNING *",
+            [user_id, message, post_id]
         );
         return result.rows[0];
     } catch (error) {
@@ -37,11 +38,11 @@ const createNotificacao = async (user_id, mensagem) => {
 };
 
 // Atualizar uma notificação existente
-const updateNotificacao = async (id, mensagem) => {
+const updateNotification = async (id, message, post_id) => {
     try {
         const result = await pool.query(
-            "UPDATE notificacoes SET mensagem = $1 WHERE id = $2 RETURNING *",
-            [mensagem, id]
+            "UPDATE notifications SET message = $1, post_id = $2 WHERE id = $3 RETURNING *",
+            [message, post_id, id]
         );
         return result.rows[0];
     } catch (error) {
@@ -51,9 +52,9 @@ const updateNotificacao = async (id, mensagem) => {
 };
 
 // Deletar uma notificação
-const deleteNotificacao = async (id) => {
+const deleteNotification = async (id) => {
     try {
-        const result = await pool.query("DELETE FROM notificacoes WHERE id = $1 RETURNING *", [id]);
+        const result = await pool.query("DELETE FROM notifications WHERE id = $1 RETURNING *", [id]);
         return result.rows[0];
     } catch (error) {
         console.error(`Erro ao deletar notificação com ID ${id}:`, error);
@@ -62,9 +63,9 @@ const deleteNotificacao = async (id) => {
 };
 
 module.exports = {
-    getNotificacoes,
-    getNotificacaoById,
-    createNotificacao,
-    updateNotificacao,
-    deleteNotificacao
+    getNotifications,
+    getNotificationById,
+    createNotification,
+    updateNotification,
+    deleteNotification
 };

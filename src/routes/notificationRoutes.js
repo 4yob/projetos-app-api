@@ -1,32 +1,32 @@
 const express = require("express");
 const router = express.Router();
-const notificacaoController = require("../controllers/notificacaoController");
+const notificationController = require("../controllers/notificationController");
 
 /**
  * @swagger
  * tags:
- *   - name: Notificacoes
+ *   - name: Notifications
  *     description: Gerenciamento de Notificações
  */
 
 /**
  * @swagger
- * /api/notificacoes:
+ * /api/notifications:
  *   get:
  *     summary: Listar todas as notificações
- *     tags: [Notificacoes]
+ *     tags: [Notifications]
  *     responses:
  *       200:
  *         description: Notificações retornadas com sucesso!
  */
-router.get("/notificacoes", notificacaoController.getNotificacoes);
+router.get("/notification", notificationController.getNotifications);
 
 /**
  * @swagger
- * /api/notificacao/{id}:
+ * /api/notification/{id}:
  *   get:
  *     summary: Busca uma notificação por ID
- *     tags: [Notificacoes]
+ *     tags: [Notifications]
  *     parameters:
  *       - in: path
  *         name: id
@@ -58,14 +58,14 @@ router.get("/notificacoes", notificacaoController.getNotificacoes);
  *       404:
  *         description: Notificação não encontrada
  */
-router.get("/notificacao/:id", notificacaoController.getNotificacaoById);
+router.get("/notification/:id", notificationController.getNotificationById);
 
 /**
  * @swagger
- * /api/notificacao:
+ * /api/notification:
  *   post:
  *     summary: Cria uma nova notificação
- *     tags: [Notificacoes]
+ *     tags: [Notifications]
  *     requestBody:
  *       required: true
  *       content:
@@ -81,14 +81,14 @@ router.get("/notificacao/:id", notificacaoController.getNotificacaoById);
  *       201:
  *         description: Notificação criada com sucesso
  */
-router.post("/notificacao", notificacaoController.createNotificacao);
+router.post("/notification", notificationController.createNotification);
 
 /**
  * @swagger
- * /api/notificacao/{id}:
+ * /api/notification/{id}:
  *   put:
  *     summary: Atualiza uma notificação existente
- *     tags: [Notificacoes]
+ *     tags: [Notifications]
  *     parameters:
  *       - in: path
  *         name: id
@@ -109,14 +109,14 @@ router.post("/notificacao", notificacaoController.createNotificacao);
  *       200:
  *         description: Notificação atualizada com sucesso
  */
-router.put("/notificacao/:id", notificacaoController.updateNotificacao);
+router.put("/notification/:id", notificationController.updateNotification);
 
 /**
  * @swagger
- * /api/notificacao/{id}:
+ * /api/notification/{id}:
  *   delete:
  *     summary: Exclui uma notificação pelo ID
- *     tags: [Notificacoes]
+ *     tags: [Notifications]
  *     parameters:
  *       - in: path
  *         name: id
@@ -128,6 +128,6 @@ router.put("/notificacao/:id", notificacaoController.updateNotificacao);
  *       200:
  *         description: Notificação excluída com sucesso
  */
-router.delete("/notificacao/:id", notificacaoController.deleteNotificacao);
+router.delete("/notification/:id", notificationController.deleteNotification);
 
 module.exports = router;
