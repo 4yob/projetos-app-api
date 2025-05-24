@@ -1,3 +1,101 @@
+/* Banco de Dados */
+
+CREATE DATABASE glamsync;
+\c glamsync;
+
+-- Create a table for users
+
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    location VARCHAR(100),
+    photo TEXT,
+    following INT DEFAULT 0,
+    followers INT DEFAULT 0,
+    created_user TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Insert sample data into users table
+
+INSERT INTO users (name, username, email, location, photo, following, followers) 
+VALUES 
+    ('Alice Johnson', 'alicej', 'alice@example.com', 'New York', 'https://example.com/photos/alice.jpg', 10, 50),
+    ('Bob Smith', 'bobsmith', 'bob@example.com', 'Los Angeles', 'https://example.com/photos/bob.jpg', 20, 100),
+    ('Charlie Brown', 'charlieb', 'charlie@example.com', 'Chicago', 'https://example.com/photos/charlie.jpg', 15, 75),
+    ('Diana Prince', 'dianap', 'diana@example.com', 'San Francisco', 'https://example.com/photos/diana.jpg', 30, 200),
+    ('Ethan Hunt', 'ethanh', 'ethan@example.com', 'Miami', 'https://example.com/photos/ethan.jpg', 25, 150);
+
+-- Create a table for posts
+
+CREATE TABLE posts (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    title VARCHAR(200) NOT NULL,
+    content TEXT NOT NULL,
+    categoria VARCHAR(50) NOT NULL,
+    photo TEXT,
+    likes INT DEFAULT 0,
+    comments INT DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Insert sample data into posts table
+
+INSERT INTO posts (user_id, title, content, categoria, photo, likes, comments) 
+VALUES 
+    (1, 'Moda é vida', 'O estilo é uma maneira de dizer quem você é sem precisar falar. 💬👗', 'Roupas', 'https://br.pinterest.com/pin/1407443629356036/', 60, 54),
+    (2, 'Estilo pessoal', 'Vestir-se bem é uma arte, e eu sou a obra-prima. 🎨✨', 'Sapatos', 'https://br.pinterest.com/pin/3377768467826560/', 45, 30),
+    (3, 'Liberdade na moda', 'A moda é uma forma de liberdade. Liberte-se! 🌟', 'Roupas', 'https://br.pinterest.com/pin/1407443629356036/', 80, 20),
+    (4, 'Elegância', 'Elegância não é sobre ser notada, mas sobre ser lembrada. ✨👑', 'Joias', 'https://br.pinterest.com/pin/1407443629356036/', 90, 15),
+    (5, 'Brilho pessoal', 'Toda mulher é uma estrela, e o estilo é seu brilho. ✨🌟', 'Maquiagem', 'https://br.pinterest.com/pin/1407443629356036/', 70, 25);
+
+
+-- Create a table for chats
+
+CREATE TABLE chats (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    message TEXT NOT NULL,
+    photo TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Insert sample data into chats table
+
+INSERT INTO chats (user_id, message, photo) VALUES
+    (1, 'A moda é uma forma de liberdade. Liberte-se! 🌟', 'https://br.pinterest.com/pin/1407443629356036/'),
+    (2, 'A moda é uma forma de liberdade. Liberte-se! 🌟', 'https://br.pinterest.com/pin/1407443629356036/'),
+    (3, 'A moda é uma forma de liberdade. Liberte-se! 🌟', 'https://br.pinterest.com/pin/1407443629356036/'),
+    (4, 'A moda é uma forma de liberdade. Liberte-se! 🌟', 'https://br.pinterest.com/pin/1407443629356036/'),
+    (5, 'A moda é uma forma de liberdade. Liberte-se! 🌟', 'https://br.pinterest.com/pin/1407443629356036/');
+
+
+-- Create a table for notifications
+
+
+CREATE TABLE notifications (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    post_id INTEGER REFERENCES posts(id) ON DELETE CASCADE,
+    message TEXT NOT NULL,
+    lida BOOLEAN DEFAULT FALSE,
+    enviada BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Insert sample data into notifications table
+
+INSERT INTO notifications (user_id, post_id, message, lida, enviada) VALUES
+    (1, 1, 'Você recebeu um novo comentário em seu post!', FALSE, FALSE),
+    (2, 2, 'Você recebeu um novo comentário em seu post!', FALSE, FALSE),
+    (3, 3, 'Você recebeu um novo comentário em seu post!', FALSE, FALSE),
+    (4, 4, 'Você recebeu um novo comentário em seu post!', FALSE, FALSE),
+    (5, 5, 'Você recebeu um novo comentário em seu post!', FALSE, FALSE);
+
+-- Create a table for comments
+
 CREATE TABLE comments (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
@@ -5,6 +103,8 @@ CREATE TABLE comments (
     text_comment VARCHAR(350),
     date_comment TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Insert sample data into comments table
 
 INSERT INTO comments (user_id, post_id, text_comment) 
 VALUES 
@@ -292,4 +392,4 @@ VALUES
     (100, 133, 'A energia desse look é única! 🌈❤️'),
     (100, 134, 'Super criativa e ousada na escolha 💡👚'),
     (100, 135, 'Look pra copiar já! 📌✨'),
-    (100, 136, 'Chique e descolada como sempre! 😍💼'),
+    (100, 136, 'Chique e descolada como sempre! 😍💼');
