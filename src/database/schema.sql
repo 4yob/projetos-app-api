@@ -393,3 +393,11 @@ VALUES
     (100, 134, 'Super criativa e ousada na escolha 💡👚'),
     (100, 135, 'Look pra copiar já! 📌✨'),
     (100, 136, 'Chique e descolada como sempre! 😍💼');
+
+
+CREATE TABLE categorias (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(150) NOT NULL UNIQUE,
+    descricao TEXT NOT NULL,
+     criada_em DATETIME DEFAULT CURRENT_TIMESTAMP,
+);
