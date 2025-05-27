@@ -32,6 +32,8 @@ VALUES
 CREATE TABLE posts (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    categoria_id INTEGER REFERENCES categorias(id) ON DELETE CASCADE,
+    
     title VARCHAR(200) NOT NULL,
     content TEXT NOT NULL,
     categoria VARCHAR(50) NOT NULL,
@@ -398,6 +400,5 @@ VALUES
 CREATE TABLE categorias (
     id SERIAL PRIMARY KEY,
     nome VARCHAR(150) NOT NULL UNIQUE,
-    descricao TEXT NOT NULL,
-     criada_em DATETIME DEFAULT CURRENT_TIMESTAMP,
+    descricao TEXT NOT NULL
 );
