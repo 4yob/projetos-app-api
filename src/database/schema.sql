@@ -32,11 +32,9 @@ VALUES
 CREATE TABLE posts (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-    categoria_id INTEGER REFERENCES categorias(id) ON DELETE CASCADE,
-    
+    categorie_id INTEGER REFERENCES categories(id) ON DELETE CASCADE,
     title VARCHAR(200) NOT NULL,
     content TEXT NOT NULL,
-    categoria VARCHAR(50) NOT NULL,
     photo TEXT,
     likes INT DEFAULT 0,
     comments INT DEFAULT 0,
@@ -399,8 +397,9 @@ VALUES
 
 CREATE TABLE categories (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(150) NOT NULL UNIQUE,
+    name VARCHAR(150) NOT NULL UNIQUE
 );
+
 
 
 
