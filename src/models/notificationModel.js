@@ -62,10 +62,24 @@ const deleteNotification = async (id) => {
     }
 };
 
+const ganharNotificacao = async (user_id, message, post_id, chat_id) => {
+    try {
+        const result = await pool.query(
+            "INSERT INTO notifications (user_id, message, post_id, chat_id, created_at) VALUES ($1, $2, $3, $4, NOW()) RETURNING *",
+            [user_id, message, post_id, chat_id]
+        );
+        return result.rows[0];
+    } catch (error) {
+        console.error("Erro ao ganhar notificação:", error);
+        throw new Error("Erro ao ganhar notificação no banco de dados.");
+    }
+};
+
 module.exports = {
     getNotifications,
     getNotificationById,
     createNotification,
     updateNotification,
-    deleteNotification
+    deleteNotification,
+    ganharNotificacao
 };
