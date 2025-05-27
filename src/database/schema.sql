@@ -397,8 +397,10 @@ VALUES
     (100, 136, 'Chique e descolada como sempre! 😍💼');
 
 
-CREATE TABLE categorias (
+CREATE TABLE categories (
     id SERIAL PRIMARY KEY,
-    nome VARCHAR(150) NOT NULL UNIQUE,
-    descricao TEXT NOT NULL
+    name VARCHAR(150) NOT NULL UNIQUE,
 );
+
+
+

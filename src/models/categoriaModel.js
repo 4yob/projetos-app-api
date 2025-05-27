@@ -20,11 +20,11 @@ const getCategoriaById = async (id) => {
     }
 };
 
-const createCategoria = async (user_id, message) => {
+const createCategoria = async (user_id, name) => {
     try {
         const result = await pool.query(
-            "INSERT INTO categorias (user_id, message) VALUES ($1, $2) RETURNING *",
-            [user_id, message]
+            "INSERT INTO categorias (user_id, name) VALUES ($1, $2) RETURNING *",
+            [user_id, name]
         );
         return result.rows[0];
     } catch (error) {
@@ -33,11 +33,11 @@ const createCategoria = async (user_id, message) => {
     }
 };
 
-const updateCategoria = async (id, message) => {
+const updateCategoria = async (id, name) => {
     try {
         const result = await pool.query(
-            "UPDATE categorias SET message = $1 WHERE id = $2 RETURNING *",
-            [message, id]
+            "UPDATE categorias SET name = $1 WHERE id = $2 RETURNING *",
+            [name, id]
         );
         return result.rows[0];
     } catch (error) {
