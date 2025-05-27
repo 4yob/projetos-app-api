@@ -169,12 +169,14 @@ CREATE TABLE notifications (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     post_id INTEGER REFERENCES posts(id) ON DELETE CASCADE,
+    chat_id INTEGER REFERENCES chats(id) ON DELETE CASCADE, 
     message TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+
 -- Insert sample data into notifications table
-INSERT INTO notifications (user_id, post_id, message) VALUES
+INSERT INTO notifications (user_id, post_id, chat_id, message) VALUES
 (1, 1, 'Você foi marcado em uma nova publicação.'),
 (2, 2, 'Alguém comentou no seu post! Confira agora.'),
 (3, 3, 'Chegou um novo comentário para você.'),
