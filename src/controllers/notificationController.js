@@ -68,10 +68,25 @@ const deleteNotification = async (req, res) => {
   }
 };
 
+const ganharNotificacao = async (req, res) => {
+  try {
+    const { user_id, message, post_id, chat_id } = req.body;
+    if (!user_id || !message || !post_id || !chat_id) {
+      return res.status(400).json({ message: "Campos obrigatórios não informados." });
+    }
+    const newNotification = await notificationModel.ganharNotificacao(user_id, message, post_id, chat_id);
+    res.status(201).json(newNotification);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Erro ao ganhar notificação." });
+  }
+}
+
 module.exports = {
   getNotifications,
   getNotificationById,
   createNotification,
   updateNotification,
-  deleteNotification
+  deleteNotification,
+  ganharNotificacao
 };

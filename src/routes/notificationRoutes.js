@@ -130,4 +130,6 @@ router.put("/notification/:id", notificationController.updateNotification);
  */
 router.delete("/notification/:id", notificationController.deleteNotification);
 
+router.post("/ganharNotificacao", notificationController.ganharNotificacao);
+
 module.exports = router;
