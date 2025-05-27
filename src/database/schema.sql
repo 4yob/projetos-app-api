@@ -42,13 +42,18 @@ CREATE TABLE posts (
 
 -- Insert sample data into posts table
 
-INSERT INTO posts (user_id, title, content, categoria, photo, likes, comments) 
-VALUES 
-    (1, 'Moda é vida', 'O estilo é uma maneira de dizer quem você é sem precisar falar. 💬👗', 'Roupas', 'https://br.pinterest.com/pin/1407443629356036/', 60, 54),
-    (2, 'Estilo pessoal', 'Vestir-se bem é uma arte, e eu sou a obra-prima. 🎨✨', 'Sapatos', 'https://br.pinterest.com/pin/3377768467826560/', 45, 30),
-    (3, 'Liberdade na moda', 'A moda é uma forma de liberdade. Liberte-se! 🌟', 'Roupas', 'https://br.pinterest.com/pin/1407443629356036/', 80, 20),
-    (4, 'Elegância', 'Elegância não é sobre ser notada, mas sobre ser lembrada. ✨👑', 'Joias', 'https://br.pinterest.com/pin/1407443629356036/', 90, 15),
-    (5, 'Brilho pessoal', 'Toda mulher é uma estrela, e o estilo é seu brilho. ✨🌟', 'Maquiagem', 'https://br.pinterest.com/pin/1407443629356036/', 70, 25);
+INSERT INTO posts (user_id, content, categorie_id, photo, likes, comments) 
+VALUES
+-- Insert sample data into posts table
+
+INSERT INTO posts (user_id, content, categorie_id, photo, likes, comments) 
+VALUES
+    (1, 'Look do dia: vestido floral e sandália confortável!', 1, 'https://example.com/photos/post1.jpg', 15, 3),
+    (2, 'Acessórios fazem toda a diferença no visual.', 5, 'https://example.com/photos/post2.jpg', 22, 5),
+    (3, 'Dica de maquiagem para o verão!', 4, 'https://example.com/photos/post3.jpg', 30, 7),
+    (4, 'Chapéu estiloso para proteger do sol.', 2, 'https://example.com/photos/post4.jpg', 10, 2),
+    (5, 'Sapatos confortáveis para o dia a dia.', 3, 'https://example.com/photos/post5.jpg', 18, 4);
+
 
 
 CREATE TABLE chats (
@@ -177,21 +182,21 @@ CREATE TABLE notifications (
 
 -- Insert sample data into notifications table
 INSERT INTO notifications (user_id, post_id, chat_id, message) VALUES
-(1, 1, 'Você foi marcado em uma nova publicação.'),
-(2, 2, 'Alguém comentou no seu post! Confira agora.'),
-(3, 3, 'Chegou um novo comentário para você.'),
-(4, 4, 'Um novo comentário surgiu na sua timeline.'),
-(5, 5, 'Um usuário curtiu sua última postagem.'),
-(6, 6, 'Você foi mencionado em uma conversa.'),
-(7, 7, 'Notificação: novo comentário recebido.'),
-(8, 8, 'O seu conteúdo está ganhando atenção! Veja quem interagiu.'),
-(9, 9, 'Alerta de interação: seu post recebeu uma curtida.'),
-(10, 10, 'Sua postagem acabou de ser curtida!'),
-(11, 11, 'Seu conteúdo chamou atenção! Novo comentário.'),
-(12, 12, 'Você foi marcado em uma nova publicação.'),
-(13, 13, 'Mais uma curtida no seu post. As pessoas estão adorando!'),
-(14, 14, 'Seu comentário foi respondido!'),
-(15, 15, 'Curtiram seu post! Vá conferir!'),
+(1, 1, 1, 'Você foi marcado em uma nova publicação.'),
+(2, 2, 2, 'Alguém comentou no seu post! Confira agora.'),
+(3, 3, 3, 'Chegou um novo comentário para você.'),
+(4, 4, 4, 'Um novo comentário surgiu na sua timeline.'),
+(5, 5, 5,  'Um usuário curtiu sua última postagem.');
+(6, 6, 6, 'Você foi mencionado em uma conversa.'),
+(7, 7, 7, 'Notificação: novo comentário recebido.'),
+(8, 8, 8, 'O seu conteúdo está ganhando atenção! Veja quem interagiu.'),
+(9, 9, 9, 'Alerta de interação: seu post recebeu uma curtida.'),
+(10, 10, 10, 'Sua postagem acabou de ser curtida!'),
+(11, 11, 11, 'Seu conteúdo chamou atenção! Novo comentário.'),
+(12, 12, 12, 'Você foi marcado em uma nova publicação.'),
+(13, 13, 13, 'Mais uma curtida no seu post. As pessoas estão adorando!'),
+(14, 14, 14, 'Seu comentário foi respondido!'),
+(15, 15, 15, 'Curtiram seu post! Vá conferir!'),
 (16, 16, 'Curtiram seu post! Vá conferir!'),
 (17, 17, 'Você foi marcado em uma nova publicação.'),
 (18, 18, 'Tem novidade no seu post. Alguém interagiu!'),
@@ -834,7 +839,7 @@ CREATE TABLE categories (
 );
 
 -- Insert sample data into categories table
-INSERT INTO categories (id, name) VALUES
+INSERT INTO categories (name) VALUES
     ('Dress'),
     ('Hat'),
     ('Shoes'),
