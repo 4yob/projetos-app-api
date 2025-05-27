@@ -28,7 +28,7 @@ const getPostById = async (id) => {
 };
 
 // Function to create a new post
-const createPost = async ( user_id, categorie_id, content,  photo, ) => {
+const createPost = async ( user_id, categorie_id, content,  photo ) => {
     try {
         const result = await pool.query(
             "INSERT INTO posts ( user_id, categorie_id, content, photo,  created_at) VALUES ($1, $2, $3, $4, NOW()) RETURNING *",
