@@ -35,7 +35,6 @@ CREATE TABLE posts (
     categoria_id INTEGER REFERENCES categorias(id) ON DELETE CASCADE,
     title VARCHAR(200) NOT NULL,
     content TEXT NOT NULL,
-    categoria VARCHAR(50) NOT NULL,
     photo TEXT,
     likes INT DEFAULT 0,
     comments INT DEFAULT 0,
@@ -530,8 +529,11 @@ VALUES
 
 
 
-CREATE TABLE categorias (
+CREATE TABLE categories (
     id SERIAL PRIMARY KEY,
-    nome VARCHAR(150) NOT NULL UNIQUE,
-    descricao TEXT NOT NULL
+    name VARCHAR(150) NOT NULL UNIQUE
 );
+
+
+
+

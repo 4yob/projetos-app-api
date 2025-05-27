@@ -3,13 +3,13 @@
 const pool = require("../config/database");
 
 // Function to fetch all posts
-const getPosts = async (categoria) => {
+const getPosts = async (categories) => {
     try {
-        const query = categoria
-            ? "SELECT * FROM posts WHERE categoria ILIKE $1"
+        const query = categories
+            ? "SELECT * FROM posts WHERE categories ILIKE $1"
             : "SELECT * FROM posts";
 
-        const values = categoria ? [`%${categoria}%`] : [];
+        const values = categories ? [`%${categories}%`] : [];
 
         const result = await pool.query(query, values);
         return result.rows;
