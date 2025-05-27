@@ -5,20 +5,16 @@ const pool = require("../config/database");
 // Function to fetch all posts
 const getPosts = async (categories) => {
     try {
-        const query = categories
-            ? "SELECT * FROM posts WHERE categories ILIKE $1"
-            : "SELECT * FROM posts";
-
-        const values = categories ? [`%${categories}%`] : [];
-
-        const result = await pool.query(query, values);
+        const result = await pool.query(
+            `SELECT posts.*, users.username AS user_name, users.photo AS user_photo FROM posts
+            JOIN users ON posts.user_id = users.id`
+        );
         return result.rows;
     } catch (error) {
         console.error("Error fetching posts:", error);
         throw new Error("Error retrieving posts from the database.");
     }
 };
-
 
 // Function to fetch a specific post by ID
 const getPostById = async (id) => {
@@ -32,11 +28,11 @@ const getPostById = async (id) => {
 };
 
 // Function to create a new post
-const createPost = async (title, content, user_id, photo) => {
+const createPost = async ( user_id, categorie_id, content,  photo, ) => {
     try {
         const result = await pool.query(
-            "INSERT INTO posts (title, content, user_id, photo, created_at) VALUES ($1, $2, $3, $4, NOW()) RETURNING *",
-            [title, content, user_id, photo]
+            "INSERT INTO posts ( user_id, categorie_id, content, photo,  created_at) VALUES ($1, $2, $3, $4, NOW()) RETURNING *",
+            [user_id, categorie_id, content,  photo ]
         );
         return result.rows[0];
     } catch (error) {
@@ -46,11 +42,11 @@ const createPost = async (title, content, user_id, photo) => {
 };
 
 // Function to update an existing post
-const updatePost = async (id, title, content) => {
+const updatePost = async (id, content) => {
     try {
         const result = await pool.query(
-            "UPDATE posts SET title = $1, content = $2 WHERE id = $3 RETURNING *",
-            [title, content, id]
+            "UPDATE posts SET content = $2 WHERE id = $3 RETURNING *",
+            [content, id]
         );
         return result.rows[0];
     } catch (error) {
