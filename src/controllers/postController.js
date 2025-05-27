@@ -28,17 +28,17 @@ const getPostById = async (req, res) => {
 //Controller to create a new post
 const createPost = async (req, res) => {
   try {
-    const { user_id, title, content } = req.body;
+    const { user_id, categorie_id, content } = req.body;
 
     // Validation of required fields
-    if (!user_id || !title || !content) {
+    if (!user_id || !categorie_id || !content) {
       return res
         .status(400)
         .json({ message: "Required fields not provided." });
     }
 
     const photo = req.file ? req.file.filename : null;
-    const newPost = await postModel.createPost(title, content, user_id, photo);
+    const newPost = await postModel.createPost(user_id, categorie_id, content,  photo);
     res.status(201).json(newPost);
   } catch (error) {
     console.error(error);
@@ -53,10 +53,9 @@ const createPost = async (req, res) => {
 //Controller to update an existing post
 const updatePost = async (req, res) => {
   try {
-    const { title, content } = req.body;
+    const { content } = req.body;
     const updatePost = await postModel.updatePost(
       req.params.id,
-      title,
       content
     );
     if (!updatePost) {

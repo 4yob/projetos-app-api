@@ -33,7 +33,6 @@ CREATE TABLE posts (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     categorie_id INTEGER REFERENCES categories(id) ON DELETE CASCADE,
-    title VARCHAR(200) NOT NULL,
     content TEXT NOT NULL,
     photo TEXT,
     likes INT DEFAULT 0,
@@ -828,10 +827,17 @@ VALUES
     (83, 200, 'Cada post é uma aula de moda ✨');
 
 
-
+-- Create a table for categories
 CREATE TABLE categories (
     id SERIAL PRIMARY KEY,
     name VARCHAR(150) NOT NULL UNIQUE
 );
 
+-- Insert sample data into categories table
+INSERT INTO categories (id, name) VALUES
+    ('Dress'),
+    ('Hat'),
+    ('Shoes'),
+    ('Make Up'),
+    ('Accessory');
 
