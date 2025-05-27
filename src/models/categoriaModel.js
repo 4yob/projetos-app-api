@@ -2,7 +2,7 @@ const pool = require("../config/database");
 
 const getCategorias = async () => {
     try {
-        const result = await pool.query("SELECT * FROM categorias");
+        const result = await pool.query("SELECT * FROM categories");
         return result.rows;
     } catch (error) {
         console.error("Error fetching all categorias:", error);
