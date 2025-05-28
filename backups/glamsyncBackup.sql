@@ -5,7 +5,7 @@
 -- Dumped from database version 17.4
 -- Dumped by pg_dump version 17.4
 
--- Started on 2025-05-27 13:45:21
+-- Started on 2025-05-27 21:31:36
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -53,12 +53,135 @@ CREATE SEQUENCE public.categories_id_seq
 ALTER SEQUENCE public.categories_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4931 (class 0 OID 0)
+-- TOC entry 4970 (class 0 OID 0)
 -- Dependencies: 219
 -- Name: categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE public.categories_id_seq OWNED BY public.categories.id;
+
+
+--
+-- TOC entry 224 (class 1259 OID 16778)
+-- Name: chats; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.chats (
+    id integer NOT NULL,
+    user_id integer,
+    message text NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE public.chats OWNER TO postgres;
+
+--
+-- TOC entry 223 (class 1259 OID 16777)
+-- Name: chats_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.chats_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.chats_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 4971 (class 0 OID 0)
+-- Dependencies: 223
+-- Name: chats_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.chats_id_seq OWNED BY public.chats.id;
+
+
+--
+-- TOC entry 228 (class 1259 OID 16819)
+-- Name: comments; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.comments (
+    id integer NOT NULL,
+    user_id integer,
+    post_id integer,
+    text_comment character varying(350),
+    date_comment timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE public.comments OWNER TO postgres;
+
+--
+-- TOC entry 227 (class 1259 OID 16818)
+-- Name: comments_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.comments_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.comments_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 4972 (class 0 OID 0)
+-- Dependencies: 227
+-- Name: comments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.comments_id_seq OWNED BY public.comments.id;
+
+
+--
+-- TOC entry 226 (class 1259 OID 16794)
+-- Name: notifications; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.notifications (
+    id integer NOT NULL,
+    user_id integer,
+    post_id integer,
+    chat_id integer,
+    message text NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE public.notifications OWNER TO postgres;
+
+--
+-- TOC entry 225 (class 1259 OID 16793)
+-- Name: notifications_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.notifications_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.notifications_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 4973 (class 0 OID 0)
+-- Dependencies: 225
+-- Name: notifications_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.notifications_id_seq OWNED BY public.notifications.id;
 
 
 --
@@ -97,7 +220,7 @@ CREATE SEQUENCE public.posts_id_seq
 ALTER SEQUENCE public.posts_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4932 (class 0 OID 0)
+-- TOC entry 4974 (class 0 OID 0)
 -- Dependencies: 221
 -- Name: posts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -142,7 +265,7 @@ CREATE SEQUENCE public.users_id_seq
 ALTER SEQUENCE public.users_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4933 (class 0 OID 0)
+-- TOC entry 4975 (class 0 OID 0)
 -- Dependencies: 217
 -- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -151,7 +274,7 @@ ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
--- TOC entry 4756 (class 2604 OID 16702)
+-- TOC entry 4771 (class 2604 OID 16702)
 -- Name: categories id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -159,7 +282,31 @@ ALTER TABLE ONLY public.categories ALTER COLUMN id SET DEFAULT nextval('public.c
 
 
 --
--- TOC entry 4757 (class 2604 OID 16750)
+-- TOC entry 4776 (class 2604 OID 16781)
+-- Name: chats id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.chats ALTER COLUMN id SET DEFAULT nextval('public.chats_id_seq'::regclass);
+
+
+--
+-- TOC entry 4780 (class 2604 OID 16822)
+-- Name: comments id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.comments ALTER COLUMN id SET DEFAULT nextval('public.comments_id_seq'::regclass);
+
+
+--
+-- TOC entry 4778 (class 2604 OID 16797)
+-- Name: notifications id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.notifications ALTER COLUMN id SET DEFAULT nextval('public.notifications_id_seq'::regclass);
+
+
+--
+-- TOC entry 4772 (class 2604 OID 16750)
 -- Name: posts id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -167,7 +314,7 @@ ALTER TABLE ONLY public.posts ALTER COLUMN id SET DEFAULT nextval('public.posts_
 
 
 --
--- TOC entry 4752 (class 2604 OID 16612)
+-- TOC entry 4767 (class 2604 OID 16612)
 -- Name: users id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -175,7 +322,7 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 
 --
--- TOC entry 4923 (class 0 OID 16699)
+-- TOC entry 4956 (class 0 OID 16699)
 -- Dependencies: 220
 -- Data for Name: categories; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -190,7 +337,475 @@ COPY public.categories (id, name) FROM stdin;
 
 
 --
--- TOC entry 4925 (class 0 OID 16747)
+-- TOC entry 4960 (class 0 OID 16778)
+-- Dependencies: 224
+-- Data for Name: chats; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.chats (id, user_id, message, created_at) FROM stdin;
+1	1	A moda ‚ uma forma de liberdade. Liberte-se! 	2025-05-27 15:24:01.76677
+2	2	Qual sua pe‡a favorita no guarda-roupa? 	2025-05-27 15:24:01.76677
+3	3	Aposte em acess¢rios para transformar qualquer look! 	2025-05-27 15:24:01.76677
+4	4	Estilo ‚ a expressÆo da sua personalidade. Seja vocˆ! 	2025-05-27 15:24:01.76677
+5	5	Sustentabilidade na moda ‚ o futuro. Vamos juntos! 	2025-05-27 15:24:01.76677
+6	6	Look do dia: conforto e estilo sempre! 	2025-05-27 15:24:01.76677
+7	7	J  experimentou misturar estampas? Fica incr¡vel! 	2025-05-27 15:24:01.76677
+8	8	Invista em pe‡as que valorizam seu corpo e estilo. 	2025-05-27 15:24:01.76677
+9	10	O segredo do estilo est  nos detalhes.	2025-05-27 15:24:01.76677
+10	11	Como escolher o jeans perfeito? Aposte no conforto!	2025-05-27 15:24:01.76677
+11	12	Vocˆ ‚ mais cl ssico ou moderno na moda?	2025-05-27 15:24:01.76677
+12	13	Acess¢rios grandes para um look poderoso!	2025-05-27 15:24:01.76677
+13	14	Look monocrom tico: simples e elegante.	2025-05-27 15:24:01.76677
+14	15	Moda ‚ arte, vista-se como uma obra-prima!	2025-05-27 15:24:01.76677
+15	16	Combinar cores pode ser divertido e estiloso!	2025-05-27 15:24:01.76677
+16	17	Pe‡as b sicas sÆo essenciais para qualquer guarda-roupa.	2025-05-27 15:24:01.76677
+17	18	Roupas confort veis tamb‚m podem ser estilosas!	2025-05-27 15:24:01.76677
+18	19	J  pensou em customizar suas roupas?	2025-05-27 15:24:01.76677
+19	20	Invista em sapatos que combinam com tudo!	2025-05-27 15:24:01.76677
+20	21	A moda ‚ para todos: encontre seu estilo £nico!	2025-05-27 15:24:01.76677
+21	22	O que nÆo pode faltar no seu closet? Conta pra gente!	2025-05-27 15:24:01.76677
+22	23	Estampas florais sÆo a cara da primavera!	2025-05-27 15:24:01.76677
+23	24	Roupas feitas com amor fazem toda a diferen‡a.	2025-05-27 15:24:01.76677
+24	25	Aposte em looks que refletem sua autenticidade!	2025-05-27 15:24:01.76677
+25	26	Vocˆ prefere roupas neutras ou coloridas?	2025-05-27 15:24:01.76677
+26	27	Look comfy para um dia relax, quem curte?	2025-05-27 15:24:01.76677
+27	28	Quer dicas para cuidar melhor das suas roupas?	2025-05-27 15:24:01.76677
+28	29	Tem alguma pe‡a xod¢ no seu arm rio? Conta!	2025-05-27 15:24:01.76677
+29	30	Como escolher a bolsa ideal para o dia a dia?	2025-05-27 15:24:01.76677
+30	31	A moda ‚ uma forma de expressÆo sem palavras!	2025-05-27 15:24:01.76677
+31	32	Roupas oversize sÆo super estilosas e confort veis!	2025-05-27 15:24:01.76677
+32	33	Qual seu acess¢rio favorito para dar um up no look?	2025-05-27 15:24:01.76677
+33	34	J  usou roupas de brech¢? Tem charme £nico!	2025-05-27 15:24:01.76677
+34	35	Mix de estampas: atrevimento com estilo!	2025-05-27 15:24:01.76677
+35	36	Pe‡as sustent veis ajudam o planeta e o estilo!	2025-05-27 15:24:01.76677
+36	37	J  fez um look inspirado em uma celebridade? Quem?	2025-05-27 15:24:01.76677
+37	38	O que nÆo pode faltar num look de festa?	2025-05-27 15:24:01.76677
+38	39	Qual sua cor favorita para se vestir?	2025-05-27 15:24:01.76677
+39	40	Moda casual: conforto e estilo na medida certa! 	2025-05-27 15:24:01.76677
+40	41	Os detalhes fazem toda a diferen‡a no visual!	2025-05-27 15:24:01.76677
+41	42	Vocˆ prefere acess¢rios grandes ou discretos?	2025-05-27 15:24:01.76677
+42	43	O que acha de apostar em estampas geom‚tricas?	2025-05-27 15:24:01.76677
+43	44	J  experimentou looks monocrom ticos? SÆo incr¡veis!	2025-05-27 15:24:01.76677
+44	45	Como escolher o vestido ideal para uma ocasiÆo especial?	2025-05-27 15:24:01.76677
+45	46	Roupas justas ou soltas: qual seu estilo?	2025-05-27 15:24:01.76677
+46	47	Qual seu look preferido para um passeio no parque?	2025-05-27 15:24:01.76677
+47	49	Qual pe‡a vocˆ acha que ‚ um investimento de moda?	2025-05-27 15:24:01.76677
+48	50	Look streetwear para quem curte estilo urbano!	2025-05-27 15:24:01.76677
+49	51	J  usou chap‚u como acess¢rio? Super estiloso!	2025-05-27 15:24:01.76677
+50	52	Moda e conforto podem andar juntos sim!	2025-05-27 15:24:01.76677
+51	53	Qual a pe‡a que vocˆ sempre repete no dia a dia?	2025-05-27 15:24:01.76677
+52	54	Invista em roupas que fazem vocˆ se sentir confiante!	2025-05-27 15:24:01.76677
+53	55	O que acha de pe‡as feitas com tecidos tecnol¢gicos?	2025-05-27 15:24:01.76677
+54	56	J  pensou em montar um guarda-roupa c psula?	2025-05-27 15:24:01.76677
+55	57	Looks coloridos para dar energia no seu dia!	2025-05-27 15:24:01.76677
+56	58	Vocˆ prefere looks mais formais ou despojados?	2025-05-27 15:24:01.76677
+57	59	Como combinar sapatos com a roupa? Dica r pida!	2025-05-27 15:24:01.76677
+58	60	Roupas de inverno que al‚m de quentinhas sÆo estilosas!	2025-05-27 15:24:01.76677
+59	61	Qual seu estilo favorito de jaqueta?	2025-05-27 15:24:01.76677
+60	62	Os acess¢rios certos transformam qualquer look!	2025-05-27 15:24:01.76677
+61	63	J  experimentou usar roupas com estampa animal?	2025-05-27 15:24:01.76677
+62	64	Qual seu look ideal para um encontro?	2025-05-27 15:24:01.76677
+63	65	Dica: roupas de cores neutras combinam com tudo!	2025-05-27 15:24:01.76677
+64	66	Vocˆ prefere roupas feitas … mÆo ou industrializadas?	2025-05-27 15:24:01.76677
+65	67	Como escolher o melhor jeans para seu corpo?	2025-05-27 15:24:01.76677
+66	68	Moda sustent vel: pequenas atitudes, grande impacto!	2025-05-27 15:24:01.76677
+67	69	J  fez customiza‡Æo DIY nas suas roupas?	2025-05-27 15:24:01.76677
+68	70	Qual pe‡a vintage vocˆ gostaria de ter?	2025-05-27 15:24:01.76677
+69	71	Look para o verÆo: frescor e estilo na medida!	2025-05-27 15:24:01.76677
+70	72	Vocˆ prefere estampas florais ou geom‚tricas?	2025-05-27 15:24:01.76677
+71	73	Sapatos confort veis para usar o dia todo!	2025-05-27 15:24:01.76677
+72	74	Aposte em acess¢rios que refletem sua personalidade!	2025-05-27 15:24:01.76677
+73	75	Qual pe‡a ‚ seu verdadeiro "curinga"?	2025-05-27 15:24:01.76677
+74	76	Vocˆ gosta de moda minimalista?	2025-05-27 15:24:01.76677
+75	77	Como escolher um bom blazer para ocasiäes formais?	2025-05-27 15:24:01.76677
+76	78	Qual ‚ a pe‡a que vocˆ gostaria de reinventar?	2025-05-27 15:24:01.76677
+77	79	Dicas para combinar estampas sem errar!	2025-05-27 15:24:01.76677
+78	80	Qual sua opiniÆo sobre fast fashion?	2025-05-27 15:24:01.76677
+79	81	Vocˆ tem um look favorito para sair com amigos?	2025-05-27 15:24:01.76677
+80	82	J  usou alguma pe‡a inspirada em outra cultura?	2025-05-27 15:24:01.76677
+81	83	Looks para dias chuvosos com estilo!	2025-05-27 15:24:01.76677
+82	84	Vocˆ prefere bolsas grandes ou pequenas?	2025-05-27 15:24:01.76677
+83	85	Qual seu acess¢rio indispens vel para o inverno?	2025-05-27 15:24:01.76677
+84	87	Roupas feitas por designers independentes tˆm personalidade!	2025-05-27 15:24:01.76677
+85	88	Qual seu estilo preferido para o trabalho?	2025-05-27 15:24:01.76677
+86	89	Vocˆ gosta de usar chap‚us ou bon‚s?	2025-05-27 15:24:01.76677
+87	90	Dica r pida: misture tecidos para um look diferenciado!	2025-05-27 15:24:01.76677
+88	91	Como a moda pode ajudar na autoestima?	2025-05-27 15:24:01.76677
+89	93	J  experimentou usar roupas com brilho?	2025-05-27 15:24:01.76677
+90	94	A moda ‚ uma arte que vocˆ veste todo dia!	2025-05-27 15:24:01.76677
+91	95	Qual pe‡a vocˆ nunca deixaria de lado?	2025-05-27 15:24:01.76677
+92	96	J  fez alguma troca de roupas com amigas?	2025-05-27 15:24:01.76677
+93	97	Como cuidar das suas roupas para durarem mais?	2025-05-27 15:24:01.76677
+94	98	Vocˆ prefere looks mais cl ssicos ou alternativos?	2025-05-27 15:24:01.76677
+95	99	Qual seu sapato favorito para eventos formais?	2025-05-27 15:24:01.76677
+96	100	A moda ‚ sua melhor forma de se expressar! Seja autˆntico(a)!	2025-05-27 15:24:01.76677
+\.
+
+
+--
+-- TOC entry 4964 (class 0 OID 16819)
+-- Dependencies: 228
+-- Data for Name: comments; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.comments (id, user_id, post_id, text_comment, date_comment) FROM stdin;
+226	50	38	Esse look t  digno de tapete vermelho!	2025-05-27 16:02:14.283005
+227	51	38	Vocˆ ‚ a defini‡Æo de glamour e sofistica‡Æo	2025-05-27 16:02:14.283005
+228	52	39	Look poderoso! Essa produ‡Æo t  de tirar o f“lego	2025-05-27 16:02:14.283005
+229	53	39	Muito brilho, muita atitude. Simplesmente perfeita	2025-05-27 16:02:14.283005
+230	54	40	A rainha da balada chegou, e chegou linda	2025-05-27 16:02:14.283005
+231	55	40	Esse vestido t  digno de tapete vermelho	2025-05-27 16:02:14.283005
+232	56	41	Simples, leve e mega estilosa! Amei a vibe	2025-05-27 16:02:14.283005
+233	57	41	Look comfy que nÆo perde o charme	2025-05-27 16:02:14.283005
+234	58	42	D  vontade de usar esse look todo dia!	2025-05-27 16:02:14.283005
+235	59	42	Look do dia aprovado com louvor	2025-05-27 16:02:14.283005
+236	60	43	Esse look t  MUITO street, amei demais!	2025-05-27 16:02:14.283005
+237	61	43	Estilo urbano que ‚ puro impacto	2025-05-27 16:02:14.283005
+238	62	44	Vocˆ ‚ a defini‡Æo de street style	2025-05-27 16:02:14.283005
+239	63	44	Combina‡Æo de cores impec vel, t  demais!	2025-05-27 16:02:14.283005
+240	64	45	Look street com atitude de sobra	2025-05-27 16:02:14.283005
+241	65	45	Pura sofistica‡Æo! Look digno de revista	2025-05-27 16:02:14.283005
+242	66	46	O cl ssico nunca sai de moda e vocˆ sabe usar como ningu‚m	2025-05-27 16:02:14.283005
+243	67	46	A elegƒncia mora nos detalhes, e vocˆ arrasou!	2025-05-27 16:02:14.283005
+244	68	47	Esse look respira classe e estilo	2025-05-27 16:02:14.283005
+245	69	47	Visual impec vel e atemporal	2025-05-27 16:02:14.283005
+246	50	38	Esse look t  digno de tapete vermelho!	2025-05-27 16:02:48.136455
+247	51	38	Vocˆ ‚ a defini‡Æo de glamour e sofistica‡Æo	2025-05-27 16:02:48.136455
+248	52	39	Look poderoso! Essa produ‡Æo t  de tirar o f“lego	2025-05-27 16:02:48.136455
+249	53	39	Muito brilho, muita atitude. Simplesmente perfeita	2025-05-27 16:02:48.136455
+250	54	40	A rainha da balada chegou, e chegou linda	2025-05-27 16:02:48.136455
+251	55	40	Esse vestido t  digno de tapete vermelho	2025-05-27 16:02:48.136455
+252	56	41	Simples, leve e mega estilosa! Amei a vibe	2025-05-27 16:02:48.136455
+253	57	41	Look comfy que nÆo perde o charme	2025-05-27 16:02:48.136455
+254	58	42	D  vontade de usar esse look todo dia!	2025-05-27 16:02:48.136455
+255	59	42	Look do dia aprovado com louvor	2025-05-27 16:02:48.136455
+256	60	43	Esse look t  MUITO street, amei demais!	2025-05-27 16:02:48.136455
+257	61	43	Estilo urbano que ‚ puro impacto	2025-05-27 16:02:48.136455
+258	62	44	Vocˆ ‚ a defini‡Æo de street style	2025-05-27 16:02:48.136455
+259	63	44	Combina‡Æo de cores impec vel, t  demais!	2025-05-27 16:02:48.136455
+260	64	45	Look street com atitude de sobra	2025-05-27 16:02:48.136455
+261	65	45	Pura sofistica‡Æo! Look digno de revista	2025-05-27 16:02:48.136455
+262	66	46	O cl ssico nunca sai de moda e vocˆ sabe usar como ningu‚m	2025-05-27 16:02:48.136455
+263	67	46	A elegƒncia mora nos detalhes, e vocˆ arrasou!	2025-05-27 16:02:48.136455
+264	68	47	Esse look respira classe e estilo	2025-05-27 16:02:48.136455
+265	69	47	Visual impec vel e atemporal	2025-05-27 16:02:48.136455
+126	1	1	Roupas de inverno sÆo as melhores!	2025-05-27 15:58:36.192356
+127	2	1	Amo o inverno	2025-05-27 15:58:36.192356
+128	3	2	Roupas de verÆo sÆo as melhores!	2025-05-27 15:58:36.192356
+129	4	2	Amo o verÆo	2025-05-27 15:58:36.192356
+130	5	3	Roupas de outono sÆo as melhores!	2025-05-27 15:58:36.192356
+131	6	3	Amo o outono	2025-05-27 15:58:36.192356
+132	7	4	Roupas de primavera sÆo as melhores!	2025-05-27 15:58:36.192356
+133	8	4	Amo a primavera	2025-05-27 15:58:36.192356
+134	1	5	Roupas de praia sÆo muito divas	2025-05-27 15:58:36.192356
+135	2	6	Simplesmente impec vel! Esse look t  um arraso	2025-05-27 15:58:36.192356
+136	3	6	O estilo t  em outro n¡vel! Amei demais	2025-05-27 15:58:36.192356
+137	7	7	Vocˆ sempre entrega tudo no visual!	2025-05-27 15:58:36.192356
+138	4	7	Chique, moderno e cheio de atitude. Amei!	2025-05-27 15:58:36.192356
+139	5	8	Essa combina‡Æo ficou perfeita em vocˆ!	2025-05-27 15:58:36.192356
+140	6	8	Arrasou demais! Vocˆ ‚ uma verdadeira fashionista!	2025-05-27 15:58:36.192356
+141	7	9	Essa jaqueta ‚ tudo! Onde vocˆ comprou?	2025-05-27 15:58:36.192356
+142	1	10	Amei a combina‡Æo de cores! Super estiloso!	2025-05-27 15:58:36.192356
+143	2	11	Esse vestido ‚ um sonho! Onde vocˆ encontrou?	2025-05-27 15:58:36.192356
+144	3	11	Vocˆ t  linda demais! Amei o look!	2025-05-27 15:58:36.192356
+145	4	12	Essa blusa ‚ tudo! Vocˆ arrasa no estilo!	2025-05-27 15:58:36.192356
+146	5	12	Amei a estampa! Super fashionista!	2025-05-27 15:58:36.192356
+147	6	13	Esse look t  perfeito pra festa! Arrasou!	2025-05-27 15:58:36.192356
+148	7	13	Vocˆ sempre entrega tudo no visual!	2025-05-27 15:58:36.192356
+149	8	14	Essa combina‡Æo ficou perfeita em vocˆ!	2025-05-27 15:58:36.192356
+150	10	15	Essa paleta de cores t  perfeita pro outono	2025-05-27 15:58:36.192356
+151	1	15	Look comfy e estiloso ao mesmo tempo	2025-05-27 15:58:36.192356
+152	2	16	A bota deu um toque poderoso no visual	2025-05-27 15:58:36.192356
+153	3	16	D  aula de estilo todo dia, n‚?	2025-05-27 15:58:36.192356
+154	5	18	Metade fashion week, metade sonho	2025-05-27 15:58:36.192356
+155	12	18	Qual a inspira‡Æo desse look? Amei demais!	2025-05-27 15:58:36.192356
+156	13	19	Me ajuda a montar algo parecido? T“ sem ideias	2025-05-27 15:58:36.192356
+157	12	19	Vocˆ acha que esse look combina com tˆnis branco tamb‚m?	2025-05-27 15:58:36.192356
+158	13	20	Usaria f cil esse look! Tem link das pe‡as?	2025-05-27 15:58:36.192356
+159	14	20	Vocˆ ‚ a defini‡Æo de estilo	2025-05-27 15:58:36.192356
+160	15	21	Cada look melhor que o outro, como pode?	2025-05-27 15:58:36.192356
+161	2	21	Vocˆ transforma qualquer roupa em tendˆncia	2025-05-27 15:58:36.192356
+162	2	22	A energia desse visual t  surreal	2025-05-27 15:58:36.192356
+163	3	22	Look de milhäes	2025-05-27 15:58:36.192356
+266	50	38	Look poderoso! Essa produ‡Æo t  de tirar o f“lego	2025-05-27 16:02:48.136455
+267	51	39	A rainha da balada chegou, e chegou linda	2025-05-27 16:02:48.136455
+268	52	39	Muito brilho, muita atitude. Simplesmente perfeita	2025-05-27 16:02:48.136455
+269	53	40	Esse vestido t  digno de tapete vermelho	2025-05-27 16:02:48.136455
+270	54	40	Simples, leve e mega estilosa! Amei a vibe	2025-05-27 16:02:48.136455
+271	55	41	Look comfy que nÆo perde o charme	2025-05-27 16:02:48.136455
+272	56	41	D  vontade de usar esse look todo dia!	2025-05-27 16:02:48.136455
+273	57	41	Casual sim, sem gra‡a nunca	2025-05-27 16:02:48.136455
+274	58	42	Look do dia aprovado com louvor	2025-05-27 16:02:48.136455
+275	58	42	Esse look t  MUITO street, amei demais!	2025-05-27 16:02:48.136455
+276	59	43	Estilo urbano que ‚ puro impacto	2025-05-27 16:02:48.136455
+277	60	43	Vocˆ ‚ a defini‡Æo de street style	2025-05-27 16:02:48.136455
+278	61	44	Combina‡Æo de cores impec vel, t  demais!	2025-05-27 16:02:48.136455
+279	62	44	Look street com atitude de sobra	2025-05-27 16:02:48.136455
+195	23	23	Essa cal‡a ‚ TUDO! Onde encontro uma igual?	2025-05-27 16:01:29.679366
+196	12	23	Amei como o blazer deu um ar sofisticado	2025-05-27 16:01:29.679366
+197	12	24	O vestido t  a coisa mais linda, super delicado	2025-05-27 16:01:29.679366
+198	1	24	Esse conjunto t  super na moda, amei a vibe!	2025-05-27 16:01:29.679366
+199	2	25	Tˆnis branco e vestido? Combina‡Æo perfeita!	2025-05-27 16:01:29.679366
+200	3	25	Esse look tem a sua cara! Cheio de atitude	2025-05-27 16:01:29.679366
+201	25	26	Vocˆ tem um estilo £nico, d  pra ver de longe	2025-05-27 16:01:29.679366
+202	26	26	Zero defeitos! Tudo combinando perfeitamente	2025-05-27 16:01:29.679366
+203	27	27	D  pra ver que vocˆ entende MUITO de moda	2025-05-27 16:01:29.679366
+204	28	27	Inspirador! J  quero copiar esse estilo	2025-05-27 16:01:29.679366
+205	29	28	T“ te denunciando por excesso de beleza e estilo	2025-05-27 16:01:29.679366
+206	30	28	Me ensina a ser estilosa assim, por favor	2025-05-27 16:01:29.679366
+207	31	29	Nem o espelho aguenta tanta beleza	2025-05-27 16:01:29.679366
+208	32	29	Vocˆ ‚ o pr¢prio moodboard do Pinterest	2025-05-27 16:01:29.679366
+209	33	30	A moda agradece sua existˆncia	2025-05-27 16:01:29.679366
+210	34	30	Look incr¡vel! Vocˆ monta sozinha ou tem stylist?	2025-05-27 16:01:29.679366
+211	35	31	Qual app vocˆ usa pra editar as fotos? Ficaram lindas!	2025-05-27 16:01:29.679366
+212	36	31	Esse look daria super certo numa sessÆo de fotos profissional!	2025-05-27 16:01:29.679366
+213	37	32	Daria certo com acess¢rios dourados tamb‚m, n‚?	2025-05-27 16:01:29.679366
+214	38	32	Qual a sua maior inspira‡Æo de moda hoje em dia?	2025-05-27 16:01:29.679366
+215	39	33	A cara do verÆo! Look leve e cheio de estilo	2025-05-27 16:01:29.679366
+216	40	33	Esse biqu¡ni t  tudo! A cor valorizou muito vocˆ	2025-05-27 16:01:29.679366
+217	41	34	Praia + estilo = vocˆ arrasando como sempre	2025-05-27 16:01:29.679366
+218	42	34	Diva solar! Iluminando o feed com esse look	2025-05-27 16:01:29.679366
+219	43	35	Chap‚u, ¢culos, biqu¡ni. entregou tudo!	2025-05-27 16:01:29.679366
+220	44	35	Look quentinho e estiloso, a combina‡Æo perfeita	2025-05-27 16:01:29.679366
+221	45	36	Frio com personalidade, amei esse casaco demais!	2025-05-27 16:01:29.679366
+222	46	36	Essa sobreposi‡Æo ficou INCRÖVEL	2025-05-27 16:01:29.679366
+223	47	37	Look inverno digno de passarela!	2025-05-27 16:01:29.679366
+224	47	37	Mostrando que no frio a gente tamb‚m lacra	2025-05-27 16:01:29.679366
+225	49	38	Pronta pra brilhar a noite toda!	2025-05-27 16:01:29.679366
+321	63	45	Pura sofistica‡Æo! Look digno de revista	2025-05-27 16:03:41.459106
+322	64	45	O cl ssico nunca sai de moda - e vocˆ sabe usar como ningu‚m	2025-05-27 16:03:41.459106
+323	65	46	A elegƒncia mora nos detalhes, e vocˆ arrasou!	2025-05-27 16:03:41.459106
+324	66	46	Esse look respira classe e estilo	2025-05-27 16:03:41.459106
+325	67	47	Visual impec vel e atemporal	2025-05-27 16:03:41.459106
+326	1	47	Que combina‡Æo de cores incr¡vel! Esse look ficou super harm“nico	2025-05-27 16:03:41.459106
+327	1	49	Vocˆ tem um talento £nico pra montar visuais estilosos e modernos	2025-05-27 16:03:41.459106
+328	2	49	Amei o contraste das pe‡as, deu um ar super autˆntico ao look	2025-05-27 16:03:41.459106
+329	2	49	Look super bem pensado, confort vel e cheio de personalidade	2025-05-27 16:03:41.459106
+330	3	49	Vocˆ sempre acerta nos detalhes. Esse visual t  impec vel	2025-05-27 16:03:41.459106
+331	4	50	Cada pe‡a parece ter sido feita sob medida pra vocˆ, incr¡vel!	2025-05-27 16:03:41.459106
+332	5	50	A escolha dos acess¢rios deu um toque final maravilhoso	2025-05-27 16:03:41.459106
+333	6	51	D  pra ver que vocˆ entende de moda s¢ pelo bom gosto	2025-05-27 16:03:41.459106
+334	7	51	Um dos melhores looks que vi hoje no feed, s‚rio mesmo	2025-05-27 16:03:41.459106
+335	8	52	Essa paleta de cores ‚ a cara da esta‡Æo! Amei demais	2025-05-27 16:03:41.459106
+336	10	53	Look super vers til, usaria f cil em v rias ocasiäes	2025-05-27 16:03:41.459106
+337	11	53	O equil¡brio entre casual e chic ficou perfeito!	2025-05-27 16:03:41.459106
+338	12	54	T  parecendo capa de revista de moda! Arrasou demais	2025-05-27 16:03:41.459106
+339	13	54	O look t  tÆo bom que nem sei o que elogiar primeiro	2025-05-27 16:03:41.459106
+340	14	55	Esse outfit transmite confian‡a e estilo	2025-05-27 16:03:41.459106
+341	15	55	A energia desse look t  surreal, me inspirou real	2025-05-27 16:03:41.459106
+342	16	56	Look fresh, leve e super atual. Amei a vibe	2025-05-27 16:03:41.459106
+343	17	56	Que styling perfeito! Essa composi‡Æo merece destaque	2025-05-27 16:03:41.459106
+344	18	57	Vocˆ consegue transformar qualquer look simples em algo incr¡vel	2025-05-27 16:03:41.459106
+345	19	57	Seu estilo tem identidade e isso ‚ raro de ver!	2025-05-27 16:03:41.459106
+346	20	58	Que bom gosto! Cada detalhe conversa com o outro	2025-05-27 16:03:41.459106
+347	21	58	Fashion, ousada e autˆntica. Amei o look inteiro	2025-05-27 16:03:41.459106
+348	22	59	Look comfy com pegada fashionista? Vocˆ entrega tudo	2025-05-27 16:03:41.459106
+349	23	59	T  lind¡ssima! Esse visual te valorizou demais	2025-05-27 16:03:41.459106
+350	24	60	J  favoritei pra usar como referˆncia no pr¢ximo look	2025-05-27 16:03:41.459106
+351	25	60	Inspira‡Æo real de moda no feed hoje	2025-05-27 16:03:41.459106
+352	26	61	Essa jaqueta ‚ o auge! Onde vocˆ achou essa lindeza?	2025-05-27 16:03:41.459106
+353	27	61	Com esse estilo vocˆ comanda qualquer ambiente	2025-05-27 16:03:41.459106
+354	28	62	D  aula de elegƒncia e autenticidade em cada post	2025-05-27 16:03:41.459106
+355	29	62	Seu visual fala por si: cheio de atitude e bom gosto	2025-05-27 16:03:41.459106
+356	30	63	A produ‡Æo t  perfeita! Super profissional e estilosa	2025-05-27 16:03:41.459106
+357	31	63	Que vibe maravilhosa! Transmite leveza e seguran‡a	2025-05-27 16:03:41.459106
+358	32	64	Roubei essa ideia pro meu pr¢ximo look, t  incr¡vel	2025-05-27 16:03:41.459106
+359	33	64	Look digno de fashion week! Vocˆ arrasou demais	2025-05-27 16:03:41.459106
+360	34	65	Amo como vocˆ combina pe‡as b sicas com personalidade	2025-05-27 16:03:41.459106
+566	35	65	Ta muito fashion, parece saida direto de editorial	2025-05-27 16:07:19.38259
+567	36	66	Um visual criativo, moderno e super bem executado	2025-05-27 16:07:19.38259
+568	37	66	Cores, textura, corte... tudo no ponto certo!	2025-05-27 16:07:19.38259
+569	38	67	Visual bem construido e cheio de presenca!	2025-05-27 16:07:19.38259
+570	39	67	Essa composicao ficou muito alem do basico! Voce brilhou	2025-05-27 16:07:19.38259
+571	40	68	Look com presenca! Amei o impacto da producao	2025-05-27 16:07:19.38259
+572	41	68	Cada post seu e um banho de inspiracao fashion	2025-05-27 16:07:19.38259
+573	42	69	Que arraso! Mostrando que moda e expressao	2025-05-27 16:07:19.38259
+574	43	69	Look super atual e com uma pegada descolada	2025-05-27 16:07:19.38259
+575	44	70	Voce dominou a estetica urbana com muita elegancia	2025-05-27 16:07:19.38259
+576	45	70	Ousada na medida certa! Esse look ta incrivel	2025-05-27 16:07:19.38259
+577	46	71	Super bem equilibrado, confortavel e fashion	2025-05-27 16:07:19.38259
+578	47	71	A silhueta do look ficou linda demais em voce	2025-05-27 16:07:19.38259
+579	49	72	Voce realmente sabe como valorizar cada peca	2025-05-27 16:07:19.38259
+580	49	72	Simplesmente apaixonado(a) nesse look! Voce tem um estilo unico	2025-05-27 16:07:19.38259
+581	50	73	O outfit ficou sofisticado sem perder a essencia urbana	2025-05-27 16:07:19.38259
+582	51	73	Consegue ser moderna, elegante e ousada no mesmo look!	2025-05-27 16:07:19.38259
+583	52	74	Essa composicao ta tao equilibrada que virou minha nova inspiracao	2025-05-27 16:07:19.38259
+584	53	74	Cada peca foi escolhida com tanta precisao, to impressionado(a)	2025-05-27 16:07:19.38259
+585	54	75	Voce faz da moda uma arte! Cada post e um quadro	2025-05-27 16:07:19.38259
+586	55	75	Visual perfeito da cabeca aos pes!	2025-05-27 16:07:19.38259
+587	56	76	Simples, direto e cheio de atitude. Amei o conceito	2025-05-27 16:07:19.38259
+588	57	76	Essa producao ta a cara do streetwear chique!	2025-05-27 16:07:19.38259
+589	58	77	Nunca decepciona no estilo! Ja virou referencia	2025-05-27 16:07:19.38259
+590	59	77	O equilibrio entre ousadia e sofisticacao ta surreal!	2025-05-27 16:07:19.38259
+591	60	78	Um mix de tendencias com identidade, amei demais!	2025-05-27 16:07:19.38259
+592	61	78	Como consegue sempre inovar e surpreender no visual?	2025-05-27 16:07:19.38259
+593	62	78	Ate o cenario combina com o look! Tudo muito bem pensado	2025-05-27 16:07:19.38259
+594	63	77	Cada foto sua vira inspiracao pro meu proprio estilo	2025-05-27 16:07:19.38259
+595	64	80	Voce mostra que estilo e uma forma de expressao	2025-05-27 16:07:19.38259
+596	65	80	O caimento dessa roupa ficou perfeito em voce!	2025-05-27 16:07:19.38259
+597	66	81	Que presenca! Voce domina o look e o ambiente	2025-05-27 16:07:19.38259
+598	67	81	Super fashionista sem parecer forcado. Isso e talento	2025-05-27 16:07:19.38259
+599	68	82	Essa producao me ganhou no primeiro olhar	2025-05-27 16:07:19.38259
+600	69	82	Look conceito e execucao perfeita	2025-05-27 16:07:19.38259
+601	70	83	Ouse mais! O resultado fica incrivel em voce	2025-05-27 16:07:19.38259
+602	71	83	As combinacoes que voce faz sao sempre surpreendentes	2025-05-27 16:07:19.38259
+603	72	84	Da vontade de copiar esse look agora mesmo!	2025-05-27 16:07:19.38259
+604	73	84	Acessorios incriveis! Deram vida ao visual	2025-05-27 16:07:19.38259
+605	74	85	A vibe dessa foto com esse look ficou TUDO	2025-05-27 16:07:19.38259
+606	75	85	E sobre ter estilo e saber usar, e voce sabe!	2025-05-27 16:07:19.38259
+607	76	84	Visual criativo, moderno e com alma	2025-05-27 16:07:19.38259
+608	77	84	Tudo tao bem encaixado, parece editorial de moda	2025-05-27 16:07:19.38259
+609	78	87	Voce inspira com cada detalhe desse visual	2025-05-27 16:07:19.38259
+610	80	88	Totalmente fashion sem perder o conforto. Isso sim!	2025-05-27 16:07:19.38259
+611	81	88	O jogo de cores ficou sensacional! Super original	2025-05-27 16:07:19.38259
+612	82	89	Eu so queria metade desse bom gosto kkkkk	2025-05-27 16:07:19.38259
+613	83	89	Esse visual tem um que de ousadia elegante	2025-05-27 16:07:19.38259
+614	84	90	O look ta tao bom que eu salvei aqui como referencia	2025-05-27 16:07:19.38259
+615	85	90	Um arraso do inicio ao fim. Amei a composicao	2025-05-27 16:07:19.38259
+616	84	91	Look simples com presenca de sobra!	2025-05-27 16:07:19.38259
+617	87	91	Essa e a definicao de estar bem vestida	2025-05-27 16:07:19.38259
+618	88	92	As camadas desse look ficaram incriveis. Super estilosa!	2025-05-27 16:07:19.38259
+619	89	92	Voce entrega conteudo de moda com alma	2025-05-27 16:07:19.38259
+620	90	93	Gosto tanto desse estilo que ja virou meu preferido!	2025-05-27 16:07:19.38259
+621	91	93	Essa producao ta gritando confianca! Adorei	2025-05-27 16:07:19.38259
+622	91	94	O toque urbano nesse look fez toda a diferenca	2025-05-27 16:07:19.38259
+623	93	94	Ta uma visao de tao linda com esse visual	2025-05-27 16:07:19.38259
+624	94	95	Essa harmonia entre pecas e acessorios ficou perfeita	2025-05-27 16:07:19.38259
+625	95	95	O look e top, mas sua atitude e o que da o brilho final	2025-05-27 16:07:19.38259
+626	96	96	Achei tudo muito bem coordenado. Parabens pelo bom gosto!	2025-05-27 16:07:19.38259
+627	97	96	Um visual cheio de forca, personalidade e elegancia	2025-05-27 16:07:19.38259
+628	98	97	Voce tem o poder de transformar qualquer look basico em algo extraordinario	2025-05-27 16:07:19.38259
+629	99	97	Esse look exala autenticidade, nao tem como nao notar!	2025-05-27 16:07:19.38259
+630	1	98	A vibe desse visual ta muito Pinterest	2025-05-27 16:07:19.38259
+631	2	98	Toda fashionista deveria ver esse post, serio!	2025-05-27 16:07:19.38259
+632	3	99	Que harmonia! Estilo e presenca num mesmo clique	2025-05-27 16:07:19.38259
+633	4	99	Cada detalhe dessa composicao mostra sua identidade	2025-05-27 16:07:19.38259
+\.
+
+
+--
+-- TOC entry 4962 (class 0 OID 16794)
+-- Dependencies: 226
+-- Data for Name: notifications; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.notifications (id, user_id, post_id, chat_id, message, created_at) FROM stdin;
+144	61	33	\N	Parab‚ns! Vocˆ recebeu uma nova curtida.	2025-05-27 15:45:01.842942
+145	62	34	\N	Tem novidade no seu post. Algu‚m interagiu!	2025-05-27 15:45:01.842942
+146	63	34	\N	Novo coment rio na sua postagem!	2025-05-27 15:45:01.842942
+147	64	35	\N	Curtiram seu post! V  conferir!	2025-05-27 15:45:01.842942
+148	65	35	\N	Vocˆ foi mencionado em um coment rio.	2025-05-27 15:45:01.842942
+149	66	36	\N	Chegou um novo coment rio para vocˆ.	2025-05-27 15:45:01.842942
+150	67	37	\N	Seu post recebeu uma nova intera‡Æo.	2025-05-27 15:45:01.842942
+151	68	38	\N	Vocˆ foi mencionado em uma conversa.	2025-05-27 15:45:01.842942
+152	69	39	\N	Nova curtida recebida. Continue postando!	2025-05-27 15:45:01.842942
+153	70	40	\N	Vocˆ foi marcado em uma nova publica‡Æo.	2025-05-27 15:45:01.842942
+154	71	41	\N	Mais uma curtida no seu post. As pessoas estÆo adorando!	2025-05-27 15:45:01.842942
+155	72	42	\N	Seu coment rio foi respondido!	2025-05-27 15:45:01.842942
+156	73	43	\N	Novo coment rio detectado. Confira agora.	2025-05-27 15:45:01.842942
+157	74	44	\N	Algu‚m comentou no seu post! Confira agora.	2025-05-27 15:45:01.842942
+158	75	45	\N	Alerta de intera‡Æo: seu post recebeu uma curtida.	2025-05-27 15:45:01.842942
+159	76	45	\N	Tem uma nova curtida esperando por vocˆ!	2025-05-27 15:45:01.842942
+160	77	46	\N	Vocˆ recebeu uma nova curtida agora mesmo.	2025-05-27 15:45:01.842942
+161	78	47	\N	Notifica‡Æo: novo coment rio recebido.	2025-05-27 15:45:01.842942
+162	79	49	\N	Curtida recebida! Algu‚m gostou da sua postagem.	2025-05-27 15:45:01.842942
+163	80	49	\N	Seu conte£do chamou aten‡Æo! Novo coment rio.	2025-05-27 15:45:01.842942
+164	81	50	\N	Vocˆ ganhou uma curtida extra! Veja quem foi.	2025-05-27 15:45:01.842942
+165	82	51	\N	Curtiram seu post! V  conferir!	2025-05-27 15:45:01.842942
+166	83	52	\N	Chegou um novo coment rio para vocˆ.	2025-05-27 15:45:01.842942
+167	84	53	\N	Novo coment rio na sua postagem!	2025-05-27 15:45:01.842942
+168	85	54	\N	Vocˆ foi mencionado em um coment rio.	2025-05-27 15:45:01.842942
+169	87	56	\N	Parab‚ns! Vocˆ recebeu uma nova curtida.	2025-05-27 15:45:01.842942
+170	88	57	\N	Nova curtida recebida. Continue postando!	2025-05-27 15:45:01.842942
+171	89	58	\N	Seu post recebeu uma nova intera‡Æo.	2025-05-27 15:45:01.842942
+172	90	59	\N	Vocˆ foi marcado em uma nova publica‡Æo.	2025-05-27 15:45:01.842942
+30	1	1	1	Vocˆ foi marcado em uma nova publica‡Æo.	2025-05-27 15:43:41.065912
+31	2	1	2	Algu‚m comentou no seu post! Confira agora.	2025-05-27 15:43:41.065912
+32	3	2	3	Chegou um novo coment rio para vocˆ.	2025-05-27 15:43:41.065912
+33	4	2	4	Um novo coment rio surgiu na sua timeline.	2025-05-27 15:43:41.065912
+34	5	3	5	Um usu rio curtiu sua £ltima postagem.	2025-05-27 15:43:41.065912
+35	6	3	6	Vocˆ foi mencionado em uma conversa.	2025-05-27 15:43:41.065912
+36	7	3	7	Notifica‡Æo: novo coment rio recebido.	2025-05-27 15:43:41.065912
+37	8	4	8	O seu conte£do est  ganhando aten‡Æo! Veja quem interagiu.	2025-05-27 15:43:41.065912
+38	10	5	10	Seu conte£do chamou aten‡Æo! Novo coment rio.	2025-05-27 15:43:41.065912
+39	11	6	11	Vocˆ foi marcado em uma nova publica‡Æo.	2025-05-27 15:43:41.065912
+40	12	6	12	Mais uma curtida no seu post. As pessoas estÆo adorando!	2025-05-27 15:43:41.065912
+41	13	7	13	Seu coment rio foi respondido!	2025-05-27 15:43:41.065912
+42	14	7	14	Curtiram seu post! V  conferir!	2025-05-27 15:43:41.065912
+43	15	8	15	Curtiram seu post! V  conferir!	2025-05-27 15:43:41.065912
+44	16	8	16	Vocˆ foi marcado em uma nova publica‡Æo.	2025-05-27 15:43:41.065912
+45	18	10	18	Tem novidade no seu post. Algu‚m interagiu!	2025-05-27 15:43:41.065912
+46	19	10	19	Mais uma curtida no seu post. As pessoas estÆo adorando!	2025-05-27 15:43:41.065912
+47	20	10	20	Vocˆ foi marcado em uma nova publica‡Æo.	2025-05-27 15:43:41.065912
+48	21	11	21	Vocˆ recebeu uma nova curtida agora mesmo.	2025-05-27 15:43:41.065912
+49	22	11	22	Nova intera‡Æo no seu conte£do! Veja quem comentou.	2025-05-27 15:43:41.065912
+50	23	12	23	Nova curtida recebida. Continue postando!	2025-05-27 15:43:41.065912
+51	24	12	24	Parab‚ns! Vocˆ recebeu uma nova curtida.	2025-05-27 15:43:41.065912
+52	25	13	25	Nova intera‡Æo no seu conte£do! Veja quem comentou.	2025-05-27 15:43:41.065912
+53	26	13	26	Um usu rio curtiu sua £ltima postagem.	2025-05-27 15:43:41.065912
+54	27	14	27	Curtida recebida! Algu‚m gostou da sua postagem.	2025-05-27 15:43:41.065912
+55	28	14	28	Notifica‡Æo: novo coment rio recebido.	2025-05-27 15:43:41.065912
+56	29	14	29	Chegou um novo coment rio para vocˆ.	2025-05-27 15:43:41.065912
+57	30	14	30	Vocˆ foi mencionado em um coment rio.	2025-05-27 15:43:41.065912
+87	31	15	\N	Vocˆ ganhou uma curtida extra! Veja quem foi.	2025-05-27 15:44:29.333035
+88	32	15	\N	Algu‚m comentou no seu post! Confira agora.	2025-05-27 15:44:29.333035
+89	33	16	\N	Novo coment rio detectado. Confira agora.	2025-05-27 15:44:29.333035
+90	34	16	\N	Notifica‡Æo: novo coment rio recebido.	2025-05-27 15:44:29.333035
+91	37	18	\N	Vocˆ foi mencionado em uma conversa.	2025-05-27 15:44:29.333035
+92	38	18	\N	Curtiram seu post! V  conferir!	2025-05-27 15:44:29.333035
+93	39	18	\N	Parab‚ns! Vocˆ recebeu uma nova curtida.	2025-05-27 15:44:29.333035
+94	40	19	\N	Chegou um novo coment rio para vocˆ.	2025-05-27 15:44:29.333035
+95	41	19	\N	Um novo coment rio surgiu na sua timeline.	2025-05-27 15:44:29.333035
+96	42	19	\N	Seu post recebeu uma nova intera‡Æo.	2025-05-27 15:44:29.333035
+97	43	20	\N	Curtida recebida! Algu‚m gostou da sua postagem.	2025-05-27 15:44:29.333035
+98	44	20	\N	Vocˆ foi marcado em uma nova publica‡Æo.	2025-05-27 15:44:29.333035
+99	45	21	\N	Alerta de intera‡Æo: seu post recebeu uma curtida.	2025-05-27 15:44:29.333035
+100	46	21	\N	Novo coment rio na sua postagem!	2025-05-27 15:44:29.333035
+101	47	22	\N	Algu‚m comentou no seu post! Confira agora.	2025-05-27 15:44:29.333035
+102	49	23	\N	Mais uma curtida no seu post. As pessoas estÆo adorando!	2025-05-27 15:44:29.333035
+103	50	24	\N	Nova curtida recebida. Continue postando!	2025-05-27 15:44:29.333035
+104	51	24	\N	Seu conte£do chamou aten‡Æo! Novo coment rio.	2025-05-27 15:44:29.333035
+105	52	25	\N	O seu conte£do est  ganhando aten‡Æo! Veja quem interagiu.	2025-05-27 15:44:29.333035
+106	53	26	\N	Seu post recebeu uma nova intera‡Æo.	2025-05-27 15:44:29.333035
+107	54	27	\N	Vocˆ foi marcado em uma nova publica‡Æo.	2025-05-27 15:44:29.333035
+108	55	27	\N	Notifica‡Æo: novo coment rio recebido.	2025-05-27 15:44:29.333035
+109	56	28	\N	Vocˆ ganhou uma curtida extra! Veja quem foi.	2025-05-27 15:44:29.333035
+110	57	29	\N	Algu‚m comentou no seu post! Confira agora.	2025-05-27 15:44:29.333035
+111	58	30	\N	Vocˆ foi mencionado em uma conversa.	2025-05-27 15:44:29.333035
+112	59	31	\N	Curtiram seu post! V  conferir!	2025-05-27 15:44:29.333035
+113	60	32	\N	Parab‚ns! Vocˆ recebeu uma nova curtida.	2025-05-27 15:44:29.333035
+260	91	59	\N	O seu conte£do est  ganhando aten‡Æo! Veja quem interagiu.	2025-05-27 15:46:06.428425
+261	93	61	\N	Algu‚m comentou no seu post! Confira agora.	2025-05-27 15:46:06.428425
+262	94	6	\N	Vocˆ foi mencionado em um coment rio.	2025-05-27 15:46:06.428425
+263	95	62	\N	Notifica‡Æo: novo coment rio recebido.	2025-05-27 15:46:06.428425
+264	96	63	\N	Vocˆ ganhou uma curtida extra! Veja quem foi.	2025-05-27 15:46:06.428425
+265	97	64	\N	Seu coment rio foi respondido!	2025-05-27 15:46:06.428425
+266	98	65	\N	Novo coment rio detectado. Confira agora.	2025-05-27 15:46:06.428425
+267	99	66	\N	Curtida recebida! Algu‚m gostou da sua postagem.	2025-05-27 15:46:06.428425
+268	100	67	\N	Parab‚ns! Vocˆ recebeu uma nova curtida.	2025-05-27 15:46:06.428425
+269	1	68	\N	Chegou um novo coment rio para vocˆ.	2025-05-27 15:46:06.428425
+270	2	69	\N	Tem novidade no seu post. Algu‚m interagiu!	2025-05-27 15:46:06.428425
+271	3	70	\N	Alerta de intera‡Æo: seu post recebeu uma curtida.	2025-05-27 15:46:06.428425
+272	4	71	\N	Seu conte£do chamou aten‡Æo! Novo coment rio.	2025-05-27 15:46:06.428425
+273	5	72	\N	Vocˆ foi marcado em uma nova publica‡Æo.	2025-05-27 15:46:06.428425
+274	6	73	\N	Mais uma curtida no seu post. As pessoas estÆo adorando!	2025-05-27 15:46:06.428425
+275	7	74	\N	Nova curtida recebida. Continue postando!	2025-05-27 15:46:06.428425
+276	8	75	\N	Vocˆ recebeu uma nova curtida agora mesmo.	2025-05-27 15:46:06.428425
+277	11	77	\N	Seu post recebeu uma nova intera‡Æo.	2025-05-27 15:46:06.428425
+278	11	78	\N	Tem uma nova curtida esperando por vocˆ!	2025-05-27 15:46:06.428425
+279	13	80	\N	Seu coment rio foi respondido!	2025-05-27 15:46:06.428425
+280	14	81	\N	O seu conte£do est  ganhando aten‡Æo! Veja quem interagiu.	2025-05-27 15:46:06.428425
+281	15	82	\N	Vocˆ foi mencionado em uma conversa.	2025-05-27 15:46:06.428425
+282	16	83	\N	Tem novidade no seu post. Algu‚m interagiu!	2025-05-27 15:46:06.428425
+283	17	84	\N	Novo coment rio na sua postagem!	2025-05-27 15:46:06.428425
+284	18	85	\N	Curtida recebida! Algu‚m gostou da sua postagem.	2025-05-27 15:46:06.428425
+285	19	86	\N	Algu‚m comentou no seu post! Confira agora.	2025-05-27 15:46:06.428425
+286	20	87	\N	Curtiram seu post! V  conferir!	2025-05-27 15:46:06.428425
+\.
+
+
+--
+-- TOC entry 4958 (class 0 OID 16747)
 -- Dependencies: 222
 -- Data for Name: posts; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -261,6 +876,22 @@ COPY public.posts (id, user_id, categorie_id, content, photo, likes, comments, c
 64	35	1	Estilo tão afiado que corta o tédio!	fae68d2f44b857c3f423b9964cb7850a	0	0	2025-05-27 10:24:55.236749
 65	35	1	Isso aqui nem é filtro, é talento mesmo!	1ba63613e0608ac2848e7a946ef8219f	0	0	2025-05-27 10:25:10.098956
 66	36	1	Tão estiloso que até a câmera pediu bis!	9328a739a7e513e1148c34f309ffe706	0	0	2025-05-27 10:25:29.108578
+182	97	4	Atitude na frente da câmera, leveza na alma. 	f4cfa0ccdcbb71e7ca7c8c5e954e1a43	0	0	2025-05-27 14:23:20.637935
+180	96	4	Não sou modelo, mas poderia ser. 	0ebe9a56b5bf4a986a4ad5e562b8725a	0	0	2025-05-27 14:22:25.412831
+178	94	4	Mood do dia: estilosa sem esforço. 	d449b9429a0b35c088c2970faacf6ef6	0	0	2025-05-27 14:21:43.147509
+174	91	1	Look escolhido com carinho e um toque de ousadia.	8fda1e59b31e5930c8ef1c05e33ed1f9	0	0	2025-05-27 14:14:10.552284
+184	99	1	Um pouco de moda, um pouco de personalidade. 	8a453a6ac99661d086d72426cd356a24	0	0	2025-05-27 14:27:51.646883
+186	1	1	Classe, elegância e confiança. 	3c56db38a84e9fe6c660738760fde226	0	0	2025-05-27 14:28:55.321087
+188	1	1	Roupa confortável, pose afiada.	9bcc447dd0945d733cc4373da592b3f9	0	0	2025-05-27 14:29:25.210688
+190	3	1	Quem disse que básico não brilha?	b9709bcd79912d46d38ec1172576f5de	0	0	2025-05-27 14:30:25.536296
+192	4	1	Vista-se para ser lembrada, não para ser notada.	5cf53ad8f927e6fc111420375d615d63	0	0	2025-05-27 14:31:22.082401
+194	5	1	O look tá pronto, e a autoestima também. 	fb289bad6a4261d98c4f08839d3677c7	0	0	2025-05-27 14:31:59.511891
+196	8	1	Posei, postei.	112fc1d0c7b7e50cda577dc2a5a1bb7e	0	0	2025-05-27 14:33:10.370688
+198	10	1	Roupa fala. Ouça.	07fdf0bbddb0e38148a920e94b8fa9cc	0	0	2025-05-27 14:33:40.256462
+200	12	1	Só joguei o look e deixei acontecer. 	9726673994e9769872a1171dd635e11a	0	0	2025-05-27 14:34:20.664795
+202	14	1	Um look, mil vibes.	9047f76c9abb85c101a9fe21de759a85	0	0	2025-05-27 14:35:09.084364
+204	15	1	Roupa boa, alma leve.	ede37200ba15aeb0a0d0c641eb174f04	0	0	2025-05-27 14:36:24.662741
+206	15	1	Flor no vestido, brilho no olhar. 	c98ec3e515eed3a49252b968dd34c587	0	0	2025-05-27 14:37:22.746153
 172	78	1	Postura de rei, fala de homem!	a6da29b8998f9ecb8a11f9ef8faf1a82	0	0	2025-05-27 11:45:22.486983
 171	77	1	Quando você se conhece, nada te abala!	7d1a56956311da6ed0a7d98af4221a17	0	0	2025-05-27 11:45:04.323074
 170	76	1	Sou mais do que pareço e menos do que esperam!	3d8cb5e02683e9d2cfe19cc7bd6471f2	0	0	2025-05-27 11:44:45.744841
@@ -289,6 +920,8 @@ COPY public.posts (id, user_id, categorie_id, content, photo, likes, comments, c
 122	89	1	Terno e alma alinhados!	5b7322c036784018d978e5cdffc1a9b9	0	0	2025-05-27 11:24:21.796279
 121	88	1	Porque todo homem estiloso sabe: menos é mais!	a5ba79843d2f60ccd6543ce7a8e89d14	0	0	2025-05-27 11:06:43.937239
 120	87	1	Look escolhido, agora só falta o rolê!	1f95a290f36dcb83ff2a35d91158b0fd	0	0	2025-05-27 11:06:02.341823
+208	17	1	Um look delicado para um dia leve. 	d4e02f3e4a7aff808ccd580e42aeb779	0	0	2025-05-27 14:38:02.427442
+210	19	1	Acendi o feed com esse outfit.	ffac3b88c3c2874f9387eb87a5ad5e87	0	0	2025-05-27 14:38:53.89579
 167	72	1	Elegância é não precisar chamar atenção!	6cdc017122a4ddc19d1c338ad428d4f8	0	0	2025-05-27 11:43:48.758208
 166	71	1	Não sou perfeito, mas sou completo!\n	37068dda5f19e4a48d6cda2d4ea45827	0	0	2025-05-27 11:43:29.999955
 165	70	1	A mente blindada e o estilo no ponto!	5e175ef51f8ea6ac5616666f9c98a0d6	0	0	2025-05-27 11:43:06.109856
@@ -361,11 +994,30 @@ COPY public.posts (id, user_id, categorie_id, content, photo, likes, comments, c
 69	39	1	Close certo no modo aleatório!	89f35a8dd5e519c252eaeaf866896e64	0	0	2025-05-27 10:26:39.592625
 68	38	1	Look inspirado em: ninguém, criei na hora!	66a50df0c73e3a68c9f8f2bc9559d54c	0	0	2025-05-27 10:26:26.30495
 67	37	1	Treinei essa pose o dia todo!	ccdfbf9ffb82d9404b6fbe1d8243b726	0	0	2025-05-27 10:26:11.057609
+181	96	4	Posei porque mereço.	da7c27275b2d9d4bbaa8f6617978fec0	0	0	2025-05-27 14:22:43.611466
+179	95	4	Só parei pra tirar essa foto mesmo. 	9bddceeba158dff5add7d782a4987b15	0	0	2025-05-27 14:22:04.007405
+177	93	4	Simples, mas com atitude. 	38cdf4edcccb9008ec1e7b2adcb2dc04	0	0	2025-05-27 14:21:23.233383
+175	91	1	Look escolhido com carinho e um toque de ousadia.	cc446f5ed341ed2e3496efc2a4e30f89	0	0	2025-05-27 14:19:06.374322
+173	79	1	Estilo de rua, alma livre. 	24d0ac8391b2d32217b06c57fd3adb58	0	0	2025-05-27 14:12:51.967092
+183	98	4	O look fala antes mesmo de eu dizer "oi".	773f58ef6c83abbcdcba387c8d5c07de	0	0	2025-05-27 14:27:22.325705
+185	100	1	Vestida para impressionar... mesmo que só eu veja.	1ce71bfececf8c66cf13e18890d0d905	0	0	2025-05-27 14:28:22.57571
+187	1	1	Do casual ao chic, tudo com estilo.	a9fcd264f3b4a424e5f10f0b0d02e8fb	0	0	2025-05-27 14:29:10.743534
+189	1	1	Combinação perfeita: tênis, atitude e uma boa pose.	3b9a8e1251f10fc241b3f81abdbeff27	0	0	2025-05-27 14:29:48.526393
+191	3	1	Descomplicada e cheia de estilo.	f40d2bccd6a14384cb3c9d3d9d0480bb	0	0	2025-05-27 14:30:43.586826
+193	4	1	Não sigo tendências, eu crio.	e93b2bd0010cdf62c9d52b956583e91b	0	0	2025-05-27 14:31:42.390467
+195	7	1	Look feito, close tirado. 	a567a2d0798145c232d8acff58e079bd	0	0	2025-05-27 14:32:52.994645
+199	11	1	Mood: linda e leve. 	da50701a51b001211f861e3976f0efcc	0	0	2025-05-27 14:33:59.459675
+201	13	1	Soft por fora, poderosa por dentro.	70cbabafc91270acae24f160fa4d16e1	0	0	2025-05-27 14:34:49.647151
+203	15	1	Em paz com meu reflexo. 	5c266cb9783827a7257ba961c5019664	0	0	2025-05-27 14:35:35.146643
+205	15	1	Estética: 100%. Vibe: elevadíssima.	63971bdadf7a267a1675a5308d6fb0af	0	0	2025-05-27 14:36:45.078035
+207	16	1	Me vesti de doçura com toque de charme.	7e403f3080f33ddf32ddd05e1702abb4	0	0	2025-05-27 14:37:44.757521
+209	18	1	Quando o look é fofo, o dia até melhora.	9478fe4d3d6a9d88f2eda459221a9d13	0	0	2025-05-27 14:38:26.787687
+211	20	1	Não sei ser discreta quando o look tá gritando perfeição.	5421a9a1fb17750a04ea26846a4d95f4	0	0	2025-05-27 14:39:17.761965
 \.
 
 
 --
--- TOC entry 4921 (class 0 OID 16609)
+-- TOC entry 4954 (class 0 OID 16609)
 -- Dependencies: 218
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -475,7 +1127,7 @@ COPY public.users (id, name, username, email, location, photo, following, follow
 
 
 --
--- TOC entry 4934 (class 0 OID 0)
+-- TOC entry 4976 (class 0 OID 0)
 -- Dependencies: 219
 -- Name: categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -484,16 +1136,43 @@ SELECT pg_catalog.setval('public.categories_id_seq', 5, true);
 
 
 --
--- TOC entry 4935 (class 0 OID 0)
+-- TOC entry 4977 (class 0 OID 0)
+-- Dependencies: 223
+-- Name: chats_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.chats_id_seq', 96, true);
+
+
+--
+-- TOC entry 4978 (class 0 OID 0)
+-- Dependencies: 227
+-- Name: comments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.comments_id_seq', 633, true);
+
+
+--
+-- TOC entry 4979 (class 0 OID 0)
+-- Dependencies: 225
+-- Name: notifications_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.notifications_id_seq', 286, true);
+
+
+--
+-- TOC entry 4980 (class 0 OID 0)
 -- Dependencies: 221
 -- Name: posts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.posts_id_seq', 172, true);
+SELECT pg_catalog.setval('public.posts_id_seq', 211, true);
 
 
 --
--- TOC entry 4936 (class 0 OID 0)
+-- TOC entry 4981 (class 0 OID 0)
 -- Dependencies: 217
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -502,7 +1181,7 @@ SELECT pg_catalog.setval('public.users_id_seq', 104, true);
 
 
 --
--- TOC entry 4768 (class 2606 OID 16706)
+-- TOC entry 4789 (class 2606 OID 16706)
 -- Name: categories categories_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -511,7 +1190,7 @@ ALTER TABLE ONLY public.categories
 
 
 --
--- TOC entry 4770 (class 2606 OID 16704)
+-- TOC entry 4791 (class 2606 OID 16704)
 -- Name: categories categories_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -520,7 +1199,34 @@ ALTER TABLE ONLY public.categories
 
 
 --
--- TOC entry 4772 (class 2606 OID 16757)
+-- TOC entry 4795 (class 2606 OID 16786)
+-- Name: chats chats_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.chats
+    ADD CONSTRAINT chats_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 4799 (class 2606 OID 16825)
+-- Name: comments comments_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.comments
+    ADD CONSTRAINT comments_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 4797 (class 2606 OID 16802)
+-- Name: notifications notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.notifications
+    ADD CONSTRAINT notifications_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 4793 (class 2606 OID 16757)
 -- Name: posts posts_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -529,7 +1235,7 @@ ALTER TABLE ONLY public.posts
 
 
 --
--- TOC entry 4762 (class 2606 OID 16623)
+-- TOC entry 4783 (class 2606 OID 16623)
 -- Name: users users_email_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -538,7 +1244,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- TOC entry 4764 (class 2606 OID 16619)
+-- TOC entry 4785 (class 2606 OID 16619)
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -547,7 +1253,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- TOC entry 4766 (class 2606 OID 16621)
+-- TOC entry 4787 (class 2606 OID 16621)
 -- Name: users users_username_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -556,7 +1262,61 @@ ALTER TABLE ONLY public.users
 
 
 --
--- TOC entry 4773 (class 2606 OID 16763)
+-- TOC entry 4802 (class 2606 OID 16787)
+-- Name: chats chats_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.chats
+    ADD CONSTRAINT chats_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 4806 (class 2606 OID 16831)
+-- Name: comments comments_post_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.comments
+    ADD CONSTRAINT comments_post_id_fkey FOREIGN KEY (post_id) REFERENCES public.posts(id) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 4807 (class 2606 OID 16826)
+-- Name: comments comments_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.comments
+    ADD CONSTRAINT comments_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 4803 (class 2606 OID 16813)
+-- Name: notifications notifications_chat_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.notifications
+    ADD CONSTRAINT notifications_chat_id_fkey FOREIGN KEY (chat_id) REFERENCES public.chats(id) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 4804 (class 2606 OID 16808)
+-- Name: notifications notifications_post_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.notifications
+    ADD CONSTRAINT notifications_post_id_fkey FOREIGN KEY (post_id) REFERENCES public.posts(id) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 4805 (class 2606 OID 16803)
+-- Name: notifications notifications_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.notifications
+    ADD CONSTRAINT notifications_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 4800 (class 2606 OID 16763)
 -- Name: posts posts_categorie_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -565,7 +1325,7 @@ ALTER TABLE ONLY public.posts
 
 
 --
--- TOC entry 4774 (class 2606 OID 16758)
+-- TOC entry 4801 (class 2606 OID 16758)
 -- Name: posts posts_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -573,7 +1333,7 @@ ALTER TABLE ONLY public.posts
     ADD CONSTRAINT posts_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
 
 
--- Completed on 2025-05-27 13:45:21
+-- Completed on 2025-05-27 21:31:36
 
 --
 -- PostgreSQL database dump complete
