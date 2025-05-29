@@ -57,7 +57,7 @@ router.get("/comments", commentsController.getComments);
  *       404:
  *         description: Comentário não encontrado
  */
-router.get("/comment/:id", commentsController.getCommentById);
+router.get("/comments/:id", commentsController.getCommentById);
 
 /**
  * @swagger
