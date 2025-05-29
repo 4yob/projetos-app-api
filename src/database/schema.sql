@@ -49,7 +49,7 @@ VALUES
 INSERT INTO posts (user_id, content, categorie_id, photo, likes, comments) 
 VALUES
     (1, 'Look do dia: vestido floral e sandália confortável!', 1, 'https://example.com/photos/post1.jpg', 15, 3),
-    (2, 'Acessórios fazem toda a diferença no visual.', 7, 'https://example.com/photos/post2.jpg', 22, 5),
+    (2, 'Acessórios fazem toda a diferença no visual.', 5, 'https://example.com/photos/post2.jpg', 22, 5),
     (3, 'Dica de maquiagem para o verão!', 4, 'https://example.com/photos/post3.jpg', 30, 7),
     (4, 'Chapéu estiloso para proteger do sol.', 2, 'https://example.com/photos/post4.jpg', 10, 2),
     (5, 'Sapatos confortáveis para o dia a dia.', 3, 'https://example.com/photos/post5.jpg', 18, 4);
@@ -68,7 +68,7 @@ INSERT INTO chats (user_id, message) VALUES
     (2, 'Qual sua peça favorita no guarda-roupa? '),
     (3, 'Aposte em acessórios para transformar qualquer look! '),
     (4, 'Estilo é a expressão da sua personalidade. Seja você! '),
-    (5, 'Sustentabilidade na moda é o futuro. Vamos juntos! '),
+    (5, 'Sustentabilidade na moda é o futuro. Vamos juntos! ');
     (6, 'Look do dia: conforto e estilo sempre! '),
     (7, 'Já experimentou misturar estampas? Fica incrível! '),
     (8, 'Invista em peças que valorizam seu corpo e estilo. '),
@@ -411,9 +411,9 @@ CREATE TABLE comments (
 
 INSERT INTO comments (user_id, post_id, text_comment) 
 VALUES 
-    (1, 1, 'Roupas de inverno são as melhores!'),
-    (2, 1, 'Amo o inverno'),
-    (3, 2, 'Roupas de verão são as melhores!'),
+    (1, 6, 'Roupas de inverno são as melhores!'),
+    (2, 7, 'Amo o inverno'),
+    (3, 8, 'Roupas de verão são as melhores!');
     (4, 2, 'Amo o verão'),
     (5, 3, 'Roupas de outono são as melhores!'),
     (6, 3, 'Amo o outono'),
