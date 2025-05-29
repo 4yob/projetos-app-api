@@ -10,9 +10,10 @@ const getCategorias = async () => {
     }
 };
 
+
 const getCategoriaById = async (id) => {
     try {
-        const result = await pool.query("SELECT * FROM categorias WHERE id = $1", [id]);
+        const result = await pool.query("SELECT * FROM categories WHERE id = $1", [id]);
         return result.rows[0];
     } catch (error) {
         console.error(`Error fetching categoria with ID ${id}:`, error);
@@ -20,11 +21,11 @@ const getCategoriaById = async (id) => {
     }
 };
 
-const createCategoria = async (user_id, name) => {
+const createCategoria = async (name) => {
     try {
         const result = await pool.query(
-            "INSERT INTO categorias (user_id, name) VALUES ($1, $2) RETURNING *",
-            [user_id, name]
+            "INSERT INTO categories (name) VALUES ($1) RETURNING *",
+            [name]
         );
         return result.rows[0];
     } catch (error) {
@@ -36,7 +37,7 @@ const createCategoria = async (user_id, name) => {
 const updateCategoria = async (id, name) => {
     try {
         const result = await pool.query(
-            "UPDATE categorias SET name = $1 WHERE id = $2 RETURNING *",
+            "UPDATE categories SET name = $1 WHERE id = $2 RETURNING *",
             [name, id]
         );
         return result.rows[0];
@@ -49,7 +50,7 @@ const updateCategoria = async (id, name) => {
 const deleteCategoria = async (id) => {
     try {
         const result = await pool.query(
-            "DELETE FROM categorias WHERE id = $1 RETURNING *",
+            "DELETE FROM categories WHERE id = $1 RETURNING *",
             [id]
         );
         return result.rows[0];
@@ -64,5 +65,5 @@ module.exports = {
     getCategoriaById,
     createCategoria,
     updateCategoria,
-    deleteCategoria
+    deleteCategoria,
 };

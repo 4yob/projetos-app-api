@@ -5,19 +5,19 @@ const categoriaController = require("../controllers/categoriaController");
 /**
  * @swagger
  * tags:
- *   - name: Categoria
- *     description: Gerenciamento de Categorias
+ *   - name: Category
+ *     description: Category management
  */
 
 /**
  * @swagger
  * /api/categoria:
  *   get:
- *     summary: Listar todas as categorias
- *     tags: [Categoria]
+ *     summary: List all categories
+ *     tags: [Category]
  *     responses:
  *       200:
- *         description: Categorias retornadas com sucesso!
+ *         description: Categories retrieved successfully!
  */
 router.get("/categoria", categoriaController.getCategorias);
 
@@ -25,8 +25,8 @@ router.get("/categoria", categoriaController.getCategorias);
  * @swagger
  * /api/categoria/{id}:
  *   get:
- *     summary: Busca uma categoria por ID
- *     tags: [Categoria]
+ *     summary: Get a category by ID
+ *     tags: [Category]
  *     parameters:
  *       - in: path
  *         name: id
@@ -34,10 +34,10 @@ router.get("/categoria", categoriaController.getCategorias);
  *         schema:
  *           type: integer
  *           example: 1
- *         description: ID da categoria
+ *         description: Category ID
  *     responses:
  *       200:
- *         description: Categoria encontrada
+ *         description: Category found
  *         content:
  *           application/json:
  *             schema:
@@ -46,14 +46,11 @@ router.get("/categoria", categoriaController.getCategorias);
  *                 id:
  *                   type: integer
  *                   example: 1
- *                 user_id:
- *                   type: integer
- *                   example: 2
- *                 message:
+ *                 name:
  *                   type: string
- *                   example: "Mensagem de exemplo"
+ *                   example: "Example category"
  *       404:
- *         description: Categoria não encontrada
+ *         description: Category not found
  */
 router.get("/categoria/:id", categoriaController.getCategoriaById);
 
@@ -61,8 +58,8 @@ router.get("/categoria/:id", categoriaController.getCategoriaById);
  * @swagger
  * /api/categoria:
  *   post:
- *     summary: Cria uma nova categoria
- *     tags: [Categoria]
+ *     summary: Create a new category
+ *     tags: [Category]
  *     requestBody:
  *       required: true
  *       content:
@@ -70,13 +67,12 @@ router.get("/categoria/:id", categoriaController.getCategoriaById);
  *           schema:
  *             type: object
  *             properties:
- *               user_id:
- *                 type: integer
- *               message:
+ *               nome:
  *                 type: string
+ *                 example: "New category"
  *     responses:
  *       201:
- *         description: Categoria criada com sucesso
+ *         description: Category created successfully
  */
 router.post("/categoria", categoriaController.createCategoria);
 
@@ -84,15 +80,15 @@ router.post("/categoria", categoriaController.createCategoria);
  * @swagger
  * /api/categoria/{id}:
  *   put:
- *     summary: Atualiza uma categoria existente
- *     tags: [Categoria]
+ *     summary: Update an existing category
+ *     tags: [Category]
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: integer
- *         description: ID da categoria
+ *         description: Category ID
  *     requestBody:
  *       required: true
  *       content:
@@ -100,11 +96,12 @@ router.post("/categoria", categoriaController.createCategoria);
  *           schema:
  *             type: object
  *             properties:
- *               message:
+ *               nome:
  *                 type: string
+ *                 example: "Updated category"
  *     responses:
  *       200:
- *         description: Categoria atualizada com sucesso
+ *         description: Category updated successfully
  */
 router.put("/categoria/:id", categoriaController.updateCategoria);
 
@@ -112,18 +109,18 @@ router.put("/categoria/:id", categoriaController.updateCategoria);
  * @swagger
  * /api/categoria/{id}:
  *   delete:
- *     summary: Exclui uma categoria pelo ID
- *     tags: [Categoria]
+ *     summary: Delete a category by ID
+ *     tags: [Category]
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: integer
- *         description: ID da categoria
+ *         description: Category ID
  *     responses:
  *       200:
- *         description: Categoria excluída com sucesso
+ *         description: Category deleted successfully
  */
 router.delete("/categoria/:id", categoriaController.deleteCategoria);
 

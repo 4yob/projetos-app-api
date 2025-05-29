@@ -49,7 +49,7 @@ VALUES
 INSERT INTO posts (user_id, content, categorie_id, photo, likes, comments) 
 VALUES
     (1, 'Look do dia: vestido floral e sandália confortável!', 1, 'https://example.com/photos/post1.jpg', 15, 3),
-    (2, 'Acessórios fazem toda a diferença no visual.', 5, 'https://example.com/photos/post2.jpg', 22, 5),
+    (2, 'Acessórios fazem toda a diferença no visual.', 7, 'https://example.com/photos/post2.jpg', 22, 5),
     (3, 'Dica de maquiagem para o verão!', 4, 'https://example.com/photos/post3.jpg', 30, 7),
     (4, 'Chapéu estiloso para proteger do sol.', 2, 'https://example.com/photos/post4.jpg', 10, 2),
     (5, 'Sapatos confortáveis para o dia a dia.', 3, 'https://example.com/photos/post5.jpg', 18, 4);
