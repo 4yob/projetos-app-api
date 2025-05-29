@@ -166,7 +166,6 @@ INSERT INTO chats (user_id, message) VALUES
     (100, 'A moda é sua melhor forma de se expressar! Seja autêntico(a)! ');
 
 
-
 -- Create a table for notifications
 
 
