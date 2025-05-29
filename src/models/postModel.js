@@ -5,10 +5,20 @@ const pool = require("../config/database");
 // Function to fetch all posts
 const getPosts = async (categories) => {
     try {
-        const result = await pool.query(
-            `SELECT posts.*, users.username AS user_name, users.photo AS user_photo FROM posts
-            JOIN users ON posts.user_id = users.id`
-        );
+        let query = `
+            SELECT posts.*, users.username AS user_name, users.photo AS user_photo 
+            FROM posts
+            JOIN users ON posts.user_id = users.id
+        `;
+        let params = [];
+
+        if (categories && Array.isArray(categories) && categories.length > 0) {
+            const placeholders = categories.map((_, idx) => `$${idx + 1}`).join(", ");
+            query += ` WHERE posts.categorie_id IN (${placeholders})`;
+            params = categories;
+        }
+
+        const result = await pool.query(query, params);
         return result.rows;
     } catch (error) {
         console.error("Error fetching posts:", error);

@@ -10,6 +10,7 @@ const getCategorias = async () => {
     }
 };
 
+
 const getCategoriaById = async (id) => {
     try {
         const result = await pool.query("SELECT * FROM categories WHERE id = $1", [id]);
@@ -22,7 +23,6 @@ const getCategoriaById = async (id) => {
 
 const createCategoria = async (name) => {
     try {
-        // Corrigido para inserir na tabela correta e apenas o campo necessário
         const result = await pool.query(
             "INSERT INTO categories (name) VALUES ($1) RETURNING *",
             [name]
@@ -49,7 +49,6 @@ const updateCategoria = async (id, name) => {
 
 const deleteCategoria = async (id) => {
     try {
-        // Corrigido para deletar da tabela correta (categories)
         const result = await pool.query(
             "DELETE FROM categories WHERE id = $1 RETURNING *",
             [id]
@@ -66,5 +65,5 @@ module.exports = {
     getCategoriaById,
     createCategoria,
     updateCategoria,
-    deleteCategoria
+    deleteCategoria,
 };
