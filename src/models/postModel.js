@@ -18,6 +18,8 @@ const getPosts = async (categories) => {
             params = categories;
         }
 
+        query = query.replace(/\s+/g, ' ').trim();
+
         const result = await pool.query(query, params);
         return result.rows;
     } catch (error) {
