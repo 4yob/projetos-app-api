@@ -5,10 +5,22 @@ const pool = require("../config/database");
 // Function to fetch all posts
 const getPosts = async (categories) => {
     try {
-        const result = await pool.query(
-            `SELECT posts.*, users.username AS user_name, users.photo AS user_photo FROM posts
-            JOIN users ON posts.user_id = users.id`
-        );
+        let query = `
+            SELECT posts.*, users.username AS user_name, users.photo AS user_photo 
+            FROM posts
+            JOIN users ON posts.user_id = users.id
+        `;
+        let params = [];
+
+        if (categories && Array.isArray(categories) && categories.length > 0) {
+            const placeholders = categories.map((_, idx) => `$${idx + 1}`).join(", ");
+            query += ` WHERE posts.categorie_id IN (${placeholders})`;
+            params = categories;
+        }
+
+        query = query.replace(/\s+/g, ' ').trim();
+
+        const result = await pool.query(query, params);
         return result.rows;
     } catch (error) {
         console.error("Error fetching posts:", error);
@@ -28,7 +40,7 @@ const getPostById = async (id) => {
 };
 
 // Function to create a new post
-const createPost = async ( user_id, categorie_id, content,  photo, ) => {
+const createPost = async ( user_id, categorie_id, content,  photo ) => {
     try {
         const result = await pool.query(
             "INSERT INTO posts ( user_id, categorie_id, content, photo,  created_at) VALUES ($1, $2, $3, $4, NOW()) RETURNING *",
@@ -45,7 +57,7 @@ const createPost = async ( user_id, categorie_id, content,  photo, ) => {
 const updatePost = async (id, content) => {
     try {
         const result = await pool.query(
-            "UPDATE posts SET content = $2 WHERE id = $3 RETURNING *",
+            "UPDATE posts SET content = $1 WHERE id = $2 RETURNING *",
             [content, id]
         );
         return result.rows[0];
@@ -80,7 +92,7 @@ const updateLikes = async (id, action) => {
     try {
         const increment = action === "like" ? 1 : -1;
         const result = await pool.query(
-            "UPDATE post SET likes = likes + $1 WHERE id = $2 AND likes + $1 >= 0 RETURNING *",
+            "UPDATE posts SET likes = likes + $1 WHERE id = $2 AND likes + $1 >= 0 RETURNING *",
             [increment, id]
         );
         return result.rows[0];

@@ -68,7 +68,7 @@ INSERT INTO chats (user_id, message) VALUES
     (2, 'Qual sua peça favorita no guarda-roupa? '),
     (3, 'Aposte em acessórios para transformar qualquer look! '),
     (4, 'Estilo é a expressão da sua personalidade. Seja você! '),
-    (5, 'Sustentabilidade na moda é o futuro. Vamos juntos! '),
+    (5, 'Sustentabilidade na moda é o futuro. Vamos juntos! ');
     (6, 'Look do dia: conforto e estilo sempre! '),
     (7, 'Já experimentou misturar estampas? Fica incrível! '),
     (8, 'Invista em peças que valorizam seu corpo e estilo. '),
@@ -164,7 +164,6 @@ INSERT INTO chats (user_id, message) VALUES
     (98, 'Você prefere looks mais clássicos ou alternativos? '),
     (99, 'Qual seu sapato favorito para eventos formais? '),
     (100, 'A moda é sua melhor forma de se expressar! Seja autêntico(a)! ');
-
 
 
 -- Create a table for notifications
@@ -412,9 +411,9 @@ CREATE TABLE comments (
 
 INSERT INTO comments (user_id, post_id, text_comment) 
 VALUES 
-    (1, 1, 'Roupas de inverno são as melhores!'),
-    (2, 1, 'Amo o inverno'),
-    (3, 2, 'Roupas de verão são as melhores!'),
+    (1, 6, 'Roupas de inverno são as melhores!'),
+    (2, 7, 'Amo o inverno'),
+    (3, 8, 'Roupas de verão são as melhores!');
     (4, 2, 'Amo o verão'),
     (5, 3, 'Roupas de outono são as melhores!'),
     (6, 3, 'Amo o outono'),
