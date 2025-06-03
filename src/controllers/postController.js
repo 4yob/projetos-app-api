@@ -103,7 +103,7 @@ const updateLikes = async (req, res) => {
   try {
     const { id } = req.params;
     const { action } = req.body; // 
-    if (!["Like", "remove like"].includes(action)) {
+    if (!["like", "remove like"].includes(action)) {
       return res
         .status(400)
         .json({ message: "Invalid action. Use 'remove like' or 'like'." });
