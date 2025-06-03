@@ -3,7 +3,11 @@ const postModel = require("../models/postModel");
 //Controller to get all posts
 const getPosts = async (req, res) => {
   try {
-    const posts = await postModel.getPosts();
+    let categories = req.query.categorie_id;
+    if(categories) {
+      categories = categories.toString().split(',').map(Number).filter(Boolean);
+    }
+    const posts = await postModel.getPosts(categories);
     res.status(200).json(posts);
   } catch (error) {
     console.error(error);

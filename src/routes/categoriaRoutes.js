@@ -19,7 +19,7 @@ const categoriaController = require("../controllers/categoriaController");
  *       200:
  *         description: Categories retrieved successfully!
  */
-router.get("/categoria", categoriaController.getCategorias);
+router.get("/categories", categoriaController.getCategorias);
 
 /**
  * @swagger
@@ -52,7 +52,7 @@ router.get("/categoria", categoriaController.getCategorias);
  *       404:
  *         description: Category not found
  */
-router.get("/categoria/:id", categoriaController.getCategoriaById);
+router.get("/category/:id", categoriaController.getCategoriaById);
 
 /**
  * @swagger
@@ -74,7 +74,7 @@ router.get("/categoria/:id", categoriaController.getCategoriaById);
  *       201:
  *         description: Category created successfully
  */
-router.post("/categoria", categoriaController.createCategoria);
+router.post("/category", categoriaController.createCategoria);
 
 /**
  * @swagger
@@ -103,7 +103,7 @@ router.post("/categoria", categoriaController.createCategoria);
  *       200:
  *         description: Category updated successfully
  */
-router.put("/categoria/:id", categoriaController.updateCategoria);
+router.put("/category/:id", categoriaController.updateCategoria);
 
 /**
  * @swagger
@@ -122,6 +122,6 @@ router.put("/categoria/:id", categoriaController.updateCategoria);
  *       200:
  *         description: Category deleted successfully
  */
-router.delete("/categoria/:id", categoriaController.deleteCategoria);
+router.delete("/category/:id", categoriaController.deleteCategoria);
 
 module.exports = router;
