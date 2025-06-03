@@ -2,8 +2,10 @@ const chatModel = require("../models/chatModel");
 
 const getChats = async (req, res) => {
     try {
-        const chats = await chatModel.getChats();
-        res.status(201).json({ message: "Messages retrieved successfully.", chats });
+        const { userName } = req.query; // userName agora é opcional
+
+        const chats = await chatModel.getChats(userName); // Busca todos se não houver userName
+        res.status(200).json({ message: "Messages retrieved successfully.", chats });
     } catch (error) {
         console.error(error);
         res.status(400).json({ message: "Error retrieving messages." });

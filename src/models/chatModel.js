@@ -2,13 +2,22 @@ const pool = require("../config/database");
 
 const getChats = async (userName) => {
     try {
-      const result = await pool.query(
-        `SELECT chats.*, users.username AS user_name, users.photo AS user_photo 
-         FROM chats 
-         JOIN users ON chats.user_id = users.id 
-         WHERE users.username = $1`,
-        [userName]
-      ); 
+        let result;
+        if (userName) {
+            result = await pool.query(
+                `SELECT chats.*, users.username AS user_name, users.photo AS user_photo 
+                 FROM chats 
+                 JOIN users ON chats.user_id = users.id 
+                 WHERE users.username = $1`,
+                [userName]
+            );
+        } else {
+            result = await pool.query(
+                `SELECT chats.*, users.username AS user_name, users.photo AS user_photo 
+                 FROM chats 
+                 JOIN users ON chats.user_id = users.id`
+            );
+        }
         return result.rows;
     } catch (error) {
         console.error("Error fetching all chats:", error);
