@@ -57,7 +57,7 @@ const createPost = async ( user_id, categorie_id, content,  photo ) => {
 const updatePost = async (id, content) => {
     try {
         const result = await pool.query(
-            "UPDATE posts SET content = $2 WHERE id = $3 RETURNING *",
+            "UPDATE posts SET content = $1 WHERE id = $2 RETURNING *",
             [content, id]
         );
         return result.rows[0];
@@ -92,7 +92,7 @@ const updateLikes = async (id, action) => {
     try {
         const increment = action === "like" ? 1 : -1;
         const result = await pool.query(
-            "UPDATE post SET likes = likes + $1 WHERE id = $2 AND likes + $1 >= 0 RETURNING *",
+            "UPDATE posts SET likes = likes + $1 WHERE id = $2 AND likes + $1 >= 0 RETURNING *",
             [increment, id]
         );
         return result.rows[0];

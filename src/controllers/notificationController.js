@@ -28,15 +28,21 @@ const getNotificationById = async (req, res) => {
 // Controller para criar uma nova notificação
 const createNotification = async (req, res) => {
   try {
-    const { user_id, message, post_id } = req.body;
-    if (!user_id || !message || !post_id) {
-      return res.status(400).json({ message: "Campos obrigatórios não informados." });
+    const { user_id, mensagem, message, post_id, chat_id } = req.body;
+    
+    const msg = message || mensagem;
+    if (!user_id || !msg || !chat_id) {
+      return res.status(400).json({ error: "user_id, mensagem/message e chat_id são obrigatórios." });
     }
-    const newNotification = await notificationModel.createNotification(user_id, message, post_id);
-    res.status(201).json(newNotification);
+    const notification = await notificationModel.createNotification(
+      user_id,
+      msg, 
+      post_id,
+      chat_id
+    );
+    res.status(201).json(notification);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Erro ao criar notificação." });
+    res.status(500).json({ error: error.message });
   }
 };
 
