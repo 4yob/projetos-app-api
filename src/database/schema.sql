@@ -68,7 +68,7 @@ INSERT INTO chats (user_id, message) VALUES
     (2, 'Qual sua peça favorita no guarda-roupa? '),
     (3, 'Aposte em acessórios para transformar qualquer look! '),
     (4, 'Estilo é a expressão da sua personalidade. Seja você! '),
-    (5, 'Sustentabilidade na moda é o futuro. Vamos juntos! '),
+    (5, 'Sustentabilidade na moda é o futuro. Vamos juntos! ');
     (6, 'Look do dia: conforto e estilo sempre! '),
     (7, 'Já experimentou misturar estampas? Fica incrível! '),
     (8, 'Invista em peças que valorizam seu corpo e estilo. '),
@@ -147,19 +147,21 @@ INSERT INTO chats (user_id, message) VALUES
     (83, 'Looks para dias chuvosos com estilo!'),
     (84, 'Você prefere bolsas grandes ou pequenas?'),
     (85, 'Qual seu acessório indispensável para o inverno?'),
-    (87, 'Roupas feitas por designers independentes têm personalidade!'),
-    (88, 'Qual seu estilo preferido para o trabalho?'),
-    (89, 'Você gosta de usar chapéus ou bonés?'),
-    (90, 'Dica rápida: misture tecidos para um look diferenciado!'),
-    (91, 'Como a moda pode ajudar na autoestima?'),
-    (93, 'Já experimentou usar roupas com brilho?'),
-    (94, 'A moda é uma arte que você veste todo dia!'),
-    (95, 'Qual peça você nunca deixaria de lado?'),
-    (96, 'Já fez alguma troca de roupas com amigas?'),
-    (97, 'Como cuidar das suas roupas para durarem mais?'),
-    (98, 'Você prefere looks mais clássicos ou alternativos?'),
-    (99, 'Qual seu sapato favorito para eventos formais?'),
-    (100, 'A moda é sua melhor forma de se expressar! Seja autêntico(a)!');
+    (86, 'Como usar roupas oversize sem perder o estilo?'),
+    (87, 'Roupas feitas por designers independentes têm personalidade! 👗'),
+    (88, 'Qual seu estilo preferido para o trabalho? 💼'),
+    (89, 'Você gosta de usar chapéus ou bonés? 🎩🧢'),
+    (90, 'Dica rápida: misture tecidos para um look diferenciado! 🧵'),
+    (91, 'Como a moda pode ajudar na autoestima? 💖'),
+    (92, 'Qual seu look preferido para festas? 🎉'),
+    (93, 'Já experimentou usar roupas com brilho? ✨'),
+    (94, 'A moda é uma arte que você veste todo dia! 🎨'),
+    (95, 'Qual peça você nunca deixaria de lado? 🧥'),
+    (96, 'Já fez alguma troca de roupas com amigas? ♻️'),
+    (97, 'Como cuidar das suas roupas para durarem mais? 🧺'),
+    (98, 'Você prefere looks mais clássicos ou alternativos? 🎩'),
+    (99, 'Qual seu sapato favorito para eventos formais? 👠'),
+    (100, 'A moda é sua melhor forma de se expressar! Seja autêntico(a)! 🌟');
 
 
 
@@ -311,9 +313,9 @@ CREATE TABLE comments (
 -- Insert sample data into comments table
 INSERT INTO comments (user_id, post_id, text_comment) 
 VALUES 
-    (1, 1, 'Roupas de inverno são as melhores!'),
-    (2, 1, 'Amo o inverno'),
-    (3, 2, 'Roupas de verão são as melhores!'),
+    (1, 6, 'Roupas de inverno são as melhores!'),
+    (2, 7, 'Amo o inverno'),
+    (3, 8, 'Roupas de verão são as melhores!');
     (4, 2, 'Amo o verão'),
     (5, 3, 'Roupas de outono são as melhores!'),
     (6, 3, 'Amo o outono'),

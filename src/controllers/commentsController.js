@@ -2,7 +2,8 @@ const commentsModel = require("../models/commentsModel");
 
 const getComments = async (req, res) => {
     try {
-        const comments = await commentsModel.getComments();
+        const { username } = req.query;
+        const comments = await commentsModel.getComments(username);
         res.status(200).json({ message: "Comments retrieved successfully.", comments });
     } catch (error) {
         console.error("Error fetching comments:", error);
@@ -12,7 +13,11 @@ const getComments = async (req, res) => {
 
 const getCommentById = async (req, res) => {
     try {
-        const comment = await commentsModel.getCommentById(req.params.id);
+        const { id } = req.params;
+        if (!id || isNaN(Number(id))) {
+            return res.status(400).json({ message: "Invalid comment id." });
+        }
+        const comment = await commentsModel.getCommentById(id);
         if (!comment) {
             return res.status(404).json({ message: "Comment not found." });
         }
