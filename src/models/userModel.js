@@ -28,9 +28,21 @@ const createUser = async (name, username, email, location, following = 0, follow
 
 //Api para atualizar um usuário
 const updateUser = async (id, name, username, email, location, photo) => {
+
+    const currentUser = await pool.query("SELECT * FROM users WHERE id = $1", [id]);
+    if (!currentUser.rows[0]) {
+        throw new Error("User not found");
+    }
+
+    const updatedName = name || currentUser.rows[0].name;
+    const updatedUsername = username || currentUser.rows[0].username;
+    const updatedEmail = email || currentUser.rows[0].email;
+    const updatedLocation = location || currentUser.rows[0].location;
+    const updatedPhoto = photo || currentUser.rows[0].photo;
+
     const result = await pool.query(
         "UPDATE users SET name = $1, username = $2, email = $3, photo = $4, location = $5 WHERE id = $6 RETURNING *",
-        [name, username, email, photo, location, id]
+        [updatedName, updatedUsername, updatedEmail, updatedPhoto, updatedLocation, id]
     );
     return result.rows[0];
 };

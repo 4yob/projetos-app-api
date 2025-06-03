@@ -12,27 +12,28 @@ const getCategorias = async (req, res) => {
 
 const getCategoriaById = async (req, res) => {
     try {
-        const categoria = await categoriaModel.getCategoriaById(req.params.id);
+        const { id } = req.params;
+        const categoria = await categoriaModel.getCategoriaById(id);
         if (!categoria) {
             return res.status(404).json({ message: "Categoria not found." });
         }
         res.status(200).json({ message: "Categoria retrieved successfully.", categoria });
     } catch (error) {
         console.error(error);
-        res.status(404).json({ message: "Error retrieving categoria." });
+        res.status(500).json({ message: "Error retrieving categoria." });
     }
 }
 
 const createCategoria = async (req, res) => {
     try {
-        const { nome, descricacao } = req.body;
+        const { nome } = req.body;
 
         // Validação dos campos obrigatórios
-        if (!nome || !descricacao) {
+        if (!nome) {
             return res.status(400).json({ message: "Required fields not provided." });
         }
 
-        const newCategoria = await categoriaModel.createCategoria(user_id, message);
+        const newCategoria = await categoriaModel.createCategoria(nome);
         res.status(201).json({ message: "Categoria created successfully.", newCategoria });
     } catch (error) {
         console.error(error);
@@ -46,8 +47,11 @@ const createCategoria = async (req, res) => {
 
 const updateCategoria = async (req, res) => {
     try {
-        const { message } = req.body;
-        const updatedCategoria = await categoriaModel.updateCategoria(req.params.id, message);
+        const { nome } = req.body;
+        if (!nome) {
+            return res.status(400).json({ message: "Required fields not provided." });
+        }
+        const updatedCategoria = await categoriaModel.updateCategoria(req.params.id, nome);
         if (!updatedCategoria) {
             return res.status(404).json({ message: "Categoria not found." });
         }

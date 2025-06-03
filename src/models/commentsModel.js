@@ -2,13 +2,17 @@ const pool = require("../config/database");
 
 const getComments = async (userName) => {
   try {
-    const result = await pool.query(
-      `SELECT comments.*, users.username AS user_name, users.photo AS user_photo
-             FROM comments
-             JOIN users ON comments.user_id = users.id
-             WHERE users.username = $1;`,
-      [userName]
-    );
+    let query = `
+      SELECT comments.*, users.username AS user_name, users.photo AS user_photo
+      FROM comments
+      JOIN users ON comments.user_id = users.id
+    `;
+    let params = [];
+    if (userName) {
+      query += " WHERE users.username = $1";
+      params = [userName];
+    }
+    const result = await pool.query(query, params);
     return result.rows;
   } catch (error) {
     console.error("Error fetching comments:", error);
@@ -18,7 +22,10 @@ const getComments = async (userName) => {
 
 const getCommentById = async (id) => {
   const result = await pool.query(
-    "SELECT comments.*, users.username FROM comments JOIN users ON comments.user_id = users.id WHERE comments.id = $1;",
+    `SELECT comments.*, users.username AS user_name, users.photo AS user_photo
+     FROM comments
+     JOIN users ON comments.user_id = users.id
+     WHERE comments.id = $1;`,
     [id]
   );
   return result.rows[0];

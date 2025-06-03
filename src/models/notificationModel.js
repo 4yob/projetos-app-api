@@ -24,11 +24,18 @@ const getNotificationById = async (id) => {
 };
 
 // Criar uma nova notificação
-const createNotification = async (user_id, message, post_id) => {
+const createNotification = async (user_id, message, post_id, chat_id) => {
+    if (user_id === null || user_id === undefined) {
+        throw new Error("user_id não pode ser null ou undefined.");
+    }
+    if (chat_id === null || chat_id === undefined) {
+        throw new Error("chat_id não pode ser null ou undefined.");
+    }
+    // post_id pode ser null
     try {
         const result = await pool.query(
-            "INSERT INTO notifications (user_id, message, post_id, created_at) VALUES ($1, $2, $3, NOW()) RETURNING *",
-            [user_id, message, post_id]
+            "INSERT INTO notifications (user_id, message, post_id, chat_id, created_at) VALUES ($1, $2, $3, $4, NOW()) RETURNING *",
+            [user_id, message, post_id || null, chat_id]
         );
         return result.rows[0];
     } catch (error) {
@@ -63,6 +70,12 @@ const deleteNotification = async (id) => {
 };
 
 const ganharNotificacao = async (user_id, message, post_id, chat_id) => {
+    if (user_id === null || user_id === undefined) {
+        throw new Error("user_id não pode ser null ou undefined.");
+    }
+    if (chat_id === null || chat_id === undefined) {
+        throw new Error("chat_id não pode ser null ou undefined.");
+    }
     try {
         const result = await pool.query(
             "INSERT INTO notifications (user_id, message, post_id, chat_id, created_at) VALUES ($1, $2, $3, $4, NOW()) RETURNING *",
