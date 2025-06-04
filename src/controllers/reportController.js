@@ -1,199 +1,146 @@
-const { format } = require("@fast-csv/format");
 const PDFDocument = require("pdfkit");
+const fs = require("fs");
+const path = require("path");
 const postModel = require("../models/postModel");
-const userModel = require("../models/userModel");
 
-const exportPostCSV = async (req, res) => {
+const exportPostsPDF = async (req, res) => {
     try {
-        const posts = await postModel.getPosts();
-
-        res.setHeader("Content-Disposition", "attachment; filename=posts.csv");
-        res.setHeader("Content-Type", "text/csv");
-
-        const csvStream = format({ headers: true });
-        csvStream.pipe(res);
-
-        posts.forEach((post) => {
-            csvStream.write({
-                Id: post.id,
-                Titulo: post.title,
-                Conteudo: post.content,
-                Usuario: post.user_id,
-                Foto: post.photo,
-                Categoria: post.categoria,
-                Likes: post.likes,
-                Comentarios: post.comments,
-                Data_Criacao: post.created_at
-            });
-        });
-
-        csvStream.end();
-    } catch (error) {
-        res.status(500).json({ message: "Erro ao gerar o CSV" });
-    }
-}
-
-const exportUserCSV = async (req, res) => {
-    try {
-        const users = await userModel.getUsers();
-
-        res.setHeader("Content-Disposition", "attachment; filename=users.csv");
-        res.setHeader("Content-Type", "text/csv");
-
-        const csvStream = format({ headers: true });
-        csvStream.pipe(res);
-
-        users.forEach((user) => {
-            csvStream.write({
-                Id: user.id,
-                Nome: user.name,
-                Email: user.email,
-                User: user.username,
-                Seguidores: user.following,
-                Seguindo: user.followers,
-                Data_Criacao: user.created_at
-            });
-        });
-
-        csvStream.end();
-    } catch (error) {
-        res.status(500).json({ message: "Erro ao gerar o CSV" });
-    }
-}
-
-const exportPostPDF = async (req, res) => {
-    try {
-        const posts = await postModel.getPosts();
+        const posts = await postModel.getPosts(); 
 
         res.setHeader("Content-Type", "application/pdf");
         res.setHeader("Content-Disposition", "inline; filename=posts.pdf");
 
-        const doc = new PDFDocument({ margin: 50 });
+        const doc = new PDFDocument({ margin: 40, size: "A4" });
         doc.pipe(res);
 
-        const maxY = 750;
+        const maxY = 760;
+        const rowHeight = 20;
 
         const drawCoverPage = () => {
-            doc
-                .font('Helvetica-Bold')
-                .fontSize(30)
-                .fillColor('#003366')
-                .text("Relatório de Posts", { align: "center", valign: "center" })
-                .moveDown(2);
+            const logoPath = path.join(__dirname, "../public/images/logo-glamsync.png");
+            if (fs.existsSync(logoPath)) {
+                doc.image(logoPath, doc.page.width / 2 - 75, 80, { width: 150 });
+            }
 
             doc
-                .fontSize(16)
-                .fillColor('black')
-                .text(`Gerado em: ${new Date().toLocaleString()}`, { align: "center" });
+                .font("Helvetica-Bold")
+                .fontSize(24)
+                .fillColor("#a94442")
+                .text("Glamsync", { align: "center" });
+
+            doc
+                .font("Helvetica-Bold")
+                .fontSize(28)
+                .fillColor("#6b2e2e")
+                .text("Relatório de Postagens", { align: "center" });
+
+            doc
+                .font("Helvetica-Oblique")
+                .fontSize(14)
+                .fillColor("#8d4d4d")
+                .text("Moda que conecta. Estilo que impacta.", { align: "center" });
+
+            doc
+                .font("Helvetica")
+                .fontSize(12)
+                .fillColor("black")
+                .text(`Gerado em: ${new Date().toLocaleString("pt-BR")}`, { align: "center" });
 
             doc.addPage();
         };
 
         const drawHeader = () => {
-            doc
-                .font('Helvetica-Bold')
-                .fontSize(24)
-                .fillColor('#003366')
-                .text("📊 Relatório de Posts", { align: "center" })
-                .moveDown(1.2);
+            const headerY = doc.y;
 
             doc
-                .fontSize(12)
-                .fillColor('black')
-                .font('Helvetica-Bold')
-                .text("ID", 50)
-                .text("Título", 90)
-                .text("Conteúdo", 200)
-                .text("Categoria", 350)
-                .text("Likes", 450)
-                .text("Comentários", 520);
+                .font("Helvetica-Bold")
+                .fontSize(11)
+                .fillColor("black");
 
-            doc.moveTo(50, doc.y).lineTo(560, doc.y).stroke('#003366');
-            doc.moveDown(0.3);
+            doc.text("ID", 50, headerY, { width: 30, align: "left" });
+            doc.text("Usuário", 90, headerY, { width: 100, align: "left" });
+            doc.text("Conteúdo", 200, headerY, { width: 180, align: "left" });
+            doc.text("Likes", 390, headerY, { width: 50, align: "right" });
+            doc.text("Data", 460, headerY, { width: 90, align: "right" });
+
+            doc
+                .moveTo(50, headerY + 15)
+                .lineTo(550, headerY + 15)
+                .stroke("#f4b6c2");
+
+            doc.y = headerY + 20;
         };
 
         const drawFooter = () => {
-            doc.fontSize(10).fillColor('gray');
-            doc.text(`Página ${doc.page.number}`, 50, maxY + 10, { align: "left" });
-            doc.text("Gerado em: " + new Date().toLocaleString(), 50, maxY + 10, { align: "right" });
+            const footerY = 800;
+            doc.fontSize(9).fillColor("gray");
+            doc.text(`Página ${doc.page.number}`, 50, footerY, { align: "left" });
+            doc.text("Glamsync", 0, footerY, { align: "right" });
         };
 
-        const drawPageTitle = () => {
-            doc.fontSize(16).fillColor('#003366').text("📄 Página de Relatório", 50, 30, { align: "center" });
-        };
-
-        const drawBorder = () => {
-            doc.rect(45, 45, 520, maxY - 45).stroke('#003366');
-        };
-
+        // Capa
         drawCoverPage();
-        drawPageTitle();
-        drawBorder();
+
+        // Tabela
         drawHeader();
 
-        let y = doc.y;
         posts.forEach((post, i) => {
-            if (y > maxY) {
+            if (doc.y > maxY - rowHeight) {
                 drawFooter();
                 doc.addPage();
-                drawPageTitle();
-                drawBorder();
                 drawHeader();
-                y = doc.y;
             }
 
-            const isEven = i % 2 === 0;
-            if (isEven) {
-                doc.rect(50, y - 2, 510, 18).fill('#f2f2f2').stroke('#d9d9d9');
-            } else {
-                doc.rect(50, y - 2, 510, 18).stroke('#d9d9d9');
-            }
+            const bgColor = i % 2 === 0 ? "#f9f3f5" : "#ffffff";
+            doc.rect(50, doc.y - 2, 500, rowHeight).fill(bgColor).stroke("#f4b6c2");
 
             doc
-                .fontSize(10)
-                .font('Helvetica')
-                .fillColor('black')
-                .text(String(post.id).padEnd(10), 50, y)
-                .text(post.title.length > 20 ? post.title.slice(0, 20) + '...' : post.title, 90, y)
-                .text(post.content.length > 50 ? post.content.slice(0, 50) + '...' : post.content, 200, y)
-                .text(post.categoria, 350, y)
-                .text(String(post.likes), 450, y, { width: 50, align: "right" })
-                .text(String(post.comments), 520, y, { width: 50, align: "right" });
+                .fillColor("black")
+                .font("Helvetica")
+                .fontSize(10);
 
-            y += 18;
+            doc.text(post.id || "", 50, doc.y, { width: 30, align: "left" });
+            doc.text((post.user_name || "").slice(0, 20), 90, doc.y, { width: 100, align: "left" });
+            doc.text((post.content || "").slice(0, 50), 200, doc.y, { width: 180, align: "left" });
+            doc.text(String(post.likes ?? 0), 390, doc.y, { width: 50, align: "right" });
+            doc.text(new Date(post.created_at).toLocaleDateString("pt-BR"), 460, doc.y, { width: 90, align: "right" });
+
+            doc.y += rowHeight;
         });
 
         drawFooter();
         doc.end();
 
     } catch (error) {
+        console.error("Erro ao gerar PDF de postagens:", error);
         res.status(500).json({ message: "Erro ao gerar PDF!", error: error.message });
     }
 };
 
 const exportUserPDF = async (req, res) => {
     try {
-        const users = await userModel.getUsers();
+        const users = await userModel.getUsers(undefined); // Explicitamente pega todos os usuários
 
         res.setHeader("Content-Type", "application/pdf");
         res.setHeader("Content-Disposition", "inline; filename=users.pdf");
 
-        const doc = new PDFDocument({ margin: 50 });
+        const doc = new PDFDocument({ margin: 40, size: "A4" });
         doc.pipe(res);
 
-        const maxY = 750;
+        const maxY = 760;
 
         const drawCoverPage = () => {
             doc
-                .font('Helvetica-Bold')
-                .fontSize(30)
-                .fillColor('#003366')
-                .text("Relatório de Usuários", { align: "center", valign: "center" })
+                .font("Helvetica-Bold")
+                .fontSize(28)
+                .fillColor("#2c3e50")
+                .text("👥 Relatório de Usuários", { align: "center" })
                 .moveDown(2);
 
             doc
-                .fontSize(16)
-                .fillColor('black')
+                .font("Helvetica")
+                .fontSize(14)
+                .fillColor("black")
                 .text(`Gerado em: ${new Date().toLocaleString()}`, { align: "center" });
 
             doc.addPage();
@@ -201,84 +148,75 @@ const exportUserPDF = async (req, res) => {
 
         const drawHeader = () => {
             doc
-                .font('Helvetica-Bold')
-                .fontSize(24)
-                .fillColor('#003366')
-                .text("Relatório de Usuários", { align: "center" })
-                .moveDown(1.2);
+                .font("Helvetica-Bold")
+                .fontSize(18)
+                .fillColor("#2980b9")
+                .text("📄 Lista de Usuários", { align: "center" })
+                .moveDown(0.5);
 
             doc
+                .font("Helvetica-Bold")
                 .fontSize(12)
-                .fillColor('black')
-                .font('Helvetica-Bold')
+                .fillColor("black")
                 .text("ID", 50)
-                .text("Nome", 90)
-                .text("Email", 200)
-                .text("Usuário", 350)
-                .text("Seguindo", 450)
+                .text("Nome", 100)
+                .text("Email", 220)
+                .text("Usuário", 370)
+                .text("Seguindo", 460)
                 .text("Seguidores", 520);
 
-            doc.moveTo(50, doc.y).lineTo(560, doc.y).stroke('#003366');
-            doc.moveDown(0.3);
+            doc.moveTo(50, doc.y).lineTo(560, doc.y).stroke("#2980b9");
+            doc.moveDown(0.5);
         };
 
         const drawFooter = () => {
-            doc.fontSize(10).fillColor('gray');
-            doc.text(`Página ${doc.page.number}`, 50, maxY + 10, { align: "left" });
-            doc.text("Gerado em: " + new Date().toLocaleString(), 50, maxY + 10, { align: "right" });
-        };
-
-        const drawPageTitle = () => {
-            doc.fontSize(16).fillColor('#003366').text("📄 Página de Relatório", 50, 30, { align: "center" });
-        };
-
-        const drawBorder = () => {
-            doc.rect(45, 45, 520, maxY - 45).stroke('#003366');
+            doc.fontSize(9).fillColor("gray");
+            doc.text(`Página ${doc.page.number}`, 50, maxY, { align: "left" });
+            doc.text("RelatórioApp", 0, maxY, { align: "right" });
         };
 
         drawCoverPage();
-        drawPageTitle();
-        drawBorder();
         drawHeader();
 
         let y = doc.y;
         users.forEach((user, i) => {
-            if (y > maxY) {
+            if (y > maxY - 40) {
                 drawFooter();
                 doc.addPage();
-                drawPageTitle();
-                drawBorder();
                 drawHeader();
                 y = doc.y;
             }
 
-            const isEven = i % 2 === 0;
-            if (isEven) {
-                doc.rect(50, y - 2, 510, 18).fill('#f9f9f9').stroke('#d9d9d9');
-            } else {
-                doc.rect(50, y - 2, 510, 18).stroke('#d9d9d9');
-            }
+            const bgColor = i % 2 === 0 ? "#f8f9fa" : "#ffffff";
+            doc
+                .rect(50, y - 2, 510, 18)
+                .fill(bgColor)
+                .stroke("#bdc3c7");
 
             doc
+                .fillColor("black")
+                .font("Helvetica")
                 .fontSize(10)
-                .font('Helvetica')
-                .fillColor('black')
-                .text(String(user.id).padEnd(10), 50, y)
-                .text(user.name.length > 20 ? user.name.slice(0, 20) + '...' : user.name, 90, y)
-                .text(user.email.length > 30 ? user.email.slice(0, 30) + '...' : user.email, 200, y)
-                .text(user.username.length > 15 ? user.username.slice(0, 15) + '...' : user.username, 350, y)
-                .text(String(user.following), 450, y, { width: 50, align: "right" })
-                .text(String(user.followers), 520, y, { width: 50, align: "right" });
+                .text(user.id || "", 50, y)
+                .text((user.name || "").slice(0, 20), 100, y)
+                .text((user.email || "").slice(0, 25), 220, y)
+                .text((user.username || "").slice(0, 15), 370, y)
+                .text(String(user.following ?? 0), 460, y)
+                .text(String(user.followers ?? 0), 520, y);
 
             y += 18;
         });
 
         drawFooter();
         doc.end();
-
     } catch (error) {
-        res.status(500).json({ message: "Erro ao gerar PDF!", error: error.message });
+        res
+            .status(500)
+            .json({ message: "Erro ao gerar PDF!", error: error.message });
     }
 };
 
-module.exports = { exportPostCSV, exportUserCSV, exportPostPDF, exportUserPDF };
+module.exports = {
+    exportPostsPDF,
+    exportUserPDF,
+};
