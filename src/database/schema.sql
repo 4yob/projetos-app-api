@@ -148,6 +148,7 @@ INSERT INTO chats (user_id, message) VALUES
     (84, 'Você prefere bolsas grandes ou pequenas?'),
     (85, 'Qual seu acessório indispensável para o inverno?'),
     (86, 'Como usar roupas oversize sem perder o estilo?'),
+<<<<<<< HEAD
     (87, 'Roupas feitas por designers independentes têm personalidade! 👗'),
     (88, 'Qual seu estilo preferido para o trabalho? 💼'),
     (89, 'Você gosta de usar chapéus ou bonés? 🎩🧢'),
@@ -163,10 +164,24 @@ INSERT INTO chats (user_id, message) VALUES
     (99, 'Qual seu sapato favorito para eventos formais? 👠'),
     (100, 'A moda é sua melhor forma de se expressar! Seja autêntico(a)! 🌟');
 
+=======
+    (87, 'Roupas feitas por designers independentes têm personalidade!'),
+    (88, 'Qual seu estilo preferido para o trabalho?'),
+    (89, 'Você gosta de usar chapéus ou bonés?'),
+    (90, 'Dica rápida: misture tecidos para um look diferenciado!'),
+    (91, 'Como a moda pode ajudar na autoestima?'),
+    (93, 'Já experimentou usar roupas com brilho?'),
+    (94, 'A moda é uma arte que você veste todo dia!'),
+    (95, 'Qual peça você nunca deixaria de lado?'),
+    (96, 'Já fez alguma troca de roupas com amigas?'),
+    (97, 'Como cuidar das suas roupas para durarem mais?'),
+    (98, 'Você prefere looks mais clássicos ou alternativos?'),
+    (99, 'Qual seu sapato favorito para eventos formais?'),
+    (100, 'A moda é sua melhor forma de se expressar! Seja autêntico(a)!');
+>>>>>>> 30f04de41af4e32cdf9b88dd0f589de5c170f67c
 
 
 -- Create a table for notifications
-
 
 CREATE TABLE notifications (
     id SERIAL PRIMARY KEY,
@@ -179,6 +194,7 @@ CREATE TABLE notifications (
 
 
 -- Insert sample data into notifications table
+
 INSERT INTO notifications (user_id, post_id, chat_id, message) VALUES
 (1, 1, 1, 'Você foi marcado em uma nova publicação.'),
 (2, 1, 2, 'Alguém comentou no seu post! Confira agora.'),
