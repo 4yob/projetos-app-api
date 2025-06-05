@@ -1,222 +1,603 @@
-const PDFDocument = require("pdfkit");
 const fs = require("fs");
 const path = require("path");
+const PDFDocument = require("pdfkit");
+const { PassThrough } = require("stream");
 const postModel = require("../models/postModel");
+const userModel = require("../models/userModel");
+const notificationModels = require("../models/notificationModel");
+const commentsModel = require("../models/commentsModel");
+const chatModel = require("../models/chatModel");
 
 const exportPostsPDF = async (req, res) => {
     try {
-        const posts = await postModel.getPosts(); 
+        const posts = await postModel.getPosts();
 
         res.setHeader("Content-Type", "application/pdf");
         res.setHeader("Content-Disposition", "inline; filename=posts.pdf");
 
         const doc = new PDFDocument({ margin: 40, size: "A4" });
-        doc.pipe(res);
+        const stream = new PassThrough();
+        doc.pipe(stream);
+        stream.pipe(res);
 
-        const maxY = 760;
-        const rowHeight = 20;
+        const rowHeight = 22;
+        const fontSize = 9;
+        const textYOffset = (rowHeight - fontSize) / 2;
+        const marginBottom = 50;
+        const contentWidth = 500;
 
         const drawCoverPage = () => {
-            const logoPath = path.join(__dirname, "../public/images/logo-glamsync.png");
+            const logoPath = path.join(__dirname, "../../public/logo.png");
+            const logoSize = 80;
+            const marginLeft = 50;
+            const topY = 80;
+        
             if (fs.existsSync(logoPath)) {
-                doc.image(logoPath, doc.page.width / 2 - 75, 80, { width: 150 });
+
+                doc.image(logoPath, marginLeft, topY, {
+                    width: logoSize,
+                    height: logoSize
+                });
             }
-
+        
+            const textStartX = marginLeft + logoSize + 20;
+            const textY = topY + 12;
+        
             doc
-                .font("Helvetica-Bold")
-                .fontSize(24)
-                .fillColor("#a94442")
-                .text("Glamsync", { align: "center" });
-
-            doc
-                .font("Helvetica-Bold")
-                .fontSize(28)
+                .font("Times-Bold")
+                .fontSize(22)
                 .fillColor("#6b2e2e")
-                .text("Relatório de Postagens", { align: "center" });
+                .text("Glamsync Posts", textStartX, textY);
+        
 
             doc
-                .font("Helvetica-Oblique")
+                .moveDown(6)
+                .font("Times-Roman")
                 .fontSize(14)
                 .fillColor("#8d4d4d")
-                .text("Moda que conecta. Estilo que impacta.", { align: "center" });
-
+                .text("Moda que conecta. Estilo que impacta.", textStartX, textY + 26);
+                
             doc
                 .font("Helvetica")
-                .fontSize(12)
-                .fillColor("black")
-                .text(`Gerado em: ${new Date().toLocaleString("pt-BR")}`, { align: "center" });
-
-            doc.addPage();
+                .fontSize(10)
+                .fillColor("#999")
+                .text("Desenvolvido por: Evelyn Oliveira, Bruna Savelli, Alejandra Barros, Leonardo Oliveira, Ana Beatriz e Julia Neves.", textStartX, textY + 46);
         };
-
+        
         const drawHeader = () => {
             const headerY = doc.y;
+            doc.rect(50, headerY, contentWidth, rowHeight).fill("#d46a6a");
 
             doc
                 .font("Helvetica-Bold")
-                .fontSize(11)
-                .fillColor("black");
+                .fontSize(fontSize)
+                .fillColor("white")
+                .text("ID", 52, headerY + textYOffset, { width: 30, align: "left" })
+                .text("Usuário", 90, headerY + textYOffset, { width: 100, align: "left" })
+                .text("Conteúdo", 200, headerY + textYOffset, { width: 180, align: "left" })
+                .text("Likes", 390, headerY + textYOffset, { width: 50, align: "right" })
+                .text("Data", 460, headerY + textYOffset, { width: 90, align: "right" });
 
-            doc.text("ID", 50, headerY, { width: 30, align: "left" });
-            doc.text("Usuário", 90, headerY, { width: 100, align: "left" });
-            doc.text("Conteúdo", 200, headerY, { width: 180, align: "left" });
-            doc.text("Likes", 390, headerY, { width: 50, align: "right" });
-            doc.text("Data", 460, headerY, { width: 90, align: "right" });
-
-            doc
-                .moveTo(50, headerY + 15)
-                .lineTo(550, headerY + 15)
-                .stroke("#f4b6c2");
-
-            doc.y = headerY + 20;
+            doc.y = headerY + rowHeight + 1;
         };
 
-        const drawFooter = () => {
-            const footerY = 800;
-            doc.fontSize(9).fillColor("gray");
-            doc.text(`Página ${doc.page.number}`, 50, footerY, { align: "left" });
-            doc.text("Glamsync", 0, footerY, { align: "right" });
-        };
-
-        // Capa
         drawCoverPage();
 
-        // Tabela
-        drawHeader();
+        if (posts.length > 0) {
+            doc.addPage();
+            doc.y = 50; 
+            drawHeader();
 
-        posts.forEach((post, i) => {
-            if (doc.y > maxY - rowHeight) {
-                drawFooter();
-                doc.addPage();
-                drawHeader();
-            }
+            posts.forEach((post, i) => {
+                const maxY = doc.page.height - marginBottom;
 
-            const bgColor = i % 2 === 0 ? "#f9f3f5" : "#ffffff";
-            doc.rect(50, doc.y - 2, 500, rowHeight).fill(bgColor).stroke("#f4b6c2");
+                if (doc.y + rowHeight > maxY) {
+                    doc.addPage();
+                    doc.y = 50;
+                    drawHeader();
+                }
 
-            doc
-                .fillColor("black")
-                .font("Helvetica")
-                .fontSize(10);
+                const currentY = doc.y;
+                const bgColor = i % 2 === 0 ? "#fdf5f7" : "#ffffff";
 
-            doc.text(post.id || "", 50, doc.y, { width: 30, align: "left" });
-            doc.text((post.user_name || "").slice(0, 20), 90, doc.y, { width: 100, align: "left" });
-            doc.text((post.content || "").slice(0, 50), 200, doc.y, { width: 180, align: "left" });
-            doc.text(String(post.likes ?? 0), 390, doc.y, { width: 50, align: "right" });
-            doc.text(new Date(post.created_at).toLocaleDateString("pt-BR"), 460, doc.y, { width: 90, align: "right" });
+                doc.rect(50, currentY, contentWidth, rowHeight).fill(bgColor);
 
-            doc.y += rowHeight;
-        });
+                doc
+                    .fillColor("black")
+                    .font("Helvetica")
+                    .fontSize(fontSize)
+                    .text(post.id || "", 52, currentY + textYOffset, { width: 30, align: "left", lineBreak: false })
+                    .text((post.user_name || "").slice(0, 20), 90, currentY + textYOffset, { width: 100, align: "left", lineBreak: false })
+                    .text((post.content || "").slice(0, 45), 200, currentY + textYOffset, { width: 180, align: "left", lineBreak: false })
+                    .text(String(post.likes ?? 0), 390, currentY + textYOffset, { width: 50, align: "right", lineBreak: false })
+                    .text(new Date(post.created_at).toLocaleDateString("pt-BR"), 460, currentY + textYOffset, { width: 90, align: "right", lineBreak: false });
 
-        drawFooter();
+                doc.y += rowHeight;
+            });
+        }
         doc.end();
-
     } catch (error) {
         console.error("Erro ao gerar PDF de postagens:", error);
         res.status(500).json({ message: "Erro ao gerar PDF!", error: error.message });
     }
 };
 
-const exportUserPDF = async (req, res) => {
+const exportUsersPDF = async (req, res) => {
     try {
-        const users = await userModel.getUsers(undefined); // Explicitamente pega todos os usuários
+        const users = await userModel.getUsers();
 
         res.setHeader("Content-Type", "application/pdf");
-        res.setHeader("Content-Disposition", "inline; filename=users.pdf");
+        res.setHeader("Content-Disposition", "inline; filename=usuarios.pdf");
 
         const doc = new PDFDocument({ margin: 40, size: "A4" });
-        doc.pipe(res);
+        const stream = new PassThrough();
+        doc.pipe(stream);
+        stream.pipe(res);
 
-        const maxY = 760;
+        const rowHeight = 22;
+        const fontSize = 9;
+        const textYOffset = (rowHeight - fontSize) / 2;
+        const marginBottom = 50;
+        const contentWidth = 500;
 
         const drawCoverPage = () => {
+            const logoPath = path.join(__dirname, "../../public/logo.png");
+            const logoSize = 80;
+            const marginLeft = 50;
+            const topY = 80;
+
+            if (fs.existsSync(logoPath)) {
+                doc.image(logoPath, marginLeft, topY, {
+                    width: logoSize,
+                    height: logoSize
+                });
+            }
+
+            const textStartX = marginLeft + logoSize + 20;
+            const textY = topY + 12;
+
             doc
-                .font("Helvetica-Bold")
-                .fontSize(28)
-                .fillColor("#2c3e50")
-                .text("👥 Relatório de Usuários", { align: "center" })
-                .moveDown(2);
+                .font("Times-Bold")
+                .fontSize(22)
+                .fillColor("#6b2e2e")
+                .text("Glamsync Usuários", textStartX, textY);
+
+            doc
+                .moveDown(6)
+                .font("Times-Roman")
+                .fontSize(14)
+                .fillColor("#8d4d4d")
+                .text("Moda que conecta. Estilo que impacta.", textStartX, textY + 26);
 
             doc
                 .font("Helvetica")
-                .fontSize(14)
-                .fillColor("black")
-                .text(`Gerado em: ${new Date().toLocaleString()}`, { align: "center" });
-
-            doc.addPage();
+                .fontSize(10)
+                .fillColor("#999")
+                .text("Desenvolvido por: Evelyn Oliveira, Bruna Savelli, Alejandra Barros, Leonardo Oliveira, Ana Beatriz e Julia Neves.", textStartX, textY + 46);
         };
 
         const drawHeader = () => {
-            doc
-                .font("Helvetica-Bold")
-                .fontSize(18)
-                .fillColor("#2980b9")
-                .text("📄 Lista de Usuários", { align: "center" })
-                .moveDown(0.5);
+            const headerY = doc.y;
+            doc.rect(50, headerY, contentWidth, rowHeight).fill("#d46a6a");
 
             doc
                 .font("Helvetica-Bold")
-                .fontSize(12)
-                .fillColor("black")
-                .text("ID", 50)
-                .text("Nome", 100)
-                .text("Email", 220)
-                .text("Usuário", 370)
-                .text("Seguindo", 460)
-                .text("Seguidores", 520);
+                .fontSize(fontSize)
+                .fillColor("white")
+                .text("ID", 52, headerY + textYOffset, { width: 30, align: "left" })
+                .text("Nome", 90, headerY + textYOffset, { width: 100, align: "left" })
+                .text("Username", 200, headerY + textYOffset, { width: 90, align: "left" })
+                .text("Seguidores", 300, headerY + textYOffset, { width: 60, align: "right" })
+                .text("Seguindo", 370, headerY + textYOffset, { width: 60, align: "right" })
+                .text("Localização", 440, headerY + textYOffset, { width: 90, align: "right" });
 
-            doc.moveTo(50, doc.y).lineTo(560, doc.y).stroke("#2980b9");
-            doc.moveDown(0.5);
-        };
-
-        const drawFooter = () => {
-            doc.fontSize(9).fillColor("gray");
-            doc.text(`Página ${doc.page.number}`, 50, maxY, { align: "left" });
-            doc.text("RelatórioApp", 0, maxY, { align: "right" });
+            doc.y = headerY + rowHeight + 1;
         };
 
         drawCoverPage();
-        drawHeader();
 
-        let y = doc.y;
-        users.forEach((user, i) => {
-            if (y > maxY - 40) {
-                drawFooter();
-                doc.addPage();
-                drawHeader();
-                y = doc.y;
-            }
+        if (users.length > 0) {
+            doc.addPage();
+            doc.y = 50;
+            drawHeader();
 
-            const bgColor = i % 2 === 0 ? "#f8f9fa" : "#ffffff";
-            doc
-                .rect(50, y - 2, 510, 18)
-                .fill(bgColor)
-                .stroke("#bdc3c7");
+            users.forEach((user, i) => {
+                const maxY = doc.page.height - marginBottom;
 
-            doc
-                .fillColor("black")
-                .font("Helvetica")
-                .fontSize(10)
-                .text(user.id || "", 50, y)
-                .text((user.name || "").slice(0, 20), 100, y)
-                .text((user.email || "").slice(0, 25), 220, y)
-                .text((user.username || "").slice(0, 15), 370, y)
-                .text(String(user.following ?? 0), 460, y)
-                .text(String(user.followers ?? 0), 520, y);
+                if (doc.y + rowHeight > maxY) {
+                    doc.addPage();
+                    doc.y = 50;
+                    drawHeader();
+                }
 
-            y += 18;
-        });
+                const currentY = doc.y;
+                const bgColor = i % 2 === 0 ? "#fdf5f7" : "#ffffff";
+                doc.rect(50, currentY, contentWidth, rowHeight).fill(bgColor);
 
-        drawFooter();
+                doc
+                    .fillColor("black")
+                    .font("Helvetica")
+                    .fontSize(fontSize)
+                    .text(user.id || "", 52, currentY + textYOffset, { width: 30, align: "left", lineBreak: false })
+                    .text((user.name || "").slice(0, 20), 90, currentY + textYOffset, { width: 100, align: "left", lineBreak: false })
+                    .text((user.username || "").slice(0, 20), 200, currentY + textYOffset, { width: 90, align: "left", lineBreak: false })
+                    .text(String(user.followers ?? 0), 300, currentY + textYOffset, { width: 60, align: "right", lineBreak: false })
+                    .text(String(user.following ?? 0), 370, currentY + textYOffset, { width: 60, align: "right", lineBreak: false })
+                    .text((user.location || "").slice(0, 20), 440, currentY + textYOffset, { width: 90, align: "right", lineBreak: false });
+
+                doc.y += rowHeight;
+            });
+        }
+
         doc.end();
     } catch (error) {
-        res
-            .status(500)
-            .json({ message: "Erro ao gerar PDF!", error: error.message });
+        console.error("Erro ao gerar PDF de usuários:", error);
+        res.status(500).json({ message: "Erro ao gerar PDF!", error: error.message });
     }
 };
 
+const exportNotificationsPDF = async (req, res) => {
+    try {
+        const notifications = await notificationModels.getNotifications();
+
+        res.setHeader("Content-Type", "application/pdf");
+        res.setHeader("Content-Disposition", "inline; filename=notificacoes.pdf");
+
+        const doc = new PDFDocument({ margin: 40, size: "A4" });
+        const stream = new PassThrough();
+        doc.pipe(stream);
+        stream.pipe(res);
+
+        const rowHeight = 22;
+        const fontSize = 9;
+        const textYOffset = (rowHeight - fontSize) / 2;
+        const marginBottom = 50;
+        const contentWidth = 500;
+
+        const drawCoverPage = () => {
+            const logoPath = path.join(__dirname, "../../public/logo.png");
+            const logoSize = 80;
+            const marginLeft = 50;
+            const topY = 80;
+
+            if (fs.existsSync(logoPath)) {
+                doc.image(logoPath, marginLeft, topY, {
+                    width: logoSize,
+                    height: logoSize
+                });
+            }
+
+            const textStartX = marginLeft + logoSize + 20;
+            const textY = topY + 12;
+
+            doc
+                .font("Times-Bold")
+                .fontSize(22)
+                .fillColor("#6b2e2e")
+                .text("Glamsync Notificações", textStartX, textY);
+
+            doc
+                .moveDown(6)
+                .font("Times-Roman")
+                .fontSize(14)
+                .fillColor("#8d4d4d")
+                .text("Moda que conecta. Estilo que impacta.", textStartX, textY + 26);
+
+            doc
+                .font("Helvetica")
+                .fontSize(10)
+                .fillColor("#999")
+                .text("Desenvolvido por: Evelyn Oliveira, Bruna Savelli, Alejandra Barros, Leonardo Oliveira, Ana Beatriz e Julia Neves.", textStartX, textY + 46);
+        };
+
+        const drawHeader = () => {
+            const headerY = doc.y;
+            doc.rect(50, headerY, contentWidth, rowHeight).fill("#d46a6a");
+
+            doc
+                .font("Helvetica-Bold")
+                .fontSize(fontSize)
+                .fillColor("white")
+                .text("ID", 52, headerY + textYOffset, { width: 30, align: "left" })
+                .text("Usuário", 90, headerY + textYOffset, { width: 60, align: "left" })
+                .text("Mensagem", 160, headerY + textYOffset, { width: 160, align: "left" })
+                .text("Post", 330, headerY + textYOffset, { width: 50, align: "right" })
+                .text("Chat", 390, headerY + textYOffset, { width: 50, align: "right" })
+                .text("Data", 450, headerY + textYOffset, { width: 90, align: "right" });
+
+            doc.y = headerY + rowHeight + 1;
+        };
+
+        drawCoverPage();
+
+        if (notifications.length > 0) {
+            doc.addPage();
+            doc.y = 50;
+            drawHeader();
+
+            notifications.forEach((notif, i) => {
+                const maxY = doc.page.height - marginBottom;
+
+                if (doc.y + rowHeight > maxY) {
+                    doc.addPage();
+                    doc.y = 50;
+                    drawHeader();
+                }
+
+                const currentY = doc.y;
+                const bgColor = i % 2 === 0 ? "#fdf5f7" : "#ffffff";
+                doc.rect(50, currentY, contentWidth, rowHeight).fill(bgColor);
+
+                doc
+                    .fillColor("black")
+                    .font("Helvetica")
+                    .fontSize(fontSize)
+                    .text(notif.id || "", 52, currentY + textYOffset, { width: 30, align: "left", lineBreak: false })
+                    .text(String(notif.user_id || ""), 90, currentY + textYOffset, { width: 60, align: "left", lineBreak: false })
+                    .text((notif.message || "").slice(0, 40), 160, currentY + textYOffset, { width: 160, align: "left", lineBreak: false })
+                    .text(notif.post_id !== null ? String(notif.post_id) : "-", 330, currentY + textYOffset, { width: 50, align: "right", lineBreak: false })
+                    .text(notif.chat_id !== null ? String(notif.chat_id) : "-", 390, currentY + textYOffset, { width: 50, align: "right", lineBreak: false })
+                    .text(new Date(notif.created_at).toLocaleDateString("pt-BR"), 450, currentY + textYOffset, { width: 90, align: "right", lineBreak: false });
+
+                doc.y += rowHeight;
+            });
+        }
+
+        doc.end();
+    } catch (error) {
+        console.error("Erro ao gerar PDF de notificações:", error);
+        res.status(500).json({ message: "Erro ao gerar PDF!", error: error.message });
+    }
+};
+
+const exportCommentsPDF = async (req, res) => {
+    try {
+      const { username } = req.query;
+
+      const comments = await commentsModel.getComments(username);
+  
+      res.setHeader("Content-Type", "application/pdf");
+      res.setHeader("Content-Disposition", "inline; filename=comentarios.pdf");
+  
+      const doc = new PDFDocument({ margin: 40, size: "A4" });
+      const stream = new PassThrough();
+      doc.pipe(stream);
+      stream.pipe(res);
+  
+      const rowHeight = 22;
+      const fontSize = 9;
+      const textYOffset = (rowHeight - fontSize) / 2;
+      const marginBottom = 50;
+      const contentWidth = 500;
+  
+      const drawCoverPage = () => {
+        const logoPath = path.join(__dirname, "../../public/logo.png");
+        const logoSize = 80;
+        const marginLeft = 50;
+        const topY = 80;
+  
+        if (fs.existsSync(logoPath)) {
+          doc.image(logoPath, marginLeft, topY, {
+            width: logoSize,
+            height: logoSize,
+          });
+        }
+  
+        const textStartX = marginLeft + logoSize + 20;
+        const textY = topY + 12;
+  
+        doc
+          .font("Times-Bold")
+          .fontSize(22)
+          .fillColor("#6b2e2e")
+          .text("Glamsync Comentários", textStartX, textY);
+  
+        doc
+          .moveDown(6)
+          .font("Times-Roman")
+          .fontSize(14)
+          .fillColor("#8d4d4d")
+          .text("Moda que conecta. Estilo que impacta.", textStartX, textY + 26);
+  
+        doc
+          .font("Helvetica")
+          .fontSize(10)
+          .fillColor("#999")
+          .text(
+            "Desenvolvido por: Evelyn Oliveira, Bruna Savelli, Alejandra Barros, Leonardo Oliveira, Ana Beatriz e Julia Neves.",
+            textStartX,
+            textY + 46
+          );
+      };
+  
+      const drawHeader = () => {
+        const headerY = doc.y;
+        doc.rect(50, headerY, contentWidth, rowHeight).fill("#d46a6a");
+  
+        doc
+          .font("Helvetica-Bold")
+          .fontSize(fontSize)
+          .fillColor("white")
+          .text("ID", 52, headerY + textYOffset, { width: 30, align: "left" })
+          .text("Usuário", 90, headerY + textYOffset, { width: 90, align: "left" })
+          .text("Comentário", 190, headerY + textYOffset, { width: 220, align: "left" })
+          .text("Post ID", 420, headerY + textYOffset, { width: 50, align: "right" })
+          .text("Data", 470, headerY + textYOffset, { width: 80, align: "right" });
+  
+        doc.y = headerY + rowHeight + 1;
+      };
+  
+      drawCoverPage();
+  
+      if (comments.length > 0) {
+        doc.addPage();
+        doc.y = 50;
+        drawHeader();
+  
+        comments.forEach((comment, i) => {
+          const maxY = doc.page.height - marginBottom;
+  
+          if (doc.y + rowHeight > maxY) {
+            doc.addPage();
+            doc.y = 50;
+            drawHeader();
+          }
+  
+          const currentY = doc.y;
+          const bgColor = i % 2 === 0 ? "#fdf5f7" : "#ffffff";
+          doc.rect(50, currentY, contentWidth, rowHeight).fill(bgColor);
+  
+          doc
+            .fillColor("black")
+            .font("Helvetica")
+            .fontSize(fontSize)
+            .text(comment.id || "", 52, currentY + textYOffset, { width: 30, align: "left", lineBreak: false })
+            .text((comment.user_name || "").slice(0, 20), 90, currentY + textYOffset, { width: 90, align: "left", lineBreak: false })
+            .text((comment.text_comment || "").slice(0, 60), 190, currentY + textYOffset, { width: 220, align: "left", lineBreak: false })
+            .text(String(comment.post_id || ""), 420, currentY + textYOffset, { width: 50, align: "right", lineBreak: false })
+            .text(
+              comment.created_at ? new Date(comment.created_at).toLocaleDateString("pt-BR") : "",
+              470,
+              currentY + textYOffset,
+              { width: 80, align: "right", lineBreak: false }
+            );
+  
+          doc.y += rowHeight;
+        });
+      }
+  
+      doc.end();
+    } catch (error) {
+      console.error("Erro ao gerar PDF de comentários:", error);
+      res.status(500).json({ message: "Erro ao gerar PDF!", error: error.message });
+    }
+  };
+
+  const exportChatsPDF = async (req, res) => {
+    try {
+      const { username } = req.query;
+      const chats = await chatModel.getChats(username);
+  
+      res.setHeader("Content-Type", "application/pdf");
+      res.setHeader("Content-Disposition", "inline; filename=chats.pdf");
+  
+      const doc = new PDFDocument({ margin: 40, size: "A4" });
+      const stream = new PassThrough();
+      doc.pipe(stream);
+      stream.pipe(res);
+  
+      const rowHeight = 22;
+      const fontSize = 9;
+      const textYOffset = (rowHeight - fontSize) / 2;
+      const marginBottom = 50;
+      const contentWidth = 500;
+  
+      const drawCoverPage = () => {
+        const logoPath = path.join(__dirname, "../../public/logo.png");
+        const logoSize = 80;
+        const marginLeft = 50;
+        const topY = 80;
+  
+        if (fs.existsSync(logoPath)) {
+          doc.image(logoPath, marginLeft, topY, {
+            width: logoSize,
+            height: logoSize,
+          });
+        }
+  
+        const textStartX = marginLeft + logoSize + 20;
+        const textY = topY + 12;
+  
+        doc
+          .font("Times-Bold")
+          .fontSize(22)
+          .fillColor("#6b2e2e")
+          .text("Glamsync Chats", textStartX, textY);
+  
+        doc
+          .moveDown(6)
+          .font("Times-Roman")
+          .fontSize(14)
+          .fillColor("#8d4d4d")
+          .text("Moda que conecta. Estilo que impacta.", textStartX, textY + 26);
+  
+        doc
+          .font("Helvetica")
+          .fontSize(10)
+          .fillColor("#999")
+          .text(
+            "Desenvolvido por: Evelyn Oliveira, Bruna Savelli, Alejandra Barros, Leonardo Oliveira, Ana Beatriz e Julia Neves.",
+            textStartX,
+            textY + 46
+          );
+      };
+  
+      const drawHeader = () => {
+        const headerY = doc.y;
+        doc.rect(50, headerY, contentWidth, rowHeight).fill("#d46a6a");
+  
+        doc
+          .font("Helvetica-Bold")
+          .fontSize(fontSize)
+          .fillColor("white")
+          .text("ID", 52, headerY + textYOffset, { width: 30, align: "left" })
+          .text("Usuário", 90, headerY + textYOffset, { width: 100, align: "left" })
+          .text("Mensagem", 200, headerY + textYOffset, { width: 200, align: "left" })
+          .text("Data", 410, headerY + textYOffset, { width: 90, align: "right" });
+  
+        doc.y = headerY + rowHeight + 1;
+      };
+  
+      drawCoverPage();
+  
+      if (chats.length > 0) {
+        doc.addPage();
+        doc.y = 50;
+        drawHeader();
+  
+        chats.forEach((chat, i) => {
+          const maxY = doc.page.height - marginBottom;
+  
+          if (doc.y + rowHeight > maxY) {
+            doc.addPage();
+            doc.y = 50;
+            drawHeader();
+          }
+  
+          const currentY = doc.y;
+          const bgColor = i % 2 === 0 ? "#fdf5f7" : "#ffffff";
+  
+          doc.rect(50, currentY, contentWidth, rowHeight).fill(bgColor);
+  
+          doc
+            .fillColor("black")
+            .font("Helvetica")
+            .fontSize(fontSize)
+            .text(chat.id || "", 52, currentY + textYOffset, { width: 30, align: "left", lineBreak: false })
+            .text((chat.user_name || "").slice(0, 20), 90, currentY + textYOffset, { width: 100, align: "left", lineBreak: false })
+            .text((chat.message || "").slice(0, 50), 200, currentY + textYOffset, { width: 200, align: "left", lineBreak: false })
+            .text(
+              chat.created_at ? new Date(chat.created_at).toLocaleDateString("pt-BR") : "",
+              410,
+              currentY + textYOffset,
+              { width: 90, align: "right", lineBreak: false }
+            );
+  
+          doc.y += rowHeight;
+        });
+      }
+  
+      doc.end();
+    } catch (error) {
+      console.error("Erro ao gerar PDF de chats:", error);
+      res.status(500).json({ message: "Erro ao gerar PDF!", error: error.message });
+    }
+  };
+
 module.exports = {
     exportPostsPDF,
-    exportUserPDF,
+    exportUsersPDF,
+    exportNotificationsPDF,
+    exportCommentsPDF,
+    exportChatsPDF
 };
