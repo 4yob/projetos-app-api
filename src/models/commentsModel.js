@@ -67,6 +67,13 @@ const getCommentsByPostId = async (post_id) => {
   return result.rows;
 };
 
+const getCountCommentsByPostId = async (post_id) => {
+  const result = await pool.query(
+    "SELECT COUNT(*) AS count FROM comments WHERE post_id = $1;",
+    [post_id]
+  );
+  return parseInt(result.rows[0].count, 10);
+};
 
 module.exports = {
   getComments,
@@ -74,5 +81,6 @@ module.exports = {
   createComment,
   updateComment,
   deleteComment,
-  getCommentsByPostId
+  getCommentsByPostId,
+  getCountCommentsByPostId
 };

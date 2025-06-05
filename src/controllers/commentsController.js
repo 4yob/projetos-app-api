@@ -77,11 +77,26 @@ const getCommentsByPostId = async (req, res) => {
     }
 }
 
+const getCountCommentsByPostId = async (req, res) => {
+    try {
+        const { post_id} = req.params;
+        if (!post_id || isNaN(Number(post_id))) {
+            return res.status(400).json({ message: "Invalid post id." });
+        }
+        const count = await commentsModel.getCountCommentsByPostId(post_id);
+        res.status(200).json({ message: "Comment count retrieved successfully.", count });
+    } catch (error) {
+        console.error("Error counting comments by post ID:", error);
+        throw new Error("Failed to count comments.");
+    }
+}
+
 module.exports = {
     getComments,
     getCommentById,
     createComment,
     updateComment,
     deleteComment,
-    getCommentsByPostId
+    getCommentsByPostId,
+    getCountCommentsByPostId
 };

@@ -130,8 +130,7 @@ router.put("/comment/:id", commentsController.updateComment);
  *         description: Comentário excluído com sucesso
  */
 router.delete("/comment/:id", commentsController.deleteComment);
-
-
 router.get("/comments/post/:post_id", commentsController.getCommentsByPostId);
+router.get("/comments/count/:post_id", commentsController.getCountCommentsByPostId);
 
 module.exports = router;
