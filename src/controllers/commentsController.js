@@ -63,10 +63,25 @@ const deleteComment = async (req, res) => {
     }
 };
 
+const getCommentsByPostId = async (req, res) => {
+    try {
+        const { post_id } = req.params;
+        if (!post_id || isNaN(Number(post_id))) {
+            return res.status(400).json({ message: "Invalid post id." });
+        }
+        const comments = await commentsModel.getCommentsByPostId(post_id);
+        res.status(200).json({ message: "Comments retrieved successfully.", comments });
+    } catch (error) {
+        console.error("Error fetching comments by post ID:", error);
+        res.status(500).json({ error: "Failed to retrieve comments." });
+    }
+}
+
 module.exports = {
     getComments,
     getCommentById,
     createComment,
     updateComment,
-    deleteComment
+    deleteComment,
+    getCommentsByPostId
 };

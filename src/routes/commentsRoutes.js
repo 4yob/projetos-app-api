@@ -131,4 +131,7 @@ router.put("/comment/:id", commentsController.updateComment);
  */
 router.delete("/comment/:id", commentsController.deleteComment);
 
+
+router.get("/comments/post/:post_id", commentsController.getCommentsByPostId);
+
 module.exports = router;

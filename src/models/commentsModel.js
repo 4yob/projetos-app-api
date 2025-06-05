@@ -55,10 +55,24 @@ const deleteComment = async (id) => {
   return result.rows[0];
 };
 
+// getCommentsByPostId
+const getCommentsByPostId = async (post_id) => {
+  const result = await pool.query(
+    `SELECT comments.*, users.username AS user_name, users.photo AS user_photo
+     FROM comments
+     JOIN users ON comments.user_id = users.id
+     WHERE comments.post_id = $1;`,
+    [post_id]
+  );
+  return result.rows;
+};
+
+
 module.exports = {
   getComments,
   getCommentById,
   createComment,
   updateComment,
   deleteComment,
+  getCommentsByPostId
 };
