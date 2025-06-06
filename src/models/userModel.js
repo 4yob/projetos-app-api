@@ -1,14 +1,24 @@
 const pool = require("../config/database");
 
-//Api para listar todos os usuários cadastrados no app
-const getUsers = async ( name ) => {
-    if ( name && name.trim()) {
-        const result = await pool.query("SELECT users.* FROM users WHERE users.name ILIKE $1", [`%${name.trim()}%`]);
-        return result.rows;
+//Api para procurar usuários pelo nome ou username
+const getUsers = async (name, username) => {
+    let query = "SELECT users.* FROM users";
+    let conditions = [];
+    let params = [];
+
+    if (name && name.trim()) {
+        params.push(`%${name.trim()}%`);
+        conditions.push(`users.name ILIKE $${params.length}`);
     }
-    // Se não houver nome, retorna todos os usuários
-    const result = await pool.query("SELECT * FROM users");
-    return result.rows;
+    if (username && username.trim()) {
+        params.push(`%${username.trim()}%`);
+        conditions.push(`users.username ILIKE $${params.length}`);
+    }
+    if (conditions.length > 0) {
+        query += " WHERE " + conditions.join(" AND ");
+    }
+    const result = await pool.query(query, params);
+    return result.rows;  
 };
 
 //Api para procurar um usuário pelo id

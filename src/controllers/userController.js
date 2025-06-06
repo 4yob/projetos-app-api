@@ -2,8 +2,10 @@ const userModel = require("../models/userModel");
 
 const getUsers = async (req, res) => {
     try {
-        const { name } = req.query;
-        const users = await userModel.getUsers(name);
+        const { name, username } = req.query;
+        
+        const users = await userModel.getUsers(name, username);
+
         res.status(200).json({ message: "Users retrieved successfully.", users });
     } catch (error) {
         console.error(error);
