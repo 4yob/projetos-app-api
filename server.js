@@ -9,6 +9,8 @@ const setupSwagger = require("./src/config/swagger.js");
 const reportRoutes = require("./src/routes/reportRoutes");
 const notificationsRoutes = require("./src/routes/notificationRoutes");
 const categoriaRoutes = require("./src/routes/categoriaRoutes");
+// const loginRoute = require("./src/routes/loginRoute.js");
+// const signUpRoute = require("./src/routes/signUpRoute.js");
 
 const path = require("path");
 
@@ -27,6 +29,8 @@ app.use("/api", commentsRoutes);
 app.use("/api", reportRoutes);
 app.use("/api", notificationsRoutes);
 app.use("/api", categoriaRoutes);
+// app.use('/api', loginRoute);
+// app.use('/api', signUpRoute);
 
 app.listen(PORT, () => {
     console.log(`🌸 Servidor rodando em http://localhost:${PORT}`);

@@ -21,11 +21,11 @@ CREATE TABLE users (
 
 INSERT INTO users (name, username, email, location, photo, following, followers) 
 VALUES 
-    ('Alice Johnson', 'alicej', 'alice@example.com', 'New York', 'https://example.com/photos/alice.jpg', 10, 50),
-    ('Bob Smith', 'bobsmith', 'bob@example.com', 'Los Angeles', 'https://example.com/photos/bob.jpg', 20, 100),
-    ('Charlie Brown', 'charlieb', 'charlie@example.com', 'Chicago', 'https://example.com/photos/charlie.jpg', 15, 75),
-    ('Diana Prince', 'dianap', 'diana@example.com', 'San Francisco', 'https://example.com/photos/diana.jpg', 30, 200),
-    ('Ethan Hunt', 'ethanh', 'ethan@example.com', 'Miami', 'https://example.com/photos/ethan.jpg', 25, 150);
+    ('Alice Johnson', 'alicej', 'alice@example.com', 'New York', '00e9f878c36e4c659ff5d21d1e0637bf', 10, 50),
+    ('Bob Smith', 'bobsmith', 'bob@example.com', 'Los Angeles', '0c88676563bc6f621320f904cd8ddcba', 20, 100),
+    ('Charlie Brown', 'charlieb', 'charlie@example.com', 'Chicago', '0b02ec72d65cc5a4c0a78a3b0f630037', 15, 75),
+    ('Diana Prince', 'dianap', 'diana@example.com', 'San Francisco', '1ce71bfececf8c66cf13e18890d0d905', 30, 200),
+    ('Ethan Hunt', 'ethanh', 'ethan@example.com', 'Miami', '1f55a7a68f24d839c9353df37db496f7', 25, 150);
 
 -- Create a table for posts
 
@@ -48,11 +48,11 @@ VALUES
 
 INSERT INTO posts (user_id, content, categorie_id, photo, likes, comments) 
 VALUES
-    (1, 'Look do dia: vestido floral e sandália confortável!', 1, 'https://example.com/photos/post1.jpg', 15, 3),
-    (2, 'Acessórios fazem toda a diferença no visual.', 5, 'https://example.com/photos/post2.jpg', 22, 5),
-    (3, 'Dica de maquiagem para o verão!', 4, 'https://example.com/photos/post3.jpg', 30, 7),
-    (4, 'Chapéu estiloso para proteger do sol.', 2, 'https://example.com/photos/post4.jpg', 10, 2),
-    (5, 'Sapatos confortáveis para o dia a dia.', 3, 'https://example.com/photos/post5.jpg', 18, 4);
+    (1, 'Look do dia', 1, '8dec83cc85f939b03041ff41b92d8c22', 15, 3),
+    (2, 'Acessórios fazem toda a diferença no visual.', 5, '1ce71bfececf8c66cf13e18890d0d905', 22, 5),
+    (3, 'Dica de maquiagem para o verão!', 4, '2c906966e4326b24c6464a147579ffdb', 30, 7),
+    (4, 'Touca estilosa para proteger do inverno.', 2, '3b8bff8bf9bc819f86fa2e46d5fad151', 10, 2),
+    (5, 'Sapatos confortáveis para o dia a dia.', 3, '3ae3f559f6bb1cfb06cb926f0fe67cf5', 18, 4);
 
 
 
