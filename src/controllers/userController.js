@@ -1,11 +1,10 @@
 const userModel = require("../models/userModel");
 
+// Rota para buscar usuários pelo nome ou username
 const getUsers = async (req, res) => {
     try {
         const { name, username } = req.query;
-        
         const users = await userModel.getUsers(name, username);
-
         res.status(200).json({ message: "Users retrieved successfully.", users });
     } catch (error) {
         console.error(error);
@@ -13,6 +12,7 @@ const getUsers = async (req, res) => {
     }
 };
 
+// Rota para buscar um usuário pelo ID
 const getUserById = async (req, res) => {
     try {
         const user = await userModel.getUserById(req.params.id);
@@ -26,15 +26,17 @@ const getUserById = async (req, res) => {
     }
 };
 
+// Rota para criar um novo usuário
 const createUser = async (req, res) => {
     try {
         const { name, username, email, location, following, followers } = req.body;
 
+        // Valida os campos obrigatórios
         if (!name || !email || !username) {
             return res.status(400).json({ message: "Os campos 'name', 'email' e 'username' são obrigatórios." });
         }
 
-        // Validação de números
+        // Valida se os campos numéricos são números
         if (following && isNaN(following)) {
             return res.status(400).json({ message: "'following' deve ser um número." });
         }
@@ -42,12 +44,13 @@ const createUser = async (req, res) => {
             return res.status(400).json({ message: "'followers' deve ser um número." });
         }
 
-        const photo = req.file ? req.file.filename : null;
+        const photo = req.file ? req.file.filename : null; // Obtém o nome do arquivo da foto, se fornecido
         const newUser = await userModel.createUser(name, username, email, location, following, followers, photo);
         res.status(201).json({ message: "User created successfully.", newUser });
     } catch (error) {
         console.log(error);
         if (error.code === "23505") {
+            // Trata erros de chave única (e-mail ou username duplicados)
             if (error.constraint === "users_email_key") {
                 res.status(400).json({ message: "Email already registered." });
             } else if (error.constraint === "users_username_key") {
@@ -58,10 +61,11 @@ const createUser = async (req, res) => {
     }
 };
 
+// Rota para atualizar os dados de um usuário
 const updateUser = async (req, res) => {
     try {
         const { name, username, email, location } = req.body;
-        const photo = req.file ? req.file.filename : null;
+        const photo = req.file ? req.file.filename : null; // Obtém o nome do arquivo da foto, se fornecido
         const updatedUser = await userModel.updateUser(req.params.id, name, username, email, location, photo);
 
         if (!updatedUser) {
@@ -74,6 +78,7 @@ const updateUser = async (req, res) => {
     }
 };
 
+// Rota para deletar um usuário
 const deleteUser = async (req, res) => {
     try {
         const message = await userModel.deleteUser(req.params.id);
@@ -83,7 +88,7 @@ const deleteUser = async (req, res) => {
     }
 };
 
-// Rota para obter seguidores de um usuário
+// Rota para obter o número de seguidores de um usuário
 const getFollowers = async (req, res) => {
     try {
         const userId = req.params.id;
@@ -98,11 +103,13 @@ const getFollowers = async (req, res) => {
     }
 };
 
-// Rota para atualizar seguidores de um usuário
+// Rota para atualizar o número de seguidores de um usuário
 const updateFollowers = async (req, res) => {
     try {
         const { id } = req.params;
         const { action } = req.body; // 'unfollow' ou 'follow'
+
+        // Valida a ação fornecida
         if (!["follow", "unfollow"].includes(action)) {
             return res.status(400).json({ message: "Invalid action. Use 'unfollow' or 'follow'." });
         }
@@ -119,7 +126,7 @@ const updateFollowers = async (req, res) => {
     }
 };
 
-// Rota para obter pessoas que o usuário está seguindo
+// Rota para obter o número de pessoas que o usuário está seguindo
 const getFollowing = async (req, res) => {
     try {
         const userId = req.params.id;
@@ -139,8 +146,10 @@ const updateFollowing = async (req, res) => {
     try {
         const { id } = req.params;
         const { action } = req.body;
+
         console.log(`Received request to update following for user ${id} with action ${action}`);
 
+        // Valida a ação fornecida
         if (!["follow", "unfollow"].includes(action)) {
             return res.status(400).json({ message: "Invalid action. Use 'follow' or 'unfollow'." });
         }

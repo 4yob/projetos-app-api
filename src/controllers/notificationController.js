@@ -1,6 +1,6 @@
 const notificationModel = require("../models/notificationModel");
 
-// Controller para listar todas as notificações
+// Retorna todas as notificações disponíveis
 const getNotifications = async (req, res) => {
   try {
     const notifications = await notificationModel.getNotifications();
@@ -11,7 +11,7 @@ const getNotifications = async (req, res) => {
   }
 };
 
-// Controller para buscar uma notificação por ID
+// Retorna uma notificação específica com base no ID fornecido
 const getNotificationById = async (req, res) => {
   try {
     const notification = await notificationModel.getNotificationById(req.params.id);
@@ -25,7 +25,7 @@ const getNotificationById = async (req, res) => {
   }
 };
 
-// Controller para criar uma nova notificação
+// Cria uma nova notificação com os dados fornecidos no corpo da requisição
 const createNotification = async (req, res) => {
   try {
     const { user_id, mensagem, message, post_id, chat_id } = req.body;
@@ -46,7 +46,7 @@ const createNotification = async (req, res) => {
   }
 };
 
-// Controller para atualizar uma notificação existente
+// Atualiza os dados de uma notificação com base no ID fornecido
 const updateNotification = async (req, res) => {
   try {
     const { message, post_id } = req.body;
@@ -60,7 +60,7 @@ const updateNotification = async (req, res) => {
   }
 };
 
-// Controller para deletar uma notificação
+// Remove uma notificação com base no ID fornecido
 const deleteNotification = async (req, res) => {
   try {
     const { id } = req.params;
@@ -74,6 +74,7 @@ const deleteNotification = async (req, res) => {
   }
 };
 
+// Insere uma nova notificação com base nos dados fornecidos
 const ganharNotificacao = async (req, res) => {
   try {
     const { user_id, message, post_id, chat_id } = req.body;
@@ -89,6 +90,7 @@ const ganharNotificacao = async (req, res) => {
 }
 
 module.exports = {
+  // Exporta todos os controladores para serem usados em rotas
   getNotifications,
   getNotificationById,
   createNotification,

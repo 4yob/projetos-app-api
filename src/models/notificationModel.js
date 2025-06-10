@@ -1,6 +1,7 @@
 const pool = require("../config/database");
 
 // Buscar todas as notificações
+// Retorna todas as notificações ordenadas pela data de criação
 const getNotifications = async () => {
     try {
         const result = await pool.query("SELECT * FROM notifications ORDER BY created_at DESC");
@@ -13,6 +14,7 @@ const getNotifications = async () => {
 };
 
 // Buscar uma notificação por ID
+// Retorna uma notificação específica com base no ID fornecido
 const getNotificationById = async (id) => {
     try {
         const result = await pool.query("SELECT * FROM notifications WHERE id = $1", [id]);
@@ -24,6 +26,7 @@ const getNotificationById = async (id) => {
 };
 
 // Criar uma nova notificação
+// Insere uma nova notificação no banco de dados
 const createNotification = async (user_id, message, post_id, chat_id) => {
     if (user_id === null || user_id === undefined) {
         throw new Error("user_id não pode ser null ou undefined.");
@@ -45,6 +48,7 @@ const createNotification = async (user_id, message, post_id, chat_id) => {
 };
 
 // Atualizar uma notificação existente
+// Atualiza os dados de uma notificação com base no ID fornecido
 const updateNotification = async (id, message, post_id) => {
     try {
         const result = await pool.query(
@@ -59,6 +63,7 @@ const updateNotification = async (id, message, post_id) => {
 };
 
 // Deletar uma notificação
+// Remove uma notificação do banco de dados com base no ID fornecido
 const deleteNotification = async (id) => {
     try {
         const result = await pool.query("DELETE FROM notifications WHERE id = $1 RETURNING *", [id]);
@@ -69,6 +74,8 @@ const deleteNotification = async (id) => {
     }
 };
 
+// Ganhar uma notificação
+// Insere uma notificação no banco de dados com base em parâmetros específicos
 const ganharNotificacao = async (user_id, message, post_id, chat_id) => {
     if (user_id === null || user_id === undefined) {
         throw new Error("user_id não pode ser null ou undefined.");
@@ -89,6 +96,7 @@ const ganharNotificacao = async (user_id, message, post_id, chat_id) => {
 };
 
 module.exports = {
+    // Exporta todas as funções para serem usadas em outros módulos
     getNotifications,
     getNotificationById,
     createNotification,

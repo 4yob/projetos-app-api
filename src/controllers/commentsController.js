@@ -1,5 +1,7 @@
+// Importa o modelo de comentários
 const commentsModel = require("../models/commentsModel");
 
+// Obtém todos os comentários, com filtro opcional por nome de usuário
 const getComments = async (req, res) => {
     try {
         const { username } = req.query;
@@ -11,6 +13,7 @@ const getComments = async (req, res) => {
     }
 };
 
+// Obtém um comentário específico pelo ID
 const getCommentById = async (req, res) => {
     try {
         const { id } = req.params;
@@ -28,6 +31,7 @@ const getCommentById = async (req, res) => {
     }
 };
 
+// Cria um novo comentário
 const createComment = async (req, res) => {
     try {
         const { user_id, post_id, text_comment } = req.body;
@@ -41,6 +45,7 @@ const createComment = async (req, res) => {
     }
 };
 
+// Atualiza o texto de um comentário existente pelo ID
 const updateComment = async (req, res) => {
     try {
         const { text_comment } = req.body;
@@ -54,6 +59,7 @@ const updateComment = async (req, res) => {
     }
 };
 
+// Deleta um comentário pelo ID
 const deleteComment = async (req, res) => {
     try {
         const message = await commentsModel.deleteComment(req.params.id);
@@ -63,6 +69,7 @@ const deleteComment = async (req, res) => {
     }
 };
 
+// Obtém todos os comentários de um post específico pelo ID do post
 const getCommentsByPostId = async (req, res) => {
     try {
         const { post_id } = req.params;
@@ -75,11 +82,12 @@ const getCommentsByPostId = async (req, res) => {
         console.error("Error fetching comments by post ID:", error);
         res.status(500).json({ error: "Failed to retrieve comments." });
     }
-}
+};
 
+// Conta o número de comentários de um post específico pelo ID do post
 const getCountCommentsByPostId = async (req, res) => {
     try {
-        const { post_id} = req.params;
+        const { post_id } = req.params;
         if (!post_id || isNaN(Number(post_id))) {
             return res.status(400).json({ message: "Invalid post id." });
         }
@@ -89,8 +97,9 @@ const getCountCommentsByPostId = async (req, res) => {
         console.error("Error counting comments by post ID:", error);
         throw new Error("Failed to count comments.");
     }
-}
+};
 
+// Exporta as funções do controlador
 module.exports = {
     getComments,
     getCommentById,

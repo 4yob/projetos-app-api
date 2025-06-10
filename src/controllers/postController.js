@@ -1,24 +1,25 @@
+// Importa o modelo de posts
 const postModel = require("../models/postModel");
 
-//Controller to get all posts
+// Controlador para buscar todos os posts
 const getPosts = async (req, res) => {
   try {
-    let categories = req.query.categorie_id;
-    if(categories) {
-      categories = categories.toString().split(',').map(Number).filter(Boolean);
+    let categories = req.query.categorie_id; // Obtém categorias da query string
+    if (categories) {
+      categories = categories.toString().split(',').map(Number).filter(Boolean); // Converte para array de números
     }
-    const posts = await postModel.getPosts(categories);
-    res.status(200).json(posts);
+    const posts = await postModel.getPosts(categories); // Busca os posts
+    res.status(200).json(posts); // Retorna os posts
   } catch (error) {
     console.error(error);
     res.status(400).json({ message: "Error fetching posts." });
   }
 };
 
-//Controller to get a specific post by ID
+// Controlador para buscar um post específico pelo ID
 const getPostById = async (req, res) => {
   try {
-    const post = await postModel.getPostById(req.params.id);
+    const post = await postModel.getPostById(req.params.id); // Busca o post pelo ID
     if (!post) {
       res.status(404).json({ message: "Post not found." });
     }
@@ -29,39 +30,35 @@ const getPostById = async (req, res) => {
   }
 };
 
-//Controller to create a new post
+// Controlador para criar um novo post
 const createPost = async (req, res) => {
   try {
     const { user_id, categorie_id, content } = req.body;
 
-    // Validation of required fields
+    // Valida os campos obrigatórios
     if (!user_id || !categorie_id || !content) {
       return res
         .status(400)
         .json({ message: "Required fields not provided." });
     }
 
-    const photo = req.file ? req.file.filename : null;
-    const newPost = await postModel.createPost(user_id, categorie_id, content,  photo);
-    res.status(201).json(newPost);
+    const photo = req.file ? req.file.filename : null; // Obtém o nome do arquivo da foto, se fornecido
+    const newPost = await postModel.createPost(user_id, categorie_id, content, photo); // Cria o post
+    res.status(201).json(newPost); // Retorna o post criado
   } catch (error) {
     console.error(error);
     if (error.code === "23505") {
       return res.status(409).json({ message: "Post already exists!" });
     }
-    console.log(req.body);
     res.status(500).json({ message: "Error creating a new post." });
   }
 };
 
-//Controller to update an existing post
+// Controlador para atualizar um post existente
 const updatePost = async (req, res) => {
   try {
-    const { content } = req.body;
-    const updatePost = await postModel.updatePost(
-      req.params.id,
-      content
-    );
+    const { content } = req.body; // Obtém o conteúdo do corpo da requisição
+    const updatePost = await postModel.updatePost(req.params.id, content); // Atualiza o post
     if (!updatePost) {
       return res.status(404).json({ message: "Post not found." });
     }
@@ -71,11 +68,11 @@ const updatePost = async (req, res) => {
   }
 };
 
-//Controller to delete an existing post
+// Controlador para deletar um post específico pelo ID
 const deletePost = async (req, res) => {
   try {
-    const { id } = req.params;
-    const deletedPost = await postModel.deletePost(id);
+    const { id } = req.params; // Obtém o ID do post
+    const deletedPost = await postModel.deletePost(id); // Deleta o post
     if (!deletedPost) {
       return res.status(404).json({ message: "Post not found." });
     }
@@ -85,11 +82,11 @@ const deletePost = async (req, res) => {
   }
 };
 
-//Controller to retrieve likes of a post
+// Controlador para buscar os likes de um post
 const getLikes = async (req, res) => {
   try {
-    const postId = req.params.id;
-    const post = await postModel.getPostById(postId);
+    const postId = req.params.id; // Obtém o ID do post
+    const post = await postModel.getPostById(postId); // Busca o post
     if (!post) {
       return res.status(404).json({ message: "Post not found." });
     }
@@ -102,18 +99,18 @@ const getLikes = async (req, res) => {
   }
 };
 
-//Controller to update likes of a post
+// Controlador para atualizar os likes de um post
 const updateLikes = async (req, res) => {
   try {
-    const { id } = req.params;
-    const { action } = req.body; // 
+    const { id } = req.params; // Obtém o ID do post
+    const { action } = req.body; // Obtém a ação (like ou remove like)
     if (!["like", "remove like"].includes(action)) {
       return res
         .status(400)
         .json({ message: "Invalid action. Use 'remove like' or 'like'." });
     }
 
-    const updatedPost = await postModel.updateLikes(id, action);
+    const updatedPost = await postModel.updateLikes(id, action); // Atualiza os likes
     if (!updatedPost) {
       return res
         .status(404)
@@ -122,15 +119,15 @@ const updateLikes = async (req, res) => {
 
     res.status(200).json({
       message: "Likes updated successfully.",
-      likes: updatedPost.likes, // Corrected property reference
+      likes: updatedPost.likes, // Retorna os likes atualizados
     });
   } catch (error) {
-    console.error("Error updating likes:", error); // Updated error message
-    res.status(500).json({ message: "Error updating likes." }); // Updated error message
+    console.error("Error updating likes:", error);
+    res.status(500).json({ message: "Error updating likes." });
   }
 };
 
-//Export controllers
+// Exporta os controladores
 module.exports = {
   getPosts,
   getPostById,

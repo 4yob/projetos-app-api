@@ -1,11 +1,12 @@
 const pool = require("../config/database");
 
-//Api para procurar usuários pelo nome ou username
+// Função para buscar usuários pelo nome ou username
 const getUsers = async (name, username) => {
     let query = "SELECT users.* FROM users";
     let conditions = [];
     let params = [];
 
+    // Adiciona condições de busca se o nome ou username forem fornecidos
     if (name && name.trim()) {
         params.push(`%${name.trim()}%`);
         conditions.push(`users.name ILIKE $${params.length}`);
@@ -17,17 +18,19 @@ const getUsers = async (name, username) => {
     if (conditions.length > 0) {
         query += " WHERE " + conditions.join(" AND ");
     }
+
+    // Executa a consulta no banco de dados
     const result = await pool.query(query, params);
-    return result.rows;  
+    return result.rows;
 };
 
-//Api para procurar um usuário pelo id
+// Função para buscar um usuário pelo ID
 const getUserById = async (id) => {
     const result = await pool.query("SELECT * FROM users WHERE id = $1", [id]);
     return result.rows[0];
 };
 
-//Api para criar um novo usuário
+// Função para criar um novo usuário
 const createUser = async (name, username, email, location, following = 0, followers = 0, photo) => {
     const result = await pool.query(
         "INSERT INTO users (name, username, email, location, following, followers, photo) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
@@ -36,20 +39,22 @@ const createUser = async (name, username, email, location, following = 0, follow
     return result.rows[0];
 };
 
-//Api para atualizar um usuário
+// Função para atualizar os dados de um usuário
 const updateUser = async (id, name, username, email, location, photo) => {
-
+    // Verifica se o usuário existe
     const currentUser = await pool.query("SELECT * FROM users WHERE id = $1", [id]);
     if (!currentUser.rows[0]) {
         throw new Error("User not found");
     }
 
+    // Atualiza os campos com os valores fornecidos ou mantém os valores atuais
     const updatedName = name || currentUser.rows[0].name;
     const updatedUsername = username || currentUser.rows[0].username;
     const updatedEmail = email || currentUser.rows[0].email;
     const updatedLocation = location || currentUser.rows[0].location;
     const updatedPhoto = photo || currentUser.rows[0].photo;
 
+    // Executa a atualização no banco de dados
     const result = await pool.query(
         "UPDATE users SET name = $1, username = $2, email = $3, photo = $4, location = $5 WHERE id = $6 RETURNING *",
         [updatedName, updatedUsername, updatedEmail, updatedPhoto, updatedLocation, id]
@@ -57,17 +62,16 @@ const updateUser = async (id, name, username, email, location, photo) => {
     return result.rows[0];
 };
 
-//Api para deletar um usuário
+// Função para deletar um usuário
 const deleteUser = async (id) => {
-    const result = await pool.query("DELETE FROM users WHERE id = $1 RETURNING *", [id]
-    );
+    const result = await pool.query("DELETE FROM users WHERE id = $1 RETURNING *", [id]);
     return result.rows[0];
 };
 
-//Api para atualizar seguidores de um usuário
+// Função para atualizar o número de seguidores de um usuário
 const updateFollowers = async (id, action) => {
     try {
-        const increment = action === "follow" ? 1 : -1;
+        const increment = action === "follow" ? 1 : -1; // Incrementa ou decrementa os seguidores
         const result = await pool.query(
             "UPDATE users SET followers = followers + $1 WHERE id = $2 AND followers + $1 >= 0 RETURNING *",
             [increment, id]
@@ -79,11 +83,11 @@ const updateFollowers = async (id, action) => {
     }
 };
 
-//Api para atualizar o número de pessoas que o usuário está seguindo
+// Função para atualizar o número de pessoas que o usuário está seguindo
 const updateFollowing = async (id, action) => {
     try {
-        const increment = action === "follow" ? 1 : -1; // Certifique-se de que "follow" aumenta e "unfollow" diminui
-        console.log(`Updating following for user ${id} with action ${action} (increment: ${increment})`); 
+        const increment = action === "follow" ? 1 : -1; // Incrementa ou decrementa o número de pessoas seguidas
+        console.log(`Updating following for user ${id} with action ${action} (increment: ${increment})`);
         const result = await pool.query(
             "UPDATE users SET following = following + $1 WHERE id = $2 AND following + $1 >= 0 RETURNING *",
             [increment, id]

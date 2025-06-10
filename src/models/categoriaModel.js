@@ -1,5 +1,6 @@
 const pool = require("../config/database");
 
+// Obtém todas as categorias do banco de dados
 const getCategorias = async () => {
     try {
         const result = await pool.query("SELECT * FROM categories");
@@ -10,7 +11,7 @@ const getCategorias = async () => {
     }
 };
 
-
+// Obtém uma categoria específica pelo ID
 const getCategoriaById = async (id) => {
     try {
         const result = await pool.query("SELECT * FROM categories WHERE id = $1", [id]);
@@ -21,6 +22,7 @@ const getCategoriaById = async (id) => {
     }
 };
 
+// Cria uma nova categoria no banco de dados
 const createCategoria = async (name) => {
     try {
         const result = await pool.query(
@@ -34,6 +36,7 @@ const createCategoria = async (name) => {
     }
 };
 
+// Atualiza uma categoria existente pelo ID
 const updateCategoria = async (id, name) => {
     try {
         const result = await pool.query(
@@ -47,6 +50,7 @@ const updateCategoria = async (id, name) => {
     }
 };
 
+// Deleta uma categoria existente pelo ID
 const deleteCategoria = async (id) => {
     try {
         const result = await pool.query(
@@ -60,6 +64,7 @@ const deleteCategoria = async (id) => {
     }
 };
 
+// Exporta as funções do modelo
 module.exports = {
     getCategorias,
     getCategoriaById,

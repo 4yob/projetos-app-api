@@ -1,5 +1,6 @@
 const pool = require("../config/database");
 
+// Obtém todos os chats ou filtra por nome de usuário, se fornecido
 const getChats = async (userName) => {
     try {
         let result;
@@ -25,6 +26,7 @@ const getChats = async (userName) => {
     }
 };
 
+// Obtém um chat específico pelo ID
 const getChatById = async (id) => {
     try {
         const result = await pool.query("SELECT * FROM chats WHERE id = $1", [id]);
@@ -35,6 +37,7 @@ const getChatById = async (id) => {
     }
 };
 
+// Cria um novo chat com o ID do usuário e a mensagem fornecida
 const createChat = async (user_id, message) => {
     try {
         const result = await pool.query(
@@ -48,6 +51,7 @@ const createChat = async (user_id, message) => {
     }
 };
 
+// Atualiza a mensagem de um chat existente pelo ID
 const updateChat = async (id, message) => {
     try {
         const result = await pool.query(
@@ -61,6 +65,7 @@ const updateChat = async (id, message) => {
     }
 };
 
+// Exclui um chat pelo ID
 const deleteChat = async (id) => {
     try {
         const result = await pool.query(

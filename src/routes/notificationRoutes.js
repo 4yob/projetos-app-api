@@ -2,6 +2,10 @@ const express = require("express");
 const router = express.Router();
 const notificationController = require("../controllers/notificationController");
 
+const apiKeyMiddleware = require("../config/apiKey");
+
+router.use(apiKeyMiddleware);
+
 /**
  * @swagger
  * tags:

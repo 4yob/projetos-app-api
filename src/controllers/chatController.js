@@ -1,5 +1,6 @@
 const chatModel = require("../models/chatModel");
 
+// Controlador para obter todos os chats ou filtrar por nome de usuário
 const getChats = async (req, res) => {
     try {
         const { userName } = req.query; // userName agora é opcional
@@ -12,6 +13,7 @@ const getChats = async (req, res) => {
     }
 };
 
+// Controlador para obter um chat específico pelo ID
 const getChatById = async (req, res) => {
     try {
         const chat = await chatModel.getChatById(req.params.id);
@@ -25,6 +27,7 @@ const getChatById = async (req, res) => {
     }
 }
 
+// Controlador para criar um novo chat
 const createChat = async (req, res) => {
     try {
         const { user_id, message } = req.body;
@@ -46,6 +49,7 @@ const createChat = async (req, res) => {
     }
 };
 
+// Controlador para atualizar a mensagem de um chat existente
 const updateChat = async (req, res) => {
     try {
         const { message } = req.body;
@@ -59,7 +63,7 @@ const updateChat = async (req, res) => {
     }
 };
 
-
+// Controlador para excluir um chat pelo ID
 const deleteChat = async (req, res) => {
     try {
         const { id } = req.params;
