@@ -3,6 +3,9 @@ const router = express.Router();
 const userController = require("../controllers/userController");
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
+const apiKeyMiddleware = require("../config/apiKey");
+
+router.use(apiKeyMiddleware);
 
 /**
  * @swagger
